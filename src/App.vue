@@ -23,6 +23,7 @@ import HelloWorld from './components/HelloWorld.vue'
       <SectionB></SectionB>
       <SectionC></SectionC>
       <p>測試測試</p>
+      <p>測試02</p>
     </div>
   </header>
 
