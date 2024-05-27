@@ -1,0 +1,32 @@
+// 主入口文件，組合所有模組
+
+@use 'sass:math';
+
+//base 變數
+@import 'base/reset';
+@import 'base/var';
+@import 'base/color';
+@import 'base/font';
+
+// mixins 函式
+@import 'mixins/mixin';
+
+// components 組件
+@import 'components/btn';
+@import 'components/card';
+@import 'components/form';
+
+// layouts 版面
+@import 'layouts/header';
+@import 'layouts/nav';
+@import 'layouts/body';
+@import 'layouts/login';
+@import 'layouts/footer';
+
+// pages 頁面
+@import 'pages/index';
+@import 'pages/about';
+@import 'pages/contact';
+
+// plugins
+@import 'plugins/grid';

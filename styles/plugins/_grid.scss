@@ -1,0 +1,30 @@
+// 網格系統
+
+//桌機
+@mixin grid($value) {
+    @for $i from 1 through $value {
+        .col-#{$i} {
+            // width: calc($i/$value) * 100%;
+            width: math.div($i , $value) * 100%;
+        }
+    }
+}
+
+// 分隔線
+@mixin grid-row($value) {
+    @for $i from 1 through $value {
+        .row-cols-#{$i} .col {
+            width: math.div(100%, $i);
+        }
+    }
+}
+
+//手機板
+@mixin grid($value) {
+    @for $i from 1 through $value {
+        .col-sm-#{$i} {
+            // width: calc($i/$value) * 100%;
+            width: math.div($i , $value) * 100%;
+        }
+    }
+}
