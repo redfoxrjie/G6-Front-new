@@ -14,7 +14,10 @@ import HelloWorld from './components/HelloWorld.vue'
         <RouterLink to="/">首頁</RouterLink>
         <RouterLink to="/about">關於我們</RouterLink>
         <RouterLink to="/trips">行程一覽</RouterLink>
-        <RouterLink to="/blog">關於我們</RouterLink>
+        <RouterLink to="/blog">旅行筆記</RouterLink>
+        <RouterLink to="/news">最新消息</RouterLink>
+        <RouterLink to="/tickets">票券訂購</RouterLink>
+        <RouterLink to="/login">會員登入</RouterLink>
       </nav>
       <!-- <section>A</section>
       <section>B</section>
@@ -22,8 +25,6 @@ import HelloWorld from './components/HelloWorld.vue'
       <SectionA></SectionA>
       <SectionB></SectionB>
       <SectionC></SectionC>
-      <p>測試測試</p>
-      <p>測試02</p>
     </div>
   </header>
 

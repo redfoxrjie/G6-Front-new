@@ -1,3 +1,3 @@
 <template>
-  <main>商品頁面</main>
+  <main>目前位在「行程一覽」</main>
 </template>

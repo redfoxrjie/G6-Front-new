@@ -1,4 +1,5 @@
 <template>
+  <main>目前位在「關於我們」</main>
   <div class="about">
     <!-- 兩種取陣列數量的方法 -->
     <!-- 第一種 -->
@@ -9,12 +10,7 @@
       <button @click="add">加入</button>
       <li v-for="item in list" :key="item.id">
         <template v-if="item.show">
-          <a
-            :href="item.link"
-            :style="{
-              color: '#315666'
-            }"
-          >
+          <a :style="{ color: '#315666' }">
             {{ item.title }}
           </a>
         </template>
@@ -34,17 +30,19 @@ export default {
           id: 1,
           title: 'duck',
           color: '#ddd',
-          link: 'https://www.google.com.tw/?hl=zh_TW'
+          show: true
         },
         {
           id: 2,
           title: 'dog',
-          color: '#efa'
+          color: '#efa',
+          show: true
         },
         {
           id: 3,
           title: 'cat',
-          color: '#333'
+          color: '#333',
+          show: true
         }
       ]
     }
@@ -59,7 +57,7 @@ export default {
       this.itemIndex += 1
       this.list.push({
         id: this.itemIndex,
-        title: `test${this.itemIndex}`
+        title: `title${this.itemIndex}`
       })
       // this.page = this.page + 1
       // this.page += 1
