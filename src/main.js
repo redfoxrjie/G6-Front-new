@@ -3,6 +3,7 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import './assets/styles/base/_font.scss' //引入粉圓體字體樣式
 
 import App from './App.vue'
 import router from './router'
