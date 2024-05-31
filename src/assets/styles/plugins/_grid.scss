@@ -29,7 +29,7 @@
 }
 
 // 大型桌機版：min-width: 1440px
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1440px) {
     @include grid-xxl(12);
     @include grid-row-xxl(6);
 }
