@@ -22,9 +22,9 @@ import HelloWorld from './components/HelloWorld.vue'
       <!-- <section>A</section>
       <section>B</section>
       <section>C</section> -->
-      <SectionA></SectionA>
-      <SectionB></SectionB>
-      <SectionC></SectionC>
+      <!-- <SectionA></SectionA>
+      <SectionB></SectionB> -->
+      <!-- <SectionC></SectionC> -->
     </div>
   </header>
 
@@ -40,7 +40,8 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import SectionA from './components/home/SectionA.vue'
 import SectionB from './components/home/SectionB.vue'
-import SectionC from './components/home/SectionC.vue'
+import SectionHotBlog from './components/home/SectionHotBlog.vue'
+import SectionTicket from './components/home/SectionTicket.vue'
 
 export default defineComponent({
   components: {
@@ -49,7 +50,8 @@ export default defineComponent({
     HelloWorld,
     SectionA,
     SectionB,
-    SectionC
+    SectionHotBlog,
+    SectionTicket
   }
 })
 </script>

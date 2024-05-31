@@ -1,9 +1,13 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import SectionHotBlog from '../components/home/SectionHotBlog.vue'
+// import TheWelcome from '../components/TheWelcome.vue'
+
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <!-- <TheWelcome /> -->
+    <SectionHotBlog />
+
   </main>
 </template>

@@ -78,6 +78,7 @@ export default {
     color: rgb(255, 128, 196);
     text-shadow: 0 0 20px deeppink;
   }
+
   .about p {
     font-size: 20px;
   }
