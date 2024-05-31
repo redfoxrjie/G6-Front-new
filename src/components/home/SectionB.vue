@@ -4,10 +4,10 @@
 
 <script></script>
 
-<style lang="scss">
+<!-- <style lang="scss">
 section {
   p {
     color: red;
   }
 }
-</style>
+</style> -->

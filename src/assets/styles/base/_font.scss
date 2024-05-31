@@ -1,1 +1,48 @@
-// 字體樣式
+@use 'sass:math';
+
+// 字型樣式
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Noto+Serif+TC:wght@200..900&display=swap');
+@import url(https://cdn.jsdelivr.net/gh/marsnow/open-huninn-font@1.1/font/jf-openhuninn.eot);
+@font-face {
+  font-family: 'HunInn';
+  src:
+    url(https://cdn.jsdelivr.net/gh/marsnow/open-huninn-font@1.1/font/jf-openhuninn.eot),
+    url(https://cdn.jsdelivr.net/gh/marsnow/open-huninn-font@1.1/font/jf-openhuninn.woff)
+      format('woff'),
+    url(https://cdn.jsdelivr.net/gh/marsnow/open-huninn-font@1.1/font/jf-openhuninn.ttf)
+      format('truetype');
+  src:
+    url(https://cdn.jsdelivr.net/gh/marsnow/open-huninn-font@1.1/font/jf-openhuninn.eot#iefix)
+      format('embedded-opentype'),
+    url(https://cdn.jsdelivr.net/gh/marsnow/open-huninn-font@1.1/font/jf-openhuninn.woff)
+      format('woff'),
+    url(https://cdn.jsdelivr.net/gh/marsnow/open-huninn-font@1.1/font/jf-openhuninn.ttf)
+      format('truetype'),
+    url(https://cdn.jsdelivr.net/gh/marsnow/open-huninn-font@1.1/font/jf-openhuninn.svg#SealmemoryHeader)
+      format('svg');
+}
+
+
+
+// 字體變數
+$base-fontSize: 16px;
+
+// 標題字letter-spacing
+$h-letterSpacing: math.div($base-fontSize * 15, 100); 
+
+h1,h2,h3,h4,h5,h6 {
+  line-height: 120%;
+  letter-spacing: $h-letterSpacing;
+}
+
+h1 {font-size: $base-fontSize * 2.25;}
+h2 {font-size: $base-fontSize * 1.875;}
+h3 {font-size: $base-fontSize * 1.5;}
+h4 {font-size: $base-fontSize * 1.125;}
+h5 {font-size: $base-fontSize * 1;}
+h6 {font-size: $base-fontSize * 0.875;}
+
+body {
+  font-family: 'HunInn';
+  font-size: $base-fontSize;
+}
