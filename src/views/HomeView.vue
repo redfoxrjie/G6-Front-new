@@ -1,19 +1,24 @@
 
 <script setup>
 
-import SectionTicket from '../components/home/SectionTicket.vue'
-=======
-import SectionNews from '../components/home/SectionNews.vue'
+
+import SectionTicket from '../components/home/SectionTicket.vue';
+import SectionNews from '../components/home/SectionNews.vue';
+import SectionHotTrips from '../components/home/SectionHotTrips.vue';
+
+
 
 </script>
 
 <template>
   <main>
     <SectionNews />
+    <SectionTicket />
+    <SectionHotTrips/>
   </main>
 </template>
 
-<script setup>
+<!-- <script setup>
   import SectionHotTrips from '../components/home/SectionHotTrips.vue';
 
   const hotTripsData = [
@@ -24,4 +29,4 @@ import SectionNews from '../components/home/SectionNews.vue'
   { title: '韓國釜山放鬆之旅', memberName: '會員名稱', imgUrl: new URL('@/assets/images/korea_busan.jpg', import.meta.url).href, memPicUrl: 'https://picsum.photos/300/200/?random=10'  },
   { title: '東京下町散策之旅', memberName: '會員名稱', imgUrl: new URL('@/assets/images/japan_asakusa-street.jpg', import.meta.url).href, memPicUrl: 'https://picsum.photos/300/200/?random=10' },
   ];
-</script>
+</script> -->

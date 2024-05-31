@@ -22,8 +22,6 @@ import HComp_LearnMoreBtn from './HComp_LearnMoreBtn.vue';
             <HComp_LearnMoreBtn/>
         </div>
     </section>
-    <HComp_SectionTitle title="票券"/>
-    <HComp_SectionTitle title="標題文字測試"/>
 </template>
 
 <script>

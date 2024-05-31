@@ -34,7 +34,7 @@
 
 <script></script>
 
-<style>
+<style scoped>
     .section{
         margin: 50px;
     }
