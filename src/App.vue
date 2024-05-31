@@ -29,6 +29,8 @@ import HelloWorld from './components/HelloWorld.vue'
   </header>
 
   <RouterView />
+  <PageFooter />
+  
 </template>
 <!-- <template>
   <RouterView />
@@ -41,6 +43,8 @@ import HelloWorld from './components/HelloWorld.vue'
 import SectionA from './components/home/SectionA.vue'
 import SectionB from './components/home/SectionB.vue'
 import SectionC from './components/home/SectionC.vue'
+import PageFooter from './components/footer/PageFooter.vue'
+
 
 export default defineComponent({
   components: {
@@ -49,7 +53,8 @@ export default defineComponent({
     HelloWorld,
     SectionA,
     SectionB,
-    SectionC
+    SectionC,
+    PageFooter
   }
 })
 </script>
