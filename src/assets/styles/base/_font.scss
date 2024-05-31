@@ -21,7 +21,6 @@
     url(https://cdn.jsdelivr.net/gh/marsnow/open-huninn-font@1.1/font/jf-openhuninn.svg#SealmemoryHeader)
       format('svg');
 }
-@import 'color';
 
 // 字體變數
 $base-fontSize: 16px;
@@ -40,3 +39,8 @@ h3 {font-size: $base-fontSize * 1.5;}
 h4 {font-size: $base-fontSize * 1.125;}
 h5 {font-size: $base-fontSize * 1;}
 h6 {font-size: $base-fontSize * 0.875;}
+
+body {
+  font-family: 'HunInn';
+  font-size: $base-fontSize;
+}

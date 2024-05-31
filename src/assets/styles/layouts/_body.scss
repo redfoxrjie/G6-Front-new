@@ -1,8 +1,5 @@
-@import './base/color';
-@import './base/font';
+@import '@/assets/styles/base/color';
 
 body {
-    font-family: 'HunInn';
-    font-size: $base-fontSize;
     background-color: $primaryColor;
 }
