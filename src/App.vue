@@ -19,12 +19,9 @@ import HelloWorld from './components/HelloWorld.vue'
         <RouterLink to="/tickets">票券訂購</RouterLink>
         <RouterLink to="/login">會員登入</RouterLink>
       </nav>
-      <!-- <section>A</section>
-      <section>B</section>
-      <section>C</section> -->
-      <SectionA></SectionA>
+      <!-- <SectionA></SectionA>
       <SectionB></SectionB>
-      <SectionC></SectionC>
+      <SectionC></SectionC> -->
     </div>
   </header>
 
