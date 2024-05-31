@@ -22,9 +22,10 @@ import HelloWorld from './components/HelloWorld.vue'
       <!-- <section>A</section>
       <section>B</section>
       <section>C</section> -->
-      <SectionA></SectionA>
+      <!-- <SectionA></SectionA>
       <SectionB></SectionB>
-      <SectionC></SectionC>
+      <SectionC></SectionC> -->
+      <SectionTicket></SectionTicket>
     </div>
   </header>
 
@@ -41,6 +42,7 @@ import HelloWorld from './components/HelloWorld.vue'
 import SectionA from './components/home/SectionA.vue'
 import SectionB from './components/home/SectionB.vue'
 import SectionC from './components/home/SectionC.vue'
+import SectionTicket from './components/home/SectionTicket.vue'
 
 export default defineComponent({
   components: {
@@ -49,7 +51,8 @@ export default defineComponent({
     HelloWorld,
     SectionA,
     SectionB,
-    SectionC
+    SectionC,
+    SectionTicket
   }
 })
 </script>
