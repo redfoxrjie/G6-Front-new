@@ -1,30 +1,35 @@
 // 網格系統
 
-//桌機
-@mixin grid($value) {
-    @for $i from 1 through $value {
-        .col-#{$i} {
-            // width: calc($i/$value) * 100%;
-            width: math.div($i , $value) * 100%;
-        }
-    }
+@use '@/assets/styles/mixins/mixin'; // gird mixins
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+// 手機/平板直式：768px以下
+@include grid(12);
+@include grid-row(6);
+
+// 平板橫向：1024px以下; min-width: 768px
+@media screen and (min-width: 768px) {
+    @include grid-md(12);
+    @include grid-row-md(6);
 }
 
-// 分隔線
-@mixin grid-row($value) {
-    @for $i from 1 through $value {
-        .row-cols-#{$i} .col {
-            width: math.div(100%, $i);
-        }
-    }
+// 筆電版：1200px以下; min-width: 1024px
+@media screen and (min-width: 1024px) {
+    @include grid-lg(12);
+    @include grid-row-lg(6);
 }
 
-//手機板
-@mixin grid($value) {
-    @for $i from 1 through $value {
-        .col-sm-#{$i} {
-            // width: calc($i/$value) * 100%;
-            width: math.div($i , $value) * 100%;
-        }
-    }
+// 桌機版：1440px以下; min-width: 1200px
+@media screen and (min-width: 1200px) {
+    @include grid-xl(12);
+    @include grid-row-xl(6);
+}
+
+// 大型桌機版：min-width: 1440px
+@media screen and (min-width: 1200px) {
+    @include grid-xxl(12);
+    @include grid-row-xxl(6);
 }
