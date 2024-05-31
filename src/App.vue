@@ -1,10 +1,7 @@
 <template>
   <header>
-    <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
-
+ 
     <div class="wrapper">
-      <!-- <HelloWorld msg="It's hard to find this" /> -->
-
       <nav>
         <RouterLink to="/">首頁</RouterLink>
         <RouterLink to="/about">關於我們</RouterLink>
@@ -27,7 +24,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import SectionA from './components/home/SectionA.vue'
 import SectionB from './components/home/SectionB.vue'
-import SectionC from './components/home/SectionC.vue'
+import SectionHotBlog from './components/home/SectionHotBlog.vue'
 import SectionTicket from './components/home/SectionTicket.vue'
 
 export default defineComponent({
@@ -35,22 +32,8 @@ export default defineComponent({
     RouterLink,
     RouterView,
     HelloWorld,
-    SectionA,
-    SectionB,
-    SectionC,
+    SectionHotBlog,
     SectionTicket
   }
 })
 </script>
-
-<!-- <style scoped>
-section {
-  bottom: #ddd;
-  height: 90vh;
-  margin: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10rem;
-}
-</style> -->

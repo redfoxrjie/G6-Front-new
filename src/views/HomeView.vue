@@ -1,17 +1,20 @@
 
 <script setup>
 
-
-import SectionTicket from '../components/home/SectionTicket.vue';
+import SectionHotBlog from '../components/home/SectionHotBlog.vue'
 import SectionNews from '../components/home/SectionNews.vue';
 import SectionHotTrips from '../components/home/SectionHotTrips.vue';
-
-
-
+import SectionTicket from '../components/home/SectionTicket.vue';
 </script>
 
 <template>
   <main>
+
+
+    <SectionHotBlog />
+
+  </main>
+</template>
     <SectionNews />
     <SectionTicket />
     <SectionHotTrips/>
@@ -30,3 +33,4 @@ import SectionHotTrips from '../components/home/SectionHotTrips.vue';
   { title: '東京下町散策之旅', memberName: '會員名稱', imgUrl: new URL('@/assets/images/japan_asakusa-street.jpg', import.meta.url).href, memPicUrl: 'https://picsum.photos/300/200/?random=10' },
   ];
 </script> -->
+
