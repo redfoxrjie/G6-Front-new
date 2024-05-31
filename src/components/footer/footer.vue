@@ -73,15 +73,13 @@
 
 <script>
 export default {
-  name: "FooterComponent",
+  name: "Footer",
 };
 </script>
 
-<style scoped>
-body {
-  margin: 0;
-  padding: 0;
-}
+<style lang="scss" scoped>
+@import '../../assets/styles/base/color';
+@import '../../assets/styles/base/font';
 
 footer .EndOfPage {
   position: relative;
