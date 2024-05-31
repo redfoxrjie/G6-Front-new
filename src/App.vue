@@ -1,8 +1,3 @@
-<!-- <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script> -->
-
 <template>
   <header>
     <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
@@ -19,17 +14,12 @@ import HelloWorld from './components/HelloWorld.vue'
         <RouterLink to="/tickets">票券訂購</RouterLink>
         <RouterLink to="/login">會員登入</RouterLink>
       </nav>
-      <!-- <SectionA></SectionA>
-      <SectionB></SectionB>
-      <SectionC></SectionC> -->
+
     </div>
   </header>
 
   <RouterView />
 </template>
-<!-- <template>
-  <RouterView />
-</template> -->
 
 <script>
 import { defineComponent } from 'vue'
@@ -51,7 +41,7 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<!-- <style scoped>
 section {
   bottom: #ddd;
   height: 90vh;
@@ -61,4 +51,4 @@ section {
   justify-content: center;
   font-size: 10rem;
 }
-</style>
+</style> -->
