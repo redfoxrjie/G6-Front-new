@@ -1,6 +1,10 @@
 
 <script setup>
+
+import SectionTicket from '../components/home/SectionTicket.vue'
+=======
 import SectionNews from '../components/home/SectionNews.vue'
+
 </script>
 
 <template>
