@@ -17,28 +17,28 @@
 
   <RouterView />
   <PageFooter />
+  <ProductCard />
   
 </template>
 
 <script>
 import { defineComponent } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import PageFooter from './components/footer/PageFooter.vue'
-
 import SectionHotBlog from './components/home/SectionHotBlog.vue'
 import SectionTicket from './components/home/SectionTicket.vue'
+import PageHeader from './components/home/PageHeader.vue'
+import ProductCard from './components/layout/ProductCard.vue'
 
 
 export default defineComponent({
   components: {
     RouterLink,
     RouterView,
-    HelloWorld,
     PageFooter,
     SectionHotBlog,
-    SectionTicket
-
-  }
-})
+    SectionTicket,
+    PageHeader,
+    ProductCard,
+}})
 </script>
