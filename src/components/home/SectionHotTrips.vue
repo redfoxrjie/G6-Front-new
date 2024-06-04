@@ -1,7 +1,7 @@
 <template>
     <section class="hot-trips">
         <div class="container">
-            <h2>熱門行程</h2>
+            <HCompSectionTitle title="熱門行程" />
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
                 <div class="col card-container" v-for="(trip, index) in hotTripsData" :key="index">
                     <a href="#">
@@ -26,6 +26,8 @@
 </template>
 
 <script setup>
+import HCompSectionTitle from './HCompSectionTitle.vue';
+
 const hotTripsData = [
     { title: '北九州五天四夜雙人行', memberName: '會員名稱', imgUrl: new URL('@/assets/images/japan_yufuin-kinrinko.jpg', import.meta.url).href, memPicUrl: 'https://picsum.photos/300/200/?random=10' },
     { title: '濟州島六天五夜家族旅遊', memberName: '會員名稱', imgUrl: new URL('@/assets/images/korea_jeju-island.jpg', import.meta.url).href, memPicUrl: 'https://picsum.photos/300/200/?random=10' },

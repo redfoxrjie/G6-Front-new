@@ -1,18 +1,22 @@
 <template>
   <section>
+    <HCompSectionTitle title="旅遊隨筆" />
     <div class="pop-blog-cards">
-      <div v-for="(card, index) in cards" :key="index" class="card" :class="{ 'active': index === activeIndex }"
-        :style="{ backgroundImage: 'url(' + card.imageSrc + ')' }" @mouseenter="activeIndex = index"
-        @mouseleave="resetActiveIndex">
+      <div v-for="(card, index) in cards" :key="index" class="hot-blog-card"
+        :class="{ 'active': index === activeIndex }" :style="{ backgroundImage: 'url(' + card.imageSrc + ')' }"
+        @mouseenter="activeIndex = index" @mouseleave="resetActiveIndex">
         <h4>{{ card.title }}</h4>
         <p>{{ card.content }} <a href="#">《More》</a></p>
       </div>
     </div>
+    <HCompLearnMoreBtn />
   </section>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import HCompSectionTitle from './HCompSectionTitle.vue';
+import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
 
 const cards = ref([
   {
@@ -46,13 +50,18 @@ function resetActiveIndex() {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+section {
+  margin: 50px;
+}
+
 .pop-blog-cards {
   display: flex;
   width: 100%;
   height: 400px;
+  margin-bottom: 50px;
 }
 
-.card {
+.hot-blog-card {
   flex-direction: column;
   justify-content: flex-end;
   display: flex;
@@ -70,41 +79,41 @@ function resetActiveIndex() {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.card:hover {
+.hot-blog-card:hover {
   flex-grow: 1;
   width: 200px;
   opacity: 1;
   filter: contrast(120%);
 }
 
-.card.active {
+.hot-blog-card.active {
   width: 200px;
   opacity: 1;
 }
 
-.card:hover p {
+.hot-blog-card:hover p {
   display: block;
   /* Show paragraph on hover */
 }
 
-.card p {
+.hot-blog-card p {
   display: none;
   /* Hide paragraph by default */
 }
 
-.card.active p {
+.hot-blog-card.active p {
   display: block;
   /* Always show paragraph when active */
 }
 
-.card h4 {
+.hot-blog-card h4 {
   line-height: 1.4;
   color: #fff;
   margin-bottom: 1rem;
 }
 
-.card p,
-.card a {
+.hot-blog-card p,
+.hot-blog-card a {
   line-height: 1.4;
   color: #fff;
 }
