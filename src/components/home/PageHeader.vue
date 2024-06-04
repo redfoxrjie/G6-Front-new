@@ -36,9 +36,42 @@
         </nav>
 
         <header>
-            <div class="logo">Logo</div>
-            <div class="slogan">土狗陪您 TOGO 展開新的旅程</div>
+            <div id="amoeba-container">
+            <div class="amoeba"></div>
+        </div>
+        <div class="logo">
+            <img src="../../assets/logo.png" alt="Logo" style="width: 60px; height: 60px;">
+        </div>
+        <div class="slogan">土狗陪您 TOGO 展開新的旅程</div>
+        <div class="togo-large-text">TOGO</div>
         </header>
+
+        <section class="content">
+        <div class="center-background"></div>
+        <div class="content-item content-item-1">
+            <div class="pic">
+            </div>
+
+            <div class="text">行程共享群組化<br>多團規劃不緊張</div>
+        </div>
+        <div class="content-item content-item-2">
+            <div class="pic">
+            </div>
+            <div class="text">票券，行程一站搞定<br>自由行也能從容優雅</div>
+        </div>
+        <div class="content-item content-item-3">
+            <div class="pic">
+            </div>
+            <div class="text">精選目的地<br>享受無盡無礙的旅行</div>
+        </div>
+        <div class="content-item content-item-4">
+            <div class="pic">
+            </div>
+            <div class="text">世界各地美景<br>隨時隨地<br>輕鬆計劃您的下一次冒險</div>
+        </div>
+    </section>
+
+
 
         <RouterView />
     </div>
@@ -189,7 +222,7 @@ header {
     position: relative;
     width: 100%;
     height: 100vh;
-    background: #f9f9f9;
+    background:$primaryColor;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -221,4 +254,311 @@ header {
     border-radius: 10px;
     z-index: 1;
 }
+#amoeba-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .amoeba {
+            width: 100%;
+            height: 100%;
+            background: url('../../assets/images/index_banner.jpg') center/cover no-repeat;
+            -webkit-mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
+            mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
+            -webkit-mask-size: cover;
+            mask-size: cover;
+            animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+        }
+
+        @keyframes morph {
+            0% {
+                border-radius: 33% 67% 70% 30%;
+            }
+
+            100% {
+                border-radius: 40% 60% 42% 58%;
+            }
+        }
+
+        @keyframes change {
+            100% {
+                background-position: 100% 100%;
+            }
+        }
+
+        .togo-large-text {
+            position: absolute;
+            bottom: 5%;
+            right: 10%;
+            transform: translate(10%, -10%);
+            font-size: 10rem;
+            color: white;
+            opacity: 0.6;
+            z-index: 1;
+            text-align: center;
+        }
+
+        /* 響應式設計，針對寬度小於768px的設備 */
+        @media screen and (max-width: 768px) {
+            nav {
+                width: 100%;
+                height: 60px;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 10px 20px;
+                align-items: center;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+            }
+
+            nav.closed {
+                height: 60px;
+            }
+
+            nav ul {
+                position: fixed;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                height: calc(100vh - 60px);
+                background-color: #3b82f6;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transform: translateY(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+
+            nav:not(.closed) ul {
+                transform: translateY(0);
+            }
+
+            nav li {
+                margin: 20px 0;
+            }
+
+            header {
+                padding-top: 70px;
+                /* 確保內容部分在導航欄下方 */
+            }
+
+            .logo {
+                top: 80px;
+                /* 調整 logo 位置，避免被導航欄遮擋 */
+            }
+        }
+
+        .content {
+            position: relative;
+            width: 100%;
+            height: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            /* 防止溢出 */
+        }
+
+        .center-background {
+            position: absolute;
+            width: 60%;
+            height: 80%;
+            background: url('../../assets/images/amoeba/blueback.svg') center/cover no-repeat;
+            z-index: -1;
+            border-radius: 50%;
+        }
+
+        .content-item {
+            position: absolute;
+            width: 20%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: center;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+
+        .text {
+            color: #333;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .content-item-1 {
+            top: 5%;
+            left: 10%;
+        }
+
+        .content-item-1 .pic {
+            width: 300px;
+            height: 300px;
+            background: url('../../assets/images/index_amoeba1.jpg') center/cover no-repeat;
+            -webkit-mask: url('../../assets/images/amoeba/NO1.svg') center/cover no-repeat;
+            mask: url('../../assets/images/amoeba/NO1.svg') center/cover no-repeat;
+            -webkit-mask-size: cover;
+            mask-size: cover;
+            animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+
+        }
+
+        .content-item-1 .text {
+            font-size: 1.2rem;
+        }
+
+        .content-item-2 {
+            top: 10%;
+            right: 20%;
+        }
+
+        .content-item-2 .pic {
+            width: 300px;
+            height: 300px;
+            background: url('../../assets/images/index_amoeba2.jpg') center/cover no-repeat;
+            -webkit-mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
+            mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
+            -webkit-mask-size: cover;
+            mask-size: cover;
+            animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+
+        }
+
+        .content-item-2 .text {
+            font-size: 1.2rem;
+        }
+
+        .content-item-3 {
+            bottom: 5%;
+            left: 20%;
+
+        }
+
+        .content-item-3 .pic {
+            width: 300px;
+            height: 300px;
+            background: url('../../assets/images/index_amoeba3.jpg') center/cover no-repeat;
+            -webkit-mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
+            mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
+            -webkit-mask-size: cover;
+            mask-size: cover;
+            animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+        }
+
+        .content-item-3 .text {
+            font-size: 1.2rem;
+        }
+
+        .content-item-4 {
+            bottom: 0%;
+            right: 10%;
+        }
+
+        .content-item-4 .pic {
+            width: 300px;
+            height: 300px;
+            background: url('../../assets/images/index_amoeba4.jpg') center/cover no-repeat;
+            -webkit-mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
+            mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
+            -webkit-mask-size: cover;
+            mask-size: cover;
+            animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+        }
+
+        .content-item-4 .text {
+            font-size: 1.2rem;
+        }
+
+        .footer {
+            width: 100%;
+            text-align: center;
+            font-size: 6rem;
+            color: #333;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .content-item {
+                width: 40%;
+            }
+
+            .text {
+                font-size: 0.8rem;
+            }
+
+            .content-item-1 {
+                top: 15%;
+                left: 10%;
+            }
+
+            .content-item-2 {
+                top: 15%;
+                right: 10%;
+            }
+
+            .content-item-3 {
+                bottom: 10%;
+                left: 10%;
+            }
+
+            .content-item-4 {
+                bottom: 10%;
+                right: 10%;
+            }
+
+            .center-background {
+                width: 100%;
+                height: 100%;
+                top: 20%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-item {
+                width: 60%;
+            }
+
+            .text {
+                font-size: 0.6rem;
+            }
+
+            .content-item-1 {
+                top: 20%;
+                left: 5%;
+            }
+
+            .content-item-2 {
+                top: 20%;
+                right: 5%;
+            }
+
+            .content-item-3 {
+                bottom: 5%;
+                left: 5%;
+            }
+
+            .content-item-4 {
+                bottom: 5%;
+                right: 5%;
+            }
+
+            .center-background {
+                width: 110%;
+                height: 110%;
+                top: 25%;
+            }
+        }
 </style>
