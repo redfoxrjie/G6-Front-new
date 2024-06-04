@@ -115,7 +115,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 @media (max-width: 768px) {
     /* ... (您的 Media Query 樣式) ... */
 }
@@ -222,7 +222,7 @@ header {
     position: relative;
     width: 100%;
     height: 100vh;
-    background:$primaryColor;
+    background-color: "$primaryColor";
     display: flex;
     justify-content: center;
     align-items: center;

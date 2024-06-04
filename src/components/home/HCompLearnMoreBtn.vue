@@ -16,7 +16,7 @@
     }
     .hs-btn{
         display: block;
-        background-color: $accnetColor-2;
+        background-color: $accentColor-2;
         margin: auto;
         border-radius: 10px;
         padding: 2px 30px ;

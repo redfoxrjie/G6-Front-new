@@ -43,8 +43,6 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/styles/base/font';
-@import '../../assets/styles/base/color';
 
 .card-container {
     box-sizing: border-box;
@@ -61,7 +59,7 @@ const props = defineProps({
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    color: $black;
+    color: "$black";
 }
 
 .card-img {
@@ -84,7 +82,7 @@ img {
 }
 
 .hot-trips h2 {
-    color: $black;
+    color: "$black";
     margin: 46px;
     text-align: center;
 }
@@ -121,7 +119,7 @@ img {
 
 .btn {
     width: fit-content;
-    background-color: $accnetColor-2;
+    background-color: "$accentColor-2";
     text-align: center;
     font-size: 0.83rem;
     line-height: 0.83rem;
@@ -133,6 +131,6 @@ img {
 .btn a {
     display: block;
     padding: 6px 28px;
-    color: $black;
+    color: "$black";
 }
 </style>
