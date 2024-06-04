@@ -14,7 +14,6 @@
 
     </div>
   </header>
-
   <RouterView />
   <PageFooter />
   <ProductCard />
@@ -35,10 +34,9 @@ export default defineComponent({
   components: {
     RouterLink,
     RouterView,
-    PageFooter,
     SectionHotBlog,
     SectionTicket,
-    PageHeader,
-    ProductCard,
-}})
+    PageFooter,
+  }
+})
 </script>
