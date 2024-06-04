@@ -14,7 +14,6 @@
 
     </div>
   </header>
-
   <RouterView />
   <PageFooter />
   
@@ -23,9 +22,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import PageFooter from './components/footer/PageFooter.vue'
-
 import SectionHotBlog from './components/home/SectionHotBlog.vue'
 import SectionTicket from './components/home/SectionTicket.vue'
 
@@ -34,11 +31,9 @@ export default defineComponent({
   components: {
     RouterLink,
     RouterView,
-    HelloWorld,
-    PageFooter,
     SectionHotBlog,
-    SectionTicket
-
+    SectionTicket,
+    PageFooter,
   }
 })
 </script>
