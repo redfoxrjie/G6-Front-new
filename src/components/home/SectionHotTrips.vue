@@ -25,7 +25,6 @@
     </section>
 </template>
 
-
 <script setup>
 const hotTripsData = [
     { title: '北九州五天四夜雙人行', memberName: '會員名稱', imgUrl: new URL('@/assets/images/japan_yufuin-kinrinko.jpg', import.meta.url).href, memPicUrl: 'https://picsum.photos/300/200/?random=10' },
@@ -117,7 +116,7 @@ img {
 .member-name {
     font-size: 0.8125rem;
     display: block;
-    vertical-align: middle;
+    // vertical-align: middle;
 }
 
 .btn {

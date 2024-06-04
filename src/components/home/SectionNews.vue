@@ -1,11 +1,11 @@
 <script setup>
-import HComp_SectionTitle from './HComp_SectionTitle.vue';
-import HComp_LearnMoreBtn from './HComp_LearnMoreBtn.vue';
+import HCompSectionTitle from './HCompSectionTitle.vue';
+import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
 </script>
 <template>
     <section class="home-section-news page-section">
         <div class="container">
-            <HComp_SectionTitle title="最新消息"/>
+            <HCompSectionTitle title="最新消息"/>
             <div class="hs-news-items-wrap">
                 <div class="hs-news-items" v-for="n in 4" :key="n">
                     <div class="hs-news-item">
@@ -19,15 +19,10 @@ import HComp_LearnMoreBtn from './HComp_LearnMoreBtn.vue';
                     </div>
                 </div>
             </div>
-            <HComp_LearnMoreBtn/>
+            <HCompLearnMoreBtn/>
         </div>
     </section>
 </template>
-
-<script>
-
-</script>
-
 <style lang="scss" scoped>
 @import '../../assets/styles/base/color';
 @import '../../assets/styles/base/font';

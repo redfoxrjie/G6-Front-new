@@ -1,3 +1,5 @@
+<script>
+</script>
 <template>
     <div class="hs-section-btn-wrap col-2">
         <button class="hs-btn">
