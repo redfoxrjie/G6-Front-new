@@ -11,7 +11,7 @@ import router from './router/index.js'
 import '@/assets/styles/style.scss'
 import 'leaflet/dist/leaflet.css'
 
-import './fixLeafletIcons.js'  // 导入修复 Leaflet 图标路径的文件
+// import './fixLeafletIcons.js'  // 导入修复 Leaflet 图标路径的文件
 
 const app = createApp(App)
 

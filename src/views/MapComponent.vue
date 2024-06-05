@@ -24,7 +24,7 @@
           </ul>
           <form id="destination-form" @submit.prevent="addDestination">
             <input type="text" id="destination-name" v-model="newDestination.name" placeholder="Destination Name" required>
-            <input type="file" id="photo" @change="onFileChange">
+            <input type="file" id="photo" ref="photo_upload" @change="onFileChange">
             <input type="text" id="remarks" v-model="newDestination.remarks" placeholder="Remarks">
             <button type="submit">Add Destination</button>
           </form>
@@ -42,7 +42,14 @@
   import 'leaflet/dist/leaflet.css';  // 引入leaflet的CSS
   import 'leaflet-routing-machine';
   import 'leaflet-routing-machine/dist/leaflet-routing-machine.css'; // 引入leaflet-routing-machine的CSS
-  
+  const blackIcon = new L.Icon({
+    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  })
   export default {
     data() {
       return {
@@ -105,6 +112,7 @@
       // 添加新目的地
       addDestination() {
         const latLng = this.map.getCenter(); // 使用地图中心点的坐标
+        console.log(this.newDestination);
         const newItem = {
           name: this.newDestination.name,
           lat: latLng.lat,
@@ -120,7 +128,7 @@
       },
       // 在地图上添加标记
       addMarker(item) {
-        const marker = L.marker([item.lat, item.lng], { draggable: true }).addTo(this.map)
+        const marker = L.marker([item.lat, item.lng],{ icon: blackIcon }, { draggable: true }).addTo(this.map)
           .bindPopup(item.name)
           .openPopup();
   
@@ -160,6 +168,7 @@
           photo: null
         };
         document.getElementById('photo').value = '';
+        this.$refs.photo_upload.value = '';
       },
       // 处理文件上传
       onFileChange(event) {
