@@ -12,7 +12,9 @@ import '@/assets/styles/style.scss'
 
 //Vue.createApp(App).mount('#app')
 const app = createApp(App)
-
+import GCompUserAccount from './components/global/GCompUserAcoount.vue'
+app.component('user-account',  GCompUserAccount
+)
 app.use(createPinia())
 app.use(router)
 
