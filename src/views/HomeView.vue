@@ -1,12 +1,4 @@
 
-<script setup>
-import PageHeader from '../components/home/PageHeader.vue';
-import SectionHotBlog from '../components/home/SectionHotBlog.vue'
-import SectionNews from '../components/home/SectionNews.vue';
-import SectionHotTrips from '../components/home/SectionHotTrips.vue';
-import SectionTicket from '../components/home/SectionTicket.vue';
-</script>
-
 <template>
   <main>
     <PageHeader />
@@ -16,5 +8,17 @@ import SectionTicket from '../components/home/SectionTicket.vue';
     <SectionTicket />
   </main>
 </template>
+
+<script setup>
+  import PageHeader from '../components/home/PageHeader.vue';
+  import SectionHotBlog from '../components/home/SectionHotBlog.vue'
+  import SectionNews from '../components/home/SectionNews.vue';
+  import SectionHotTrips from '../components/home/SectionHotTrips.vue';
+  import SectionTicket from '../components/home/SectionTicket.vue';
+</script>
+
+<style lang="scss" scoped>
+  @import '@/assets/styles/base/color';
+</style>
 
 

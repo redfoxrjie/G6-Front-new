@@ -1,7 +1,7 @@
 <template>
   <section>
     <HCompSectionTitle title="旅遊隨筆" />
-    <div class="pop-blog-cards">
+    <div class="hot-blog-card-wrapper">
       <div v-for="(card, index) in cards" :key="index" class="hot-blog-card"
         :class="{ 'active': index === activeIndex }" :style="{ backgroundImage: 'url(' + card.imageSrc + ')' }"
         @mouseenter="activeIndex = index" @mouseleave="resetActiveIndex">
@@ -33,13 +33,7 @@ const cards = ref([
     title: '濟州島fun輕鬆|走進神話般的壯麗美景',
     content: '從濟州的火山岩石海岸線到神秘的瀑布，每一處都讓人感覺如同步入了神話世界。遊覽青翠的山巒，探索隱藏在深林中的寺廟，每一刻都讓人心曠神怡...',
     imageSrc: '/src/assets/images/korea_jeju-island.jpg'
-  },
-  // {
-  //   title: '濟州島fun輕鬆|走進神話般的壯麗美景',
-  //   content: '從濟州的火山岩石海岸線到神秘的瀑布，每一處都讓人感覺如同步入了神話世界。遊覽青翠的山巒，探索隱藏在深林中的寺廟，每一刻都讓人心曠神怡...',
-  //   imageSrc: '/src/assets/images/korea_jeju-island.jpg'
-  // },
-
+  }
 ]);
 const activeIndex = ref(0);
 
@@ -50,71 +44,58 @@ function resetActiveIndex() {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+@import '@/assets/styles/base/color';
+
 section {
   margin: 50px;
 }
 
-.pop-blog-cards {
+.hot-blog-card-wrapper {
   display: flex;
   width: 100%;
   height: 400px;
-  margin-bottom: 50px;
-}
-
-.hot-blog-card {
+  margin-bottom: 60px;
+  .hot-blog-card {
   flex-direction: column;
   justify-content: flex-end;
   display: flex;
   width: 0px;
+  height: 100%;
   flex-grow: 1;
-  object-fit: cover;
   opacity: .5;
   transition: .5s ease;
   border-radius: 20px;
   margin: 1%;
   background-position: center center;
-  border: 1px solid #ccc;
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.hot-blog-card:hover {
-  flex-grow: 1;
-  width: 200px;
-  opacity: 1;
-  filter: contrast(120%);
-}
-
-.hot-blog-card.active {
-  width: 200px;
-  opacity: 1;
-}
-
-.hot-blog-card:hover p {
-  display: block;
-  /* Show paragraph on hover */
-}
-
-.hot-blog-card p {
-  display: none;
-  /* Hide paragraph by default */
-}
-
-.hot-blog-card.active p {
-  display: block;
-  /* Always show paragraph when active */
-}
-
-.hot-blog-card h4 {
-  line-height: 1.4;
-  color: #fff;
-  margin-bottom: 1rem;
-}
-
-.hot-blog-card p,
-.hot-blog-card a {
-  line-height: 1.4;
-  color: #fff;
+    p {
+    display: none;
+    /* Hide paragraph by default */
+    }
+    &:hover{
+      opacity: 1;
+      filter: contrast(100%);
+      p {
+      display: block;
+      /* Show paragraph on hover */
+      }
+    } 
+    h4, p, a {
+    line-height: 1.4;
+    color: $primaryColor;
+    margin-bottom: 1rem;
+    }
+  }
+  .hot-blog-card.active {
+    height: 400px;
+    flex-grow: 2;
+    opacity: 1;
+    p {
+      display: block;
+      /* Always show paragraph when active */
+    }
+  }
 }
 </style>
