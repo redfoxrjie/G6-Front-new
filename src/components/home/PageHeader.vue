@@ -7,51 +7,35 @@
                 <div></div>
             </button>
             <ul>
-                <li>
-                    <RouterLink to="/about">關於我們</RouterLink>
-                </li>
-                <li>
-                    <RouterLink to="/tours">行程一覽</RouterLink>
-                </li>
-                <li>
-                    <RouterLink to="/blog">旅行筆記</RouterLink>
-                </li>
-                <li>
-                    <RouterLink to="/news">最新消息</RouterLink>
-                </li>
-                <li>
-                    <RouterLink to="/booking">票券訂購</RouterLink>
-                </li>
-                <li>
-                    <RouterLink to="/contact">聯絡我們</RouterLink>
-                </li>
-                <li>
-                    <RouterLink to="/login">會員登入</RouterLink>
-                </li>
+                <li><RouterLink to="/about">關於我們</RouterLink></li>
+                <li><RouterLink to="/trips">行程一覽</RouterLink></li>
+                <li><RouterLink to="/blog">旅行筆記</RouterLink></li>
+                <li><RouterLink to="/news">最新消息</RouterLink></li>
+                <li><RouterLink to="/booking">票券訂購</RouterLink></li>
+                <li><RouterLink to="/contact">聯絡我們</RouterLink></li>
+                <li><RouterLink to="/login">會員登入</RouterLink></li>
             </ul>
             <div class="bottom-section">
-                <img src="../../assets/images/global/icons/Vector.svg" alt="map icon" crossorigin="anonymous">
+                <img src="@/assets/images/global/icons/Vector.svg" alt="map icon" crossorigin="anonymous">
                 <span>開始規劃</span>
             </div>
         </nav>
 
         <header>
             <div id="amoeba-container">
-            <div class="amoeba"></div>
-        </div>
-        <div class="logo">
-            <img src="../../assets/logo.png" alt="Logo" style="width: 60px; height: 60px;">
-        </div>
-        <div class="slogan">土狗陪您 TOGO 展開新的旅程</div>
-        <div class="togo-large-text">TOGO</div>
+                <div class="amoeba"></div>
+                <div class="slogan">土狗陪您 TOGO 展開新的旅程</div>
+                <div class="togo-large-text">TOGO</div>
+            </div>
+            <div class="logo">
+                <img src="../../assets/logo.png" alt="Logo">
+            </div>
         </header>
 
         <section class="content">
         <div class="center-background"></div>
         <div class="content-item content-item-1">
-            <div class="pic">
-            </div>
-
+            <div class="pic"></div>
             <div class="text">行程共享群組化<br>多團規劃不緊張</div>
         </div>
         <div class="content-item content-item-2">
@@ -70,10 +54,7 @@
             <div class="text">世界各地美景<br>隨時隨地<br>輕鬆計劃您的下一次冒險</div>
         </div>
     </section>
-
-
-
-        <RouterView />
+        <!-- <RouterView /> -->
     </div>
 </template>
 
@@ -87,7 +68,7 @@ export default defineComponent({
         RouterView,
     },
     setup() {
-        const isMenuClosed = ref(true);
+        const isMenuClosed = ref(false);
         const menu = ref(null);
 
         const toggleMenu = () => {
@@ -105,7 +86,6 @@ export default defineComponent({
         onBeforeUnmount(() => {
             menu.value.removeEventListener('click', toggleMenu);
         });
-
         return {
             isMenuClosed,
             toggleMenu,
@@ -116,40 +96,83 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@media (max-width: 768px) {
-    /* ... (您的 Media Query 樣式) ... */
-}
+@import '@/assets/styles/base/color';
+
 
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
 }
-
+header {
+    position: relative;
+}
 nav {
-    background-color: #3b82f6;
-    color: white;
-    width: 300px;
+    .menu-button div:nth-child(1) { transform: translateY(8px) rotate(45deg);}
+    .menu-button div:nth-child(2) { opacity: 0; }
+    .menu-button div:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    background-color: $secondColor-2;
+    color: $accentColor-2;
+    width: 200px;
     height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    justify-content: space-between;
     box-sizing: border-box;
+    padding: 20px 30px;
     position: fixed;
     top: 0;
     right: 0;
     transition: height 0.3s ease-in-out;
     z-index: 100;
-    background-image: url('/travel.jpg');
-    /* 背景圖片 */
-    background-size: cover;
-    background-position: center;
+
+    ul {
+        list-style: none;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        height: fit-content;
+        transition: height 0.3s ease-in-out;
+            li {
+                text-align: center;
+                flex-grow: 1;
+                a {
+                    color: $primaryColor;
+                    text-decoration: none;
+                    font-size: 1rem;
+                    letter-spacing: 1.6px;
+                        &:hover {
+                        color: $accentColor-2;
+                    }
+                }
+            }
+    }
+    .bottom-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px 10px;
+    box-sizing: border-box;
+    border-top: solid 1px $primaryColor;
+        img {
+            width: 30px;
+            height: 30px;
+        }
+        span {
+            margin-top: 8px;
+            letter-spacing: 1px;
+            font-size: 0.875rem;
+            color: $primaryColor;
+        }
+    }
 }
 
-nav.closed {
-    height: 140px;
-}
 
 .menu-button {
     background: none;
@@ -157,123 +180,83 @@ nav.closed {
     cursor: pointer;
     margin-bottom: 20px;
     align-self: center;
+        div {
+        width: 25px;
+        height: 3px;
+        background-color: white;
+        margin: 5px 0;
+        transition: all 0.3s ease-in-out;
+    }
 }
-
-.menu-button div {
-    width: 25px;
-    height: 3px;
-    background-color: white;
-    margin: 5px 0;
-    transition: all 0.3s ease-in-out;
-}
-
-nav.closed .menu-button div:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-}
-
-nav.closed .menu-button div:nth-child(2) {
-    opacity: 0;
-}
-
-nav.closed .menu-button div:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    text-align: center;
-    width: 100%;
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.3s ease-in-out;
-}
-
-nav:not(.closed) ul {
-    max-height: 500px;
-    /* 或者一個足夠大的值 */
-}
-
-nav li {
-    margin-bottom: 20px;
-}
-
-nav a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-}
-
-.bottom-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.bottom-section img {
-    width: 30px;
-    height: 30px;
-    margin-bottom: 10px;
-}
-
-header {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    background-color: "$primaryColor";
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    overflow: hidden;
+nav.closed { 
+    .menu-button div:nth-child(1) { transform: translateY(0px) rotate(0deg);}
+    .menu-button div:nth-child(2) { opacity: 1; }
+    .menu-button div:nth-child(3) { transform: translateY(0px) rotate(0deg); }
+    height: 180px;
+    transition: height 0.3s ease-in-out;
+    .bottom-section{
+        border-top: solid 0px $primaryColor;
+    }
+    ul {
+        height: 0;
+        transition: height 0.3s ease-in-out;
+    }
 }
 
 .logo {
     position: absolute;
     top: 20px;
     left: 20px;
-    background-color: #aaa;
-    border-radius: 50%;
     width: 60px;
     height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    color: white;
-    z-index: 1;
+    img { width: 100%;}
 }
 
-.slogan {
-    font-size: 24px;
-    color: black;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 10px 20px;
-    border-radius: 10px;
-    z-index: 1;
-}
 #amoeba-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-        }
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1.9/1;
+    height: fit-content;
+    overflow: hidden;
+}
 
-        .amoeba {
-            width: 100%;
-            height: 100%;
-            background: url('../../assets/images/index_banner.jpg') center/cover no-repeat;
-            -webkit-mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
-            mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
-            -webkit-mask-size: cover;
-            mask-size: cover;
-            animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
-        }
+.amoeba {
+    position: absolute;
+    top: -100px;
+    right: -4vw;
+    width: 96vw;
+    height: 100%;
+    background: url('../../assets/images/index_banner.jpg') center/cover no-repeat;
+    -webkit-mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
+    mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+}
+.slogan {
+    font-size: 1.9rem;
+    letter-spacing: 16px;
+    position: absolute;
+    top: 40%;
+    left: 20%;
+    color: $black;
+    background: rgba(246, 245, 241, 0.6);
+    padding: 14px 20px;
+    border-radius: 10px;
+    // z-index: 1;
+}
+.togo-large-text {
+    position: absolute;
+    bottom: 10%;
+    right: 20%;
+    transform: translate(10%, -10%);
+    font-size: 10rem;
+    color: $primaryColor;
+    letter-spacing: 50px;
+    z-index: 1;
+    text-align: center;
+}
 
         @keyframes morph {
             0% {
@@ -290,18 +273,7 @@ header {
                 background-position: 100% 100%;
             }
         }
-
-        .togo-large-text {
-            position: absolute;
-            bottom: 5%;
-            right: 10%;
-            transform: translate(10%, -10%);
-            font-size: 10rem;
-            color: white;
-            opacity: 0.6;
-            z-index: 1;
-            text-align: center;
-        }
+        
 
         /* 響應式設計，針對寬度小於768px的設備 */
         @media screen and (max-width: 768px) {
@@ -329,7 +301,7 @@ header {
                 left: 0;
                 width: 100%;
                 height: calc(100vh - 60px);
-                background-color: #3b82f6;
+                background-color: $secondColor-2;
                 overflow-y: auto;
                 display: flex;
                 flex-direction: column;
@@ -391,9 +363,8 @@ header {
 
 
         .text {
-            color: #333;
+            color: $black;
             font-size: 1rem;
-            font-weight: bold;
             text-align: center;
             padding: 10px;
             border-radius: 5px;
@@ -402,9 +373,7 @@ header {
         .content-item-1 {
             top: 5%;
             left: 10%;
-        }
-
-        .content-item-1 .pic {
+            .pic {
             width: 300px;
             height: 300px;
             background: url('../../assets/images/index_amoeba1.jpg') center/cover no-repeat;
@@ -413,19 +382,16 @@ header {
             -webkit-mask-size: cover;
             mask-size: cover;
             animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
-
-        }
-
-        .content-item-1 .text {
+            }
+            .text {
             font-size: 1.2rem;
+            }
         }
 
         .content-item-2 {
             top: 10%;
             right: 20%;
-        }
-
-        .content-item-2 .pic {
+            .pic {
             width: 300px;
             height: 300px;
             background: url('../../assets/images/index_amoeba2.jpg') center/cover no-repeat;
@@ -434,7 +400,7 @@ header {
             -webkit-mask-size: cover;
             mask-size: cover;
             animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
-
+            }
         }
 
         .content-item-2 .text {
