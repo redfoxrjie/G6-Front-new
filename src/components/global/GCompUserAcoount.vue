@@ -14,7 +14,7 @@
     .user-account-wrapper{
         width: fit-content;
         height: $compSize;
-        padding: 2px 5px;
+        padding: 2px 0px;
         display: flex; 
         align-items: center;
         .ua-id{
@@ -22,20 +22,22 @@
             margin-left: 5px;
             // line-height: $compSize;
         }   
-    }
-    
-    .ua-img{
+
+        .ua-img{
         // height: 100%;
-        width: $compSize;
+        width: $compSize * .8;
         aspect-ratio: 1;
         border-radius: 50%;
         overflow: hidden;
-        img{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+            img{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
 
     }
+    }
+    
+
 
 </style>
