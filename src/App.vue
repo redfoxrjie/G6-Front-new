@@ -14,7 +14,7 @@
   </header>
   <RouterView />
   <PageFooter />
-  
+
 </template>
 
 <script>
@@ -25,8 +25,9 @@ import { RouterLink, RouterView } from 'vue-router'
 import PageFooter from './components/footer/PageFooter.vue'
 import SectionHotBlog from './components/home/SectionHotBlog.vue'
 import SectionTicket from './components/home/SectionTicket.vue'
+import LoginRegisterModal from './components/layout/LoginRegisterBox.vue'
 // import PageHeader from './components/home/PageHeader.vue'
-import'./assets/styles/style.scss'
+import './assets/styles/style.scss'
 
 
 export default defineComponent({
@@ -36,11 +37,12 @@ export default defineComponent({
     SectionHotBlog,
     SectionTicket,
     PageFooter,
+    LoginRegisterModal,
     // PageHeader
   }
 })
 </script>
 
 <style>
-  @import '@/assets/styles/style.scss';
+@import '@/assets/styles/style.scss';
 </style>

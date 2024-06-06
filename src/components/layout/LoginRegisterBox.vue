@@ -1,5 +1,5 @@
 <template>
-    <section v-if="isVisible">
+    <section class="modal" v-if="isVisible">
         <div class="container">
             <div class="form-box" ref="formBox">
                 <div class="register-box" ref="registerBox" :class="{ hidden: !switchLogin }">
@@ -37,22 +37,23 @@
                         <label for="remember-email">記住Email</label>
                         <a href="#" class="forgot-password">忘記密碼?</a>
                     </div>
-                    <button class="login-btn" @click="login">登入</button>
+                    <button class="login-btn" @click="$emit('close')">登入</button>
                     <button class="else-way">
                         <img src="/src/assets/images/global/icons/google.png" alt="">使用google帳號登入
                     </button>
                 </div>
             </div>
             <div class="con-box left">
-                <button class="close-left-btn" @click="closeForm">✖</button>
+                <button class="close-left-btn" @click="$emit('close')">✖</button>
+
                 <h2>歡迎來到<span>土狗旅遊</span></h2>
                 <p>快來踏上屬於你的旅程吧</p>
                 <img src="/src/assets/images/register_box.png" alt="註冊燈箱圖片">
-                <p>沒有帳號?</p>
+                <p>還沒有帳號?</p>
                 <button @click="switchLoginEvent">立即註冊</button>
             </div>
             <div class="con-box right">
-                <button class="close-right-btn" @click="closeForm">✖</button>
+                <button class="close-right-btn" @click="$emit('close')">✖</button>
                 <h2>歡迎來到<span>土狗旅遊</span></h2>
                 <p>快來踏上屬於你的旅程吧</p>
                 <img src="/src/assets/images/login_box.png" alt="登入燈箱圖片">
@@ -65,22 +66,23 @@
 
 
 <script setup>
-import { ref } from 'vue';
+import { ref, defineProps, defineEmits } from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { faLock } from '@fortawesome/free-solid-svg-icons';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faUser);
-library.add(faLock);
-library.add(faEnvelope);
+library.add(faUser, faLock, faEnvelope);
+
+const props = defineProps({
+    isVisible: Boolean
+});
+
+const emit = defineEmits(['close']);
 
 const switchLogin = ref(true);
 const formBox = ref(null);
 const registerBox = ref(null);
 const loginBox = ref(null);
-const isVisible = ref(true);
 
 const switchLoginEvent = () => {
     switchLogin.value = !switchLogin.value;
@@ -93,7 +95,7 @@ const switchLoginEvent = () => {
         registerBox.value.classList.add('hidden');
         loginBox.value.classList.remove('hidden');
     }
-}
+};
 
 const closeForm = () => {
     isVisible.value = false;
@@ -102,9 +104,21 @@ const closeForm = () => {
 
 
 <style lang="scss" scoped>
-@import '../../assets/styles/base/color';
-@import '../../assets/styles/base/font';
+@import '@/assets/styles/base/color';
+@import '@/assets/styles/base/font';
 
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); // 半透明背景
+    z-index: 1000; // 確保 z-index 高於其他元素
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .close-right-btn {
     position: absolute;
@@ -139,7 +153,8 @@ const closeForm = () => {
 .form-box {
     position: absolute;
     // left: 5%;
-    background-color: $secondColor-1;
+    background-color: $secondColor-2;
+    ;
     width: 400px;
     height: 500px;
     border-radius: 5px;
@@ -175,12 +190,12 @@ const closeForm = () => {
 
 .credentials-container label {
     margin-right: auto;
-    color: $secondColor-2;
+    color: $secondColor-1
 }
 
 .credentials-container .forgot-password {
     margin-left: auto;
-    color: $secondColor-2;
+    color: $secondColor-1;
     text-decoration: none;
 }
 
@@ -235,14 +250,14 @@ input:focus::placeholder {
 }
 
 .input-icon {
-    color: $secondColor-2;
+    color: $secondColor-1;
 }
 
 .register-btn,
 .login-btn {
     width: 70%;
     margin-top: 5%;
-    background-color: $accnetColor-1;
+    background-color: $accentColor-1;
     outline: none;
     border-radius: 28px;
     padding: 13px;
@@ -254,7 +269,7 @@ input:focus::placeholder {
 }
 
 .form-box button:hover {
-    background-color: $accnetColor-2;
+    background-color: $accentColor-2;
     color: #fff;
     transition: background-color 0.5s ease;
 }
@@ -295,7 +310,7 @@ input:focus::placeholder {
 }
 
 .con-box span {
-    color: $accnetColor-1
+    color: $accentColor-1;
 }
 
 .con-box img {
@@ -333,7 +348,7 @@ input:focus::placeholder {
     outline: none;
     border-radius: 28px;
     padding: 13px;
-    color: $secondColor-2;
+    color: "black";
     font-size: 1rem;
     letter-spacing: 2px;
     border: none;
@@ -341,7 +356,7 @@ input:focus::placeholder {
 }
 
 .form-box button.else-way:hover {
-    background-color: $secondColor-2;
+    background-color: $secondColor-1;
     color: #fff;
 }
 
