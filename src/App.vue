@@ -10,12 +10,10 @@
         <RouterLink to="/tickets">票券訂購</RouterLink>
         <RouterLink to="/login">會員登入</RouterLink>
       </nav>
-
     </div>
   </header>
   <RouterView />
   <PageFooter />
-  <!-- <ProductCard /> -->
   
 </template>
 
@@ -28,7 +26,7 @@ import PageFooter from './components/footer/PageFooter.vue'
 import SectionHotBlog from './components/home/SectionHotBlog.vue'
 import SectionTicket from './components/home/SectionTicket.vue'
 // import PageHeader from './components/home/PageHeader.vue'
-// import ProductCard from './components/layout/ProductCard.vue'
+import'./assets/styles/style.scss'
 
 
 export default defineComponent({

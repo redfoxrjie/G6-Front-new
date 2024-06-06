@@ -10,7 +10,7 @@ import router from './router/index.js'
 import '@/assets/styles/style.scss'
 import 'leaflet/dist/leaflet.css'
 
-import '@/fixLeafletIcons.js'  // 導入 Leaflet 圖標路徑的文件
+// import './fixLeafletIcons.js'  // 導入 Leaflet 圖標路徑的文件
 
 const app = createApp(App)
 

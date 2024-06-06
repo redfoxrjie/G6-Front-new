@@ -28,7 +28,7 @@ export default{
     props:['money','name'],
     data(){
         return{
-            product:{
+            menu:{
                 id:1,
                 name:'商品1',
                 img:'IndexTicket_01.jpg',
