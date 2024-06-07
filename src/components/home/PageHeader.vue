@@ -44,7 +44,7 @@
                 <div class="togo-large-text">TOGO</div>
             </div>
             <div class="logo">
-                <img src="../../assets/logo.png" alt="Logo">
+                <img src="@/assets/images/global/logo/logo.png" alt="Logo">
             </div>
         </header>
 
