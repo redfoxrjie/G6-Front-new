@@ -150,9 +150,21 @@ export default {
     }, 300), // 300毫秒的去抖動
 
     // 刪除行程中的地點
-  removeLocation(location) {
-    this.itinerary = this.itinerary.filter(item => item !== location);
-  },
+    removeLocation(location) {
+      // 找到對應的標記
+      const markerObj = this.markers.find(marker => marker.location === location);
+
+      if (markerObj) {
+        // 從地圖上移除標記
+        this.map.removeLayer(markerObj.marker);
+
+        // 從標記數組中移除標記
+        this.markers = this.markers.filter(marker => marker !== markerObj);
+      }
+
+      // 從行程列表中移除地點
+      this.itinerary = this.itinerary.filter(item => item !== location);
+    },
 
     // 選擇搜索結果
     selectResult(result) {
@@ -160,16 +172,19 @@ export default {
       this.map.setView([latlng.lat, latlng.lng], 13);
 
       // 在地圖上添加搜索結果的標記
-      L.marker([latlng.lat, latlng.lng]).addTo(this.map)
+      const marker = L.marker([latlng.lat, latlng.lng]).addTo(this.map)
         .bindPopup(result.display_name)
         .openPopup();
 
-       // 清空搜索結果和搜索查詢
+      // 存儲標記
+      this.markers.push({ location: result, marker: marker });
+
+      // 清空搜索結果和搜索查詢
       this.searchResults = [];
       this.searchQuery = '';
 
       // 清空 filteredSearchResults
-  this.filteredSearchResults = [];
+      this.filteredSearchResults = [];
 
       // 將選擇的結果加入行程列表
       this.itinerary.push(result);
