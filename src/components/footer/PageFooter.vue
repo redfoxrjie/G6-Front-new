@@ -94,12 +94,12 @@
   </footer>
 </template>
 
-<script>
+
+<script src="https://kit.fontawesome.com/e26cd8f315.js" crossorigin="anonymous">
 export default {
   name: "Footer",
-};
+}
 </script>
-<script src="https://kit.fontawesome.com/e26cd8f315.js" crossorigin="anonymous"></script>
 
 <style lang="scss" scoped>
 @import '../../assets/styles/base/color';

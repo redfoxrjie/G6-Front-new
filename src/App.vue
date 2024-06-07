@@ -27,7 +27,7 @@ import HelloWorld from './components/HelloWorld.vue'
 import SectionA from './components/home/SectionA.vue'
 import SectionB from './components/home/SectionB.vue'
 
-import SectionC from './components/home/SectionC.vue'
+// import SectionC from './components/home/SectionC.vue'
 import PageFooter from './components/footer/PageFooter.vue'
 
 import SectionHotBlog from './components/home/SectionHotBlog.vue'
