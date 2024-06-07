@@ -18,7 +18,7 @@
       <h3>在ToGo的熱門行程</h3>
       <p>幫助每個人，更容易規劃行程，更輕鬆分享體驗</p>
       <p>這些是受大家喜愛的熱門行程</p>
-      <GCompUserAccount/>
+      <GCompUserAccount />
     </div>
   </div>
   <div class="section-tripRank">
@@ -30,11 +30,11 @@
         <div class="tr-tab  col-2 col-md-2 " v-for="n in 3">
           <h4 class="bdradius-half">日本</h4>
         </div>
-        
+
       </div>
       <div class="tripRank-body">
         <div class="tripRank-wrapper">
-          <div class="tr-item-card col-11 col-lg-11 col-xl-10 " v-for="n in 3" >
+          <div class="tr-item-card col-11 col-lg-11 col-xl-10 " v-for="n in 3">
             <div class="tr-item-cardTag col-2 col-md-1">
               <h3>#{{ n }}</h3>
             </div>
@@ -49,7 +49,7 @@
                   </h4>
                 </div>
                 <!-- <div class="content-detail">userinfo</div> -->
-                <user-account/>
+                <user-account />
 
               </div>
             </div>
@@ -60,12 +60,88 @@
   </div>
   <div class="section-title">
     <div class="container">
-      <h3>探索所有日本的行程地圖</h3>
-      <p>日本地區總共有432個行程地圖，127位ToGo 創作者參與。</p>
+      <h3>探索所有{{areaFormat[selectedCase]}}的行程地圖</h3>
+      <p>{{areaFormat[selectedCase]}}地區總共有432個行程地圖，127位ToGo 創作者參與。</p>
     </div>
   </div>
+  <select v-model="selectedCase">
+      <option value="jp">日本</option>
+      <option value="kr">韓國</option>
+      <option value="th">泰國</option>
+      <option value="hkmo">港澳</option>
+    </select>
+  <div class="section-tripList">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+        <trip-card :tcImg="n.trp_img" :tc-title="n.trp_name" :tcMemName="n.u_nickname"
+        v-for="n in trips[selectedCase]" :key="n.trp_id" />
+
+      </div>
+      <p> {{ trips[selectedCase] }}</p>
+    </div>
+  </div>
+
 </template>
-<script></script>
+<script>
+import { ref, onMounted } from 'vue';
+export default {
+  setup() {
+
+    const areaFormat ={'jp':'日本','kr':"韓國",'th':"泰國",'hkmo':"港澳"};    //分類後會存在Trips
+    const trips = ref([]);
+    const selectedCase = ref('jp');
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/json/data.json');
+        const data = await response.json();
+        //先根據地區區分 暫存陣列位置
+        const classifiedTrips = {
+          jp: [],
+          kr: [],
+          th: [],
+          hkmo: []
+        }
+        data.trip.forEach(trip => {
+          switch (trip.trp_area) {
+            case '日本':
+              classifiedTrips.jp.push(trip);
+              break;
+            case '韓國':
+              classifiedTrips.kr.push(trip);
+              break;
+            case '泰國':
+              classifiedTrips.th.push(trip);
+              break;
+            case '港澳':
+              classifiedTrips.hkmo.push(trip);
+              break;
+
+          }
+        });
+        //存回到ref位置 要用.value的方式
+        trips.value = classifiedTrips;
+        console.log(classifiedTrips)
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    onMounted(() => {
+      fetchData();
+    });
+    return {
+      trips,
+      selectedCase,
+      areaFormat
+
+    }
+
+  }
+
+}
+
+
+</script>
 
 <style lang="scss" scoped>
 @import '../assets/styles/base/color';
@@ -94,12 +170,14 @@
 .tripRank-tabs-wrapper {
   display: flex;
   position: relative;
+
   .tr-tab {
     box-sizing: border-box;
     text-align: center;
     // padding-right:100/12*1%;
-    padding-right:20px ;
-    h4{
+    padding-right: 20px;
+
+    h4 {
       padding: 20px 0;
       border: 1.5px solid $secondColor-2;
       border-bottom: 0;
@@ -108,7 +186,8 @@
       color: $secondColor-2;
     }
   }
-  .tr-tab-active h4{
+
+  .tr-tab-active h4 {
     background-color: $secondColor-2;
     color: $primaryColor;
   }
@@ -161,7 +240,7 @@
 
 .tr-item-img {
   aspect-ratio: 19/15;
-  
+
 
   img {
     width: 100%;
@@ -182,6 +261,7 @@
   .content-title {
     width: 100%;
     margin: 5px 0;
+
     // border: 1px solid #000;
     h4 {
       padding: 5px 0;
@@ -218,6 +298,7 @@ input {
 }
 
 $searchBarHeight: 30px;
+
 .comp-searchBar {
 
   margin: 0 auto;
@@ -230,7 +311,7 @@ $searchBarHeight: 30px;
     height: $searchBarHeight;
     width: 80%;
     box-sizing: border-box;
-    padding: 0 $searchBarHeight / 5 ;
+    padding: 0 $searchBarHeight / 5;
   }
 }
 
@@ -296,62 +377,79 @@ $searchBarHeight: 30px;
   opacity: 1;
   /* Firefox */
 }
+
 //rwd 
 @media screen and (max-width: 768px) {
   $searchBarHeight: 50px;
-  .section-banner{
+
+  .section-banner {
     height: fit-content;
-    h1{display: none;}
-    background: none;
-    .comp-searchBar{
-      input{
-      border: 1px solid #000;
-      border-right: none;
+
+    h1 {
+      display: none;
     }
-    .icon-wrap{
+
+    background: none;
+
+    .comp-searchBar {
+      input {
+        border: 1px solid #000;
+        border-right: none;
+      }
+
+      .icon-wrap {
         border: 1px solid #000;
         border-left: none;
       }
     }
   }
-  .section-title{margin-top: 10px;}
-  .section-tripRank> .container{
+
+  .section-title {
+    margin-top: 10px;
+  }
+
+  .section-tripRank>.container {
     width: 100vw;
     max-width: 100%;
   }
 
-  .tripRank-tabs-wrapper{
+  .tripRank-tabs-wrapper {
     justify-content: center;
     margin: auto;
 
 
 
   }
-  .tripRank-tabs-wrapper >.tr-tab{
+
+  .tripRank-tabs-wrapper>.tr-tab {
     padding-right: 5px;
-    h4{
+
+    h4 {
       padding: 10px 0;
     }
   }
-  .tr-item-card{
-    h3{
+
+  .tr-item-card {
+    h3 {
       line-height: 3;
     }
   }
-  .tr-item{
+
+  .tr-item {
     flex-direction: column;
+
     // width:  calc(100 / 12) *10%;
-    .tr-item-img{
+    .tr-item-img {
       width: 100%;
       height: auto;
       aspect-ratio: 16/8;
       overflow: hidden;
     }
 
-    .tr-item-content{
+    .tr-item-content {
       // width: 100%;
-      padding-top: 10px ;
-      padding-bottom: 10px ;
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
   }
 
