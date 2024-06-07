@@ -13,7 +13,12 @@ import 'leaflet/dist/leaflet.css'
 // import './fixLeafletIcons.js'  // 導入 Leaflet 圖標路徑的文件
 
 const app = createApp(App)
-
+import GCompUserAccount from './components/global/GCompUserAcoount.vue'
+import GCompTripCard from './components/global/GCompTripCard.vue'
+app.component('user-account',  GCompUserAccount
+)
+app.component('trip-card',  GCompTripCard
+)
 app.use(createPinia())
 app.use(router)
 app.mount('#app')
