@@ -230,7 +230,7 @@ export default {
       position: absolute;
       top: 0;
       right: 0;
-      background-color: $accnetColor-1;
+      background-color: $accentColor-1;
       transform: translateY(15%);
       text-align: center;
     }
@@ -311,7 +311,7 @@ $searchBarHeight: 30px;
     height: $searchBarHeight;
     width: 80%;
     box-sizing: border-box;
-    padding: 0 $searchBarHeight / 5;
+    padding: 0 6px;
   }
 }
 
