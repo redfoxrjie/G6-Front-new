@@ -1,5 +1,10 @@
 <template>
-    <main>目前位在「地圖編輯」</main>
-  </template>
-  
-<script></script>
+
+  <main>目前位在「行程一覽」</main>
+  <Map></Map>
+</template>
+
+<script setup>
+import Map from './MapComponent.vue';
+</script>
+

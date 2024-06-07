@@ -1,6 +1,5 @@
 <template>
   <header>
- 
     <div class="wrapper">
       <nav>
         <RouterLink to="/">首頁</RouterLink>
@@ -12,23 +11,26 @@
         <RouterLink to="/login">會員登入</RouterLink>
         <RouterLink to="/trips">地圖編輯</RouterLink>
       </nav>
-
     </div>
   </header>
   <RouterView />
   <PageFooter />
-  
+
 </template>
 
 <script>
 import { defineComponent } from 'vue'
+import './assets/styles/style.scss'
+
 import { RouterLink, RouterView } from 'vue-router'
 import PageFooter from './components/footer/PageFooter.vue'
 import SectionHotBlog from './components/home/SectionHotBlog.vue'
 import SectionTicket from './components/home/SectionTicket.vue'
-// import GCompUserAccount from './components/global/GCompUserAcoount.vue'
-// app.component('user-account',  GCompUserAccount
-// )
+
+import LoginRegisterModal from './components/layout/LoginRegisterBox.vue'
+// import PageHeader from './components/home/PageHeader.vue'
+import './assets/styles/style.scss'
+
 export default defineComponent({
   components: {
     RouterLink,
@@ -36,7 +38,11 @@ export default defineComponent({
     SectionHotBlog,
     SectionTicket,
     PageFooter,
-    // GCompUserAccount
+
   }
 })
 </script>
+
+<style>
+@import '@/assets/styles/style.scss';
+</style>

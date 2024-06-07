@@ -1,5 +1,11 @@
+<script setup>
+import HCompSectionTitle from './HCompSectionTitle.vue';
+import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
+</script>
+
 <template>
     <div class="section">
+        <HCompSectionTitle title="熱門票券" />
         <div class="container">
             <div class="TK_card">
                 <div class="TK_txt_area">
@@ -29,35 +35,38 @@
                 </div>
             </div>
         </div>
+        <HCompLearnMoreBtn />
     </div>
 </template>
 
-<script></script>
-
 <style scoped>
-    .section{
-        margin: 50px;
-    }
-    .container{
-        display: flex;
-        padding-left: 55px;
-    }
-    .TK_card img{
-        width: 90%;
-        border-radius: 20px;
-    }
-    .TK_txt_area .TK_title{
-        padding-top: 10px;
-    }
-    .TK_txt_area .TK_price{
-        padding-top: 5px;
-        font-weight: bold;
-    }
-    .TK_txt_area .TK_buycount{
-        padding-top: 5px;
-        font-size: 12px;
-        color: #6C6C6C;
-    }
+.section {
+    margin: 50px;
+}
 
+.container {
+    display: flex;
+    padding-left: 55px;
+    margin-bottom: 50px;
+}
+
+.TK_card img {
+    width: 90%;
+    border-radius: 20px;
+}
+
+.TK_txt_area .TK_title {
+    padding-top: 10px;
+}
+
+.TK_txt_area .TK_price {
+    padding-top: 5px;
+    font-weight: bold;
+}
+
+.TK_txt_area .TK_buycount {
+    padding-top: 5px;
+    font-size: 12px;
+    color: #6C6C6C;
+}
 </style>
-

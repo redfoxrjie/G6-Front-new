@@ -14,7 +14,7 @@ const props = defineProps({
             <img src="../../assets/images/global/icons/paw-sm.svg" alt="" srcset="">
         </div>
         <h2 class="section-title">
-            {{ title }}
+            {{ props.title }}
         </h2>
     </div>
 </template>

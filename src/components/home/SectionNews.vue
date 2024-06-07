@@ -1,7 +1,3 @@
-<script setup>
-import HCompSectionTitle from './HCompSectionTitle.vue';
-import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
-</script>
 <template>
     <section class="home-section-news page-section">
         <div class="container">
@@ -23,6 +19,12 @@ import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
         </div>
     </section>
 </template>
+
+<script setup>
+    import HCompSectionTitle from './HCompSectionTitle.vue';
+    import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
+</script>
+
 <style lang="scss" scoped>
 @import '../../assets/styles/base/color';
 @import '../../assets/styles/base/font';

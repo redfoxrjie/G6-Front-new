@@ -7,16 +7,17 @@
         </button>
     </div>
 </template>
+
 <style lang="scss" scoped>
-    @import '../../assets/styles/base/font';
-    @import '../../assets/styles/base/color';
+    @import '@/assets/styles/base/font';
+    @import '@/assets/styles/base/color';
     .hs-section-btn-wrap{
         padding: $base-fontSize 0;
         margin: 0 auto;
     }
     .hs-btn{
         display: block;
-        background-color: $accnetColor-2;
+        background-color: $accentColor-2;
         margin: auto;
         border-radius: 10px;
         padding: 2px 30px ;
