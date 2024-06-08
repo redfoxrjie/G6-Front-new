@@ -1,5 +1,10 @@
 $containerWidth: 75vw;
+$sectionMargin-full: 86px 0px;
 
+.section-full-width {
+    width: 100%;
+    margin: $sectionMargin-full;
+}
 .container {
     width: $containerWidth;
     margin: 0px auto;

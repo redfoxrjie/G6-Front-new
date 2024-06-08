@@ -75,7 +75,7 @@ header {
                 a:hover, a.click {
                     color: $accentColor-1;
                 }
-                .btn-start-plan {
+                a.btn-start-plan {
                     background-color: $accentColor-1;
                     color: $black;
                     padding: 10px 14px;
@@ -88,6 +88,9 @@ header {
                         display: inline-block;
                         margin-right: 6px;
                         vertical-align: middle;
+                        &:hover {
+                            color: $black;
+                        }
                     }
                 }
             }

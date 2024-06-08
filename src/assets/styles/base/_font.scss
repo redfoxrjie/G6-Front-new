@@ -22,8 +22,6 @@
       format('svg');
 }
 
-
-
 // 字體變數
 $base-fontSize: 16px;
 
@@ -46,3 +44,5 @@ body {
   font-family: 'HunInn';
   font-size: $base-fontSize;
 }
+
+.font-time, .font-viewers { font-size: $base-fontSize * 0.75; }

@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "name": "北九州五天四夜雙人行",
+    "startDate": "2024/05/19",
+    "endDate": "2024/05/23",
+    "image": "src/assets/images/japan_yufuin-kinrinko.jpg"
+  },
+  {
+    "id": 2,
+    "name": "東京粉色自由行",
+    "startDate": "2024/03/04",
+    "endDate": "2024/03/09",
+    "image": "src/assets/images/japan_asakusa_street.jpg"
+  },
+  {
+    "id": 3,
+    "name": "濟州島六天五夜家族旅遊",
+    "startDate": "2024/01/12",
+    "endDate": "2024/01/17",
+    "image": "src/assets/images/korea_jeju-island.jpg"
+  },
+  {
+    "id": 4,
+    "name": "京阪神絕景賞楓五天四夜",
+    "startDate": "2023/10/20",
+    "endDate": "2023/10/24",
+    "image": "src/assets/images/japan_kyoto-street.jpg"
+  },
+  {
+    "id": 5,
+    "name": "墾丁四天三夜畢業旅行",
+    "startDate": "2023/07/11",
+    "endDate": "2024/07/14",
+    "image": "src/assets/images/taiwan_kenting.jpg"
+  },
+  {
+    "id": 6,
+    "name": "韓國釜山放鬆之旅",
+    "startDate": "2023/04/01",
+    "endDate": "2023/04/06",
+    "image": "src/assets/images/korea_busan.jpg"
+  }
+]
