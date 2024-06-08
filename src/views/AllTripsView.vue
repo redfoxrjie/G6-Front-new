@@ -24,32 +24,35 @@
   <div class="section-tripRank">
     <div class="container">
       <div class="tripRank-tabs-wrapper col-11 col-md-12">
-        <div class="tr-tab tr-tab-active col-2 col-md-2 ">
+        <!-- <div class="tr-tab tr-tab-active col-2 col-md-2 ">
           <h4 class="bdradius-half">日本</h4>
+        </div> -->
+        <div class="tr-tab  col-2 col-md-2 " 
+        v-for="(area,index) in areaFormat" :key="index" 
+        @click="tabSwitch(index)" :class="{'tr-tab-active' : selectedCase== index }"
+        >
+          <h4 class="bdradius-half">{{area}}</h4>
         </div>
-        <div class="tr-tab  col-2 col-md-2 " v-for="n in 3">
-          <h4 class="bdradius-half">日本</h4>
-        </div>
-
+        <!-- :tcImg="trips[selectedCase][n].trp_img" -->
       </div>
       <div class="tripRank-body">
         <div class="tripRank-wrapper">
-          <div class="tr-item-card col-11 col-lg-11 col-xl-10 " v-for="n in 3">
-            <div class="tr-item-cardTag col-2 col-md-1">
-              <h3>#{{ n }}</h3>
+          <div class="tr-item-card col-11 col-lg-11 col-xl-10 " v-for="(n, index) in 3"
+          >
+            <div class="tr-item-cardTag col-2 col-md-1" >
+              <h3>#{{index+1}}</h3>
             </div>
             <div class="tr-item shadow-v1 bdradius-sm col-10 col-md-11">
               <div class="tr-item-img col-12 col-md-3 col-xl-2">
-                <img src="https://fakeimg.pl/300x200/200">
+                <img :src="trips[selectedCase][index].trp_img">
               </div>
               <div class="tr-item-content col-12 col-md-9 col-xl-10">
                 <div class="content-title">
                   <h4>
-                    京都｜抹茶糰子秘境、最美落日大道、日系動畫場景全在這!
+                    {{ trips[selectedCase][index].trp_name }}
                   </h4>
                 </div>
-                <!-- <div class="content-detail">userinfo</div> -->
-                <user-account />
+                <user-account :uName="trips[selectedCase][index].u_nickname" />
 
               </div>
             </div>
@@ -64,30 +67,24 @@
       <p>{{areaFormat[selectedCase]}}地區總共有432個行程地圖，127位ToGo 創作者參與。</p>
     </div>
   </div>
-  <select v-model="selectedCase">
-      <option value="jp">日本</option>
-      <option value="kr">韓國</option>
-      <option value="th">泰國</option>
-      <option value="hkmo">港澳</option>
-    </select>
   <div class="section-tripList">
     <div class="container">
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-        <trip-card :tcImg="n.trp_img" :tc-title="n.trp_name" :tcMemName="n.u_nickname"
-        v-for="n in trips[selectedCase]" :key="n.trp_id" />
+        <trip-card v-for="(n,i) in 6" 
+        :tcImg="trips[selectedCase][i].trp_img" 
+        :tc-title="trips[selectedCase][i].trp_name" :tcMemName="trips[selectedCase][i].u_nickname"
+        :key="trips[selectedCase][i].trp_id" />
 
       </div>
-      <p> {{ trips[selectedCase] }}</p>
+      <p v-for="(n,i) in 6"> {{ trips[selectedCase][i] }}</p>
     </div>
   </div>
 
 </template>
-<script>
+<script setup>
 import { ref, onMounted } from 'vue';
-export default {
-  setup() {
 
-    const areaFormat ={'jp':'日本','kr':"韓國",'th':"泰國",'hkmo':"港澳"};    //分類後會存在Trips
+    const areaFormat ={'jp':'日本','kr':"韓國",'th':"泰國",'hkmo':"港澳"};
     const trips = ref([]);
     const selectedCase = ref('jp');
     const fetchData = async () => {
@@ -117,29 +114,25 @@ export default {
               break;
 
           }
-        });
-        //存回到ref位置 要用.value的方式
+        }
+      );
+        //存回到ref位置 ref要用ref.value的方式才會存入
         trips.value = classifiedTrips;
         console.log(classifiedTrips)
-
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    onMounted(() => {
-      fetchData();
-    });
-    return {
-      trips,
-      selectedCase,
-      areaFormat
 
+    const tabSwitch = (area)=> {
+      selectedCase.value = area;
+      console.log('hii',area,'result:',selectedCase.value);
+    }
+    const test =()=>{
+      alert('dddd');
     }
 
-  }
-
-}
-
+fetchData();
 
 </script>
 
@@ -148,8 +141,8 @@ export default {
 @import '../assets/styles/base/font';
 
 .shadow-v1 {
-  //   -webkit-box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.33);
-  // -moz-box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.33);
+  -webkit-box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.33);
+  -moz-box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.33);
   box-shadow: 0px 2px 4px .2px rgba(0, 0, 0, 0.25);
 }
 
