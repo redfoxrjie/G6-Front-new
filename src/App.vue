@@ -18,9 +18,10 @@
                 </nav>
             </div>
         </header>
+        <RouterView />
+        <PageFooter />
     </div>
-<RouterView />
-<PageFooter />
+
 </template>
 
 <script>

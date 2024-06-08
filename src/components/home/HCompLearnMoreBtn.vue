@@ -1,7 +1,7 @@
 <script>
 </script>
 <template>
-    <div class="hs-section-btn-wrap col-2">
+    <div class="hs-section-btn-wrap col-6 col-md-3">
         <button class="hs-btn">
             查看更多
         </button>

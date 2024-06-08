@@ -11,7 +11,7 @@
                     <RouterLink to="/about">關於我們</RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/trips">行程一覽</RouterLink>
+                    <RouterLink to="/alltrips">行程一覽</RouterLink>
                 </li>
                 <li>
                     <RouterLink to="/blog">旅行筆記</RouterLink>
@@ -25,7 +25,7 @@
                 <li>
                     <RouterLink to="/contact">聯絡我們</RouterLink>
                 </li>
-                <!-- <li><RouterLink to="/login">會員登入</RouterLink></li> -->
+                <li><RouterLink to="/trips">暫時的地圖編輯位置等到學會怎麼在icon切換頁面</RouterLink></li>
                 <!-- 點擊出現會員登入彈窗 -->
                 <li class="openLoginModal">
                     <button @click="openLoginModal">會員登入</button>
@@ -311,11 +311,12 @@ nav.closed {
     width: 96vw;
     height: 100%;
     background: url('../../assets/images/index_banner.jpg') center/cover no-repeat;
-    -webkit-mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
-    mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
-    -webkit-mask-size: cover;
-    mask-size: cover;
-    animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+    // -webkit-mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
+    // mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
+    // -webkit-mask-size: cover;
+    // mask-size: cover;
+    animation: morph 5s ease-in-out infinite alternate, change 30s linear infinite alternate;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
 }
 
 .slogan {
