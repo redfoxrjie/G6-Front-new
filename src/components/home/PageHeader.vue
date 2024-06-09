@@ -232,6 +232,7 @@ nav {
         padding: 20px 10px;
         box-sizing: border-box;
         border-top: solid 1px $primaryColor;
+        cursor: pointer;
 
         img {
             width: 30px;
