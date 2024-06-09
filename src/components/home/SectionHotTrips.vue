@@ -20,13 +20,17 @@
                     </a>
                 </div>
             </div>
-            <div class="btn"><a href="#">查看更多</a></div>
+            <!-- <div class="btn"><a href="#">查看更多</a></div> -->
+            <HCompLearnMoreBtn  link="/alltrips" />
+
         </div>
     </section>
 </template>
 
 <script setup>
 import HCompSectionTitle from './HCompSectionTitle.vue';
+import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
+
 
 const hotTripsData = [
     { title: '北九州五天四夜雙人行', memberName: '會員名稱', imgUrl: new URL('@/assets/images/japan_yufuin-kinrinko.jpg', import.meta.url).href, memPicUrl: 'https://picsum.photos/300/200/?random=10' },

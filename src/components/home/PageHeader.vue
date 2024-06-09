@@ -25,13 +25,13 @@
                 <li>
                     <RouterLink to="/contact">聯絡我們</RouterLink>
                 </li>
-                <li><RouterLink to="/trips">暫時的地圖編輯位置等到學會怎麼在icon切換頁面</RouterLink></li>
+                <!-- <li><RouterLink to="/trips">暫時的地圖編輯位置等到學會怎麼在icon切換頁面</RouterLink></li> -->
                 <!-- 點擊出現會員登入彈窗 -->
                 <li class="openLoginModal">
                     <button @click="openLoginModal">會員登入</button>
                 </li>
             </ul>
-            <div class="bottom-section">
+            <div class="bottom-section" @click="goToPage('/trips')">
                 <img src="@/assets/images/global/icons/Vector.svg" alt="map icon" crossorigin="anonymous">
                 <span>開始規劃</span>
             </div>
@@ -78,7 +78,7 @@
 
 <script>
 import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue';
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterLink, RouterView,useRouter } from 'vue-router';
 import LoginRegisterModal from '../layout/LoginRegisterBox.vue';
 
 export default defineComponent({
@@ -108,6 +108,12 @@ export default defineComponent({
         onBeforeUnmount(() => {
             menu.value.removeEventListener('click', toggleMenu);
         });
+        // 頁面切換
+        const router = useRouter();
+        const goToPage=(toLink)=>{
+            // const router = useRouter();
+            router.push(toLink);
+        };
 
         // 會員登入彈窗
         const openLoginModal = () => {
@@ -128,7 +134,8 @@ export default defineComponent({
             isLoginModalVisible,
             openLoginModal,
             closeLoginModal,
-            switchMode
+            switchMode,
+            goToPage
         };
     },
 });

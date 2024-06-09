@@ -35,7 +35,7 @@ import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
                 </div>
             </div>
         </div>
-        <HCompLearnMoreBtn />
+        <HCompLearnMoreBtn  link="/tickets" />
     </div>
 </template>
 

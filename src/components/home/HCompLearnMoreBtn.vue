@@ -1,8 +1,21 @@
-<script>
+<script setup>
+import { defineProps } from 'vue';
+
+import { useRouter } from 'vue-router';
+    const router = useRouter();
+    const goToPage=(toLink)=>{
+        router.push(toLink)
+    }
+    const props = defineProps({
+    link: {
+        type: String,
+        default: '/' //沒給值預設值是回到首頁的link      
+    }
+});
 </script>
 <template>
     <div class="hs-section-btn-wrap col-6 col-md-3">
-        <button class="hs-btn">
+        <button class="hs-btn" @click="goToPage(link)">
             查看更多
         </button>
     </div>

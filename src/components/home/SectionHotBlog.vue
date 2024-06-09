@@ -9,7 +9,7 @@
         <p>{{ card.content }} <a href="#">《More》</a></p>
       </div>
     </div>
-    <HCompLearnMoreBtn />
+    <HCompLearnMoreBtn  link="/blog" />
   </section>
 </template>
 

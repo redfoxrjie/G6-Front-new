@@ -24,16 +24,13 @@
   <div class="section-tripRank">
     <div class="container">
       <div class="tripRank-tabs-wrapper col-11 col-md-12">
-        <!-- <div class="tr-tab tr-tab-active col-2 col-md-2 ">
-          <h4 class="bdradius-half">日本</h4>
-        </div> -->
+
         <div class="tr-tab  col-2 col-md-2 " 
         v-for="(area,index) in areaFormat" :key="index" 
         @click="tabSwitch(index)" :class="{'tr-tab-active' : selectedCase== index }"
         >
           <h4 class="bdradius-half">{{area}}</h4>
         </div>
-        <!-- :tcImg="trips[selectedCase][n].trp_img" -->
       </div>
       <div class="tripRank-body">
         <div class="tripRank-wrapper">
