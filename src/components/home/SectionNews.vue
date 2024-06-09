@@ -16,7 +16,7 @@
                     </div>
                 </div>
             </div>
-            <HCompLearnMoreBtn />
+            <HCompLearnMoreBtn link="/news" />
         </div>
     </section>
 </template>
