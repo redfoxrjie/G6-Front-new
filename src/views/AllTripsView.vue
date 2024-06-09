@@ -6,7 +6,7 @@
     <h1>全世界最棒的旅遊體驗</h1>
     <div class="comp-searchBar col-md-7 col-12">
       <input class='' type="text" placeholder="下一個旅遊地點">
-      <div class="icon-wrap">
+      <div class="icon-wrap" @click="goToPage('/tripsSearchResult')">
         <span class="material-symbols-outlined">
           search
         </span>
@@ -25,19 +25,16 @@
     <div class="container">
       <div class="tripRank-tabs-wrapper col-11 col-md-12">
 
-        <div class="tr-tab  col-2 col-md-2 " 
-        v-for="(area,index) in areaFormat" :key="index" 
-        @click="tabSwitch(index)" :class="{'tr-tab-active' : selectedCase== index }"
-        >
-          <h4 class="bdradius-half">{{area}}</h4>
+        <div class="tr-tab  col-2 col-md-2 " v-for="(area, index) in areaFormat" :key="index" @click="tabSwitch(index)"
+          :class="{ 'tr-tab-active': selectedCase == index }">
+          <h4 class="bdradius-half">{{ area }}</h4>
         </div>
       </div>
       <div class="tripRank-body">
         <div class="tripRank-wrapper">
-          <div class="tr-item-card col-11 col-lg-11 col-xl-10 " v-for="(n, index) in 3"
-          >
-            <div class="tr-item-cardTag col-2 col-md-1" >
-              <h3>#{{index+1}}</h3>
+          <div class="tr-item-card col-11 col-lg-11 col-xl-10 " v-for="(n, index) in 3">
+            <div class="tr-item-cardTag col-2 col-md-1">
+              <h3>#{{ index + 1 }}</h3>
             </div>
             <div class="tr-item shadow-v1 bdradius-sm col-10 col-md-11">
               <div class="tr-item-img col-12 col-md-3 col-xl-2">
@@ -60,75 +57,87 @@
   </div>
   <div class="section-title">
     <div class="container">
-      <h3>探索所有{{areaFormat[selectedCase]}}的行程地圖</h3>
-      <p>{{areaFormat[selectedCase]}}地區總共有432個行程地圖，127位ToGo 創作者參與。</p>
+      <h3>探索所有{{ areaFormat[selectedCase] }}的行程地圖</h3>
+      <p>{{ areaFormat[selectedCase] }}地區總共有432個行程地圖，127位ToGo 創作者參與。</p>
     </div>
   </div>
   <div class="section-tripList">
     <div class="container">
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-        <trip-card v-for="(n,i) in 6" 
-        :tcImg="trips[selectedCase][i].trp_img" 
-        :tc-title="trips[selectedCase][i].trp_name" :tcMemName="trips[selectedCase][i].u_nickname"
-        :key="trips[selectedCase][i].trp_id" />
+        <trip-card v-for="(n, i) in 6" :tcImg="trips[selectedCase][i].trp_img"
+          :tc-title="trips[selectedCase][i].trp_name" :tcMemName="trips[selectedCase][i].u_nickname"
+          :key="trips[selectedCase][i].trp_id" />
 
       </div>
-      <p v-for="(n,i) in 6"> {{ trips[selectedCase][i] }}</p>
+      <p v-for="(n, i) in 6"> {{ trips[selectedCase][i] }}</p>
     </div>
   </div>
 
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
-    const areaFormat ={'jp':'日本','kr':"韓國",'th':"泰國",'hkmo':"港澳"};
-    const trips = ref([]);
-    const selectedCase = ref('jp');
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/json/data.json');
-        const data = await response.json();
-        //先根據地區區分 暫存陣列位置
-        const classifiedTrips = {
-          jp: [],
-          kr: [],
-          th: [],
-          hkmo: []
-        }
-        data.trip.forEach(trip => {
-          switch (trip.trp_area) {
-            case '日本':
-              classifiedTrips.jp.push(trip);
-              break;
-            case '韓國':
-              classifiedTrips.kr.push(trip);
-              break;
-            case '泰國':
-              classifiedTrips.th.push(trip);
-              break;
-            case '港澳':
-              classifiedTrips.hkmo.push(trip);
-              break;
+// tab中文內容對照
+const areaFormat = { 'jp': '日本', 'kr': "韓國", 'th': "泰國", 'hkmo': "港澳" };
+//紀錄資料 (綁定)
+const trips = ref([]);
+//紀錄切換狀態 (綁定)
+const selectedCase = ref('jp');
 
-          }
-        }
-      );
-        //存回到ref位置 ref要用ref.value的方式才會存入
-        trips.value = classifiedTrips;
-        console.log(classifiedTrips)
-      } catch (error) {
-        console.error('Error fetching data:', error);
+const fetchData = async () => {
+  try {
+    const response = await fetch('/json/data.json');
+    const data = await response.json();
+    //先根據地區區分 暫存陣列位置
+    const classifiedTrips = {
+      jp: [],
+      kr: [],
+      th: [],
+      hkmo: []
+    }
+    data.trip.forEach(trip => {
+      switch (trip.trp_area) {
+        case '日本':
+          classifiedTrips.jp.push(trip);
+          break;
+        case '韓國':
+          classifiedTrips.kr.push(trip);
+          break;
+        case '泰國':
+          classifiedTrips.th.push(trip);
+          break;
+        case '港澳':
+          classifiedTrips.hkmo.push(trip);
+          break;
+
       }
-    };
-
-    const tabSwitch = (area)=> {
-      selectedCase.value = area;
-      console.log('hii',area,'result:',selectedCase.value);
     }
-    const test =()=>{
-      alert('dddd');
-    }
+    );
+    //存回到ref位置 ref要用ref.value的方式才會存入
+    trips.value = classifiedTrips;
+    console.log(classifiedTrips)
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+//切換狀態 設置方法 
 
+const tabSwitch = (area) => {
+  selectedCase.value = area;
+  console.log('hii', area, 'result:', selectedCase.value);
+}
+const test = () => {
+  alert('dddd');
+}
+
+// 路由切換 方法
+const router = useRouter();
+const goToPage = (toLink) => {
+  router.push(toLink);
+}
+
+// 執行
 fetchData();
 
 </script>
@@ -138,8 +147,8 @@ fetchData();
 @import '../assets/styles/base/font';
 
 .shadow-v1 {
-  -webkit-box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.33);
-  -moz-box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.33);
+  -webkit-box-shadow: 0px 1px 6px 2px rgba(0, 0, 0, 0.33);
+  -moz-box-shadow: 0px 1px 6px 2px rgba(0, 0, 0, 0.33);
   box-shadow: 0px 2px 4px .2px rgba(0, 0, 0, 0.25);
 }
 
@@ -166,6 +175,7 @@ fetchData();
     text-align: center;
     // padding-right:100/12*1%;
     padding-right: 20px;
+    cursor: pointer;
 
     h4 {
       padding: 20px 0;

@@ -1,0 +1,33 @@
+{
+    "tripsSearch" :[
+        {
+            "trp_id": 6,
+            "u_nickname": "Daisy",
+            "trp_name": "日本春季遊",
+            "trp_area": "日本",
+            "trp_img": "https://picsum.photos/300/200/?random=4"
+        },
+        {
+            "trp_id": 12,
+            "u_nickname": "Jack",
+            "trp_name": "港澳歷史文化",
+            "trp_area": "港澳",
+            "trp_img": "https://picsum.photos/300/200/?random=11"
+        },
+        {
+            "trp_id": 13,
+            "u_nickname": "Kathy",
+            "trp_name": "泰國探險之旅",
+            "trp_area": "泰國",
+            "trp_img": "https://picsum.photos/300/200/?random=12"
+        },
+        {
+            "trp_id": 14,
+            "u_nickname": "Leo",
+            "trp_name": "日本文化體驗",
+            "trp_area": "日本",
+            "trp_img": "https://picsum.photos/300/200/?random=13"
+        }
+
+    ]
+}

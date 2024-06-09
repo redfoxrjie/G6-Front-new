@@ -50,10 +50,18 @@ const router = createRouter({
       component: () => import('../views/MemberMainView.vue')
     },
     {
+
+      path: '/tripsSearchResult',
+      name: 'tripsSearchResult',
+      component: () => import('../views/TripsSearchResultView.vue')
+    },
+
+{
       path: '/newsPage',
       name: 'newsPage',
       component: () => import('../views/NewsPageView.vue')
     }
+
     
   ]
 })

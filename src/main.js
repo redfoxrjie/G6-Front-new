@@ -19,6 +19,7 @@ app.component('user-account',  GCompUserAccount
 )
 app.component('trip-card',  GCompTripCard
 )
+
 app.use(createPinia())
 app.use(router)
 app.mount('#app')

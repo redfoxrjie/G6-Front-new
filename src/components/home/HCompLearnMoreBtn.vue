@@ -34,5 +34,7 @@ import { useRouter } from 'vue-router';
         margin: auto;
         border-radius: 10px;
         padding: 2px 30px ;
+        cursor: pointer;
+
     }
 </style>
