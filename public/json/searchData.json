@@ -1,5 +1,5 @@
 {
-    "tripsSearch" :[
+    "tripsSearch": [
         {
             "trp_id": 6,
             "u_nickname": "Daisy",
@@ -28,6 +28,39 @@
             "trp_area": "日本",
             "trp_img": "https://picsum.photos/300/200/?random=13"
         }
-
+    ],
+    "blogsSearch": [
+        {
+            "id": 5,
+            "name": "泰國清邁探險|熱帶叢林與古廟",
+            "date": "2024/02/20",
+            "viewers": 9875,
+            "likes": 110,
+            "image": "https://picsum.photos/300/200/?random=5"
+        },
+        {
+            "id": 13,
+            "name": "泰國夜市探險|地道小吃與夜生活",
+            "date": "2024/04/30",
+            "viewers": 12980,
+            "likes": 195,
+            "image": "https://picsum.photos/300/200/?random=13"
+        },
+        {
+            "id": 14,
+            "name": "曼谷大皇宮|文化與建築之美",
+            "date": "2024/03/14",
+            "viewers": 11540,
+            "likes": 175,
+            "image": "https://picsum.photos/300/200/?random=14"
+        },
+        {
+            "id": 27,
+            "name": "首爾夜生活|熱鬧酒吧與夜市",
+            "date": "2024/05/21",
+            "viewers": 13780,
+            "likes": 195,
+            "image": "https://picsum.photos/300/200/?random=27"
+        }
     ]
 }
