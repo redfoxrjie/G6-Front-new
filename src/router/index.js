@@ -55,13 +55,16 @@ const router = createRouter({
       name: 'tripsSearchResult',
       component: () => import('../views/TripsSearchResultView.vue')
     },
-
-{
-      path: '/newsPage',
+    {
+      path: '/news/:id',
       name: 'newsPage',
       component: () => import('../views/NewsPageView.vue')
+    },
+    {
+      path: '/blogPage',
+      name: 'blogPage',
+      component: () => import('../views/BlogPageView.vue')
     }
-
     
   ]
 })

@@ -33,12 +33,11 @@ export default {
     },
     methods: {
         loadJsonData() {
+            const newsId = this.$route.params.id;
             fetch('../../json/news.json')
                 .then((response) => response.json())
                 .then(data => {
-                    if (data.length > 0) {
-                        this.item = data[0]; //選擇第一篇文章
-                    }
+                    this.item = data.find(news => news.id == newsId);
                 })
                 .catch((error) => {
                     console.error('Error loading JSON data:', error);
@@ -66,6 +65,7 @@ export default {
         .news-info {
             .news-title {
                 font-size: $base-fontSize * 1.33;
+                line-height: 140%;
             }
             .published-date, .news-type {
                 display: inline-block;
