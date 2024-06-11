@@ -21,6 +21,8 @@
     "leaflet-control-geocoder": "^2.4.0",
     "leaflet-routing-machine": "^3.2.12",
     "pinia": "^2.1.7",
+    "sweetalert": "^2.1.2",
+    "sweetalert2": "^11.11.1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },

@@ -11,36 +11,52 @@
                     <div class="form-input"><input type="email" placeholder="Email">
                         <font-awesome-icon :icon="['fas', 'envelope']" class="input-icon" />
                     </div>
-                    <div class="form-input"><input type="password" placeholder="設定密碼">
-                        <font-awesome-icon :icon="['fas', 'lock']" class="input-icon" />
+                    <div class="form-input"><input v-model="registerPassword" :type="registerPasswordType"
+                            placeholder="設定密碼">
+                        <font-awesome-icon
+                            :icon="registerPasswordType === 'password' ? ['fas', 'lock'] : ['fas', 'unlock']"
+                            class="input-icon" @click="togglePasswordVisibility('register')" />
                     </div>
-                    <div class="form-input"><input type="password" placeholder="再次確認密碼">
-                        <font-awesome-icon :icon="['fas', 'lock']" class="input-icon" />
+                    <div class="form-input"><input v-model="registerPasswordConfirm" :type="registerPasswordConfirmType"
+                            placeholder="再次確認密碼">
+                        <font-awesome-icon
+                            :icon="registerPasswordConfirmType === 'password' ? ['fas', 'lock'] : ['fas', 'unlock']"
+                            class="input-icon" @click="togglePasswordVisibility('registerConfirm')" />
                     </div>
-                    <button class="register-btn">註冊</button>
+                    <button class="register-btn" @click="register" type="submit">註冊</button>
                     <button class="else-way">
                         <img src="/src/assets/images/global/icons/google.png" alt="">使用google帳號註冊
                     </button>
+                    <div class="rwd-btn">
+                        <p>已有會員?</p>
+                        <button @click="switchLoginEvent">會員登入</button>
+                    </div>
                 </div>
-                <div class="login-box" ref="loginBox" :class="{ hidden: switchLogin }">
+                <div class="login-box" ref="loginBox" :class="{ hidden: switchLogin }" @submit="submitOrder">
                     <h1>login</h1>
                     <!-- Input fields -->
                     <div class="form-input">
-                        <input type="email" placeholder="Email">
+                        <input v-model="email" type="email" placeholder="Email">
                         <font-awesome-icon :icon="['fas', 'envelope']" class="input-icon" />
                     </div>
-                    <div class="form-input"><input type="password" placeholder="輸入密碼">
-                        <font-awesome-icon :icon="['fas', 'lock']" class="input-icon" />
+                    <div class="form-input"><input v-model="password" :type="loginPasswordType" placeholder="輸入密碼">
+                        <font-awesome-icon
+                            :icon="loginPasswordType === 'password' ? ['fas', 'lock'] : ['fas', 'unlock']"
+                            class="input-icon" @click="togglePasswordVisibility('login')" />
                     </div>
                     <div class="credentials-container">
                         <input type="checkbox" id="remember-email">
                         <label for="remember-email">記住Email</label>
                         <a href="#" class="forgot-password">忘記密碼?</a>
                     </div>
-                    <button class="login-btn" @click="$emit('close')">登入</button>
+                    <button class="login-btn" @click="login" type="submit">登入</button>
                     <button class="else-way">
                         <img src="/src/assets/images/global/icons/google.png" alt="">使用google帳號登入
                     </button>
+                    <div class="rwd-btn">
+                        <p>還沒有帳號?</p>
+                        <button @click="switchLoginEvent">立即註冊</button>
+                    </div>
                 </div>
             </div>
             <div class="con-box left">
@@ -64,14 +80,10 @@
     </section>
 </template>
 
-
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUser, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
-library.add(faUser, faLock, faEnvelope);
+import Swal from 'sweetalert2';
+import { isValidEmail, isValidPassword } from '@/components/layout/validation';
 
 const props = defineProps({
     isVisible: Boolean
@@ -84,10 +96,184 @@ const formBox = ref(null);
 const registerBox = ref(null);
 const loginBox = ref(null);
 
+// 登入表單的輸入綁定
+const email = ref('');
+const password = ref('');
+const loginPasswordType = ref('password');
+
+// 註冊表單的輸入綁定
+// const registerEmail = ref('');
+// const registerUsername = ref('');
+// const registerPassword = ref('');
+// const registerPasswordConfirm = ref('');
+// const registerPasswordType = ref('password');
+// const registerPasswordConfirmType = ref('password');
+
+// 切換密碼可見性
+const togglePasswordVisibility = (field) => {
+    if (field === 'login') {
+        loginPasswordType.value = loginPasswordType.value === 'password' ? 'text' : 'password';
+    } else if (field === 'register') {
+        registerPasswordType.value = registerPasswordType.value === 'password' ? 'text' : 'password';
+    } else if (field === 'registerConfirm') {
+        registerPasswordConfirmType.value = registerPasswordConfirmType.value === 'password' ? 'text' : 'password';
+    }
+};
+
+// 登入事件
+const login = async () => {
+    if (!email.value && !password.value) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '請輸入email及密碼'
+        });
+    } else if (!email.value) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '請輸入有效email'
+        });
+    } else if (!isValidEmail(email.value)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Email',
+            text: 'email格式錯誤'
+        });
+    } else if (!password.value) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '請輸入密碼'
+        });
+    } else if (!isValidPassword(password.value)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Password',
+            text: '(必須為8字元，且包含半形英文字母小寫及數字)',
+        });
+    } else {
+        try {
+            // 模擬API請求
+            const response = await fetch('/public/json/users.json');
+            const data = await response.json();
+            const user = data.users.find(u => u.email === email.value && u.password === password.value);
+
+            if (user) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '登入成功!',
+                    showConfirmButton: false,
+                });
+                emit('close');  //假設登入後關閉彈窗
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Failed',
+                    text: '無法找到該用戶'
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Failed',
+                text: '查無此帳號存在'
+            });
+            console.error('Login error:', error);
+        }
+    }
+};
+
+// // 註冊事件
+// const register = async () => {
+//     if (!registerEmail.value && !registerUsername.value && !registerPassword.value && !registerPasswordConfirm.value) {
+//         Swal.fire({
+//             icon: 'error',
+//             title: 'Oops...',
+//             text: '請輸入所有必填字段'
+//         });
+//     } else if (!registerEmail.value) {
+//         Swal.fire({
+//             icon: 'error',
+//             title: 'Oops...',
+//             text: '請輸入有效email'
+//         });
+//     } else if (!isValidEmail(registerEmail.value)) {
+//         Swal.fire({
+//             icon: 'error',
+//             title: 'Invalid Email',
+//             text: 'email格式錯誤'
+//         });
+//     } else if (!registerUsername.value) {
+//         Swal.fire({
+//             icon: 'error',
+//             title: 'Oops...',
+//             text: '請輸入用戶名稱'
+//         });
+//     } else if (!registerPassword.value) {
+//         Swal.fire({
+//             icon: 'error',
+//             title: 'Oops...',
+//             text: '請輸入密碼'
+//         });
+//     } else if (!isValidPassword(registerPassword.value)) {
+//         Swal.fire({
+//             icon: 'error',
+//             title: 'Invalid Password',
+//             text: '(必須為8字元，且包含半形英文字母小寫及數字)',
+//         });
+//     } else if (registerPassword.value !== registerPasswordConfirm.value) {
+//         Swal.fire({
+//             icon: 'error',
+//             title: 'Oops...',
+//             text: '兩次密碼輸入不一致'
+//         });
+//     } else {
+//         try {
+//             // 模擬API請求
+//             const response = await fetch('/public/json/users.json');
+//             const data = await response.json();
+//             const user = data.users.find(u => u.email === registerEmail.value);
+
+//             if (!user) {
+//                 data.users.push({
+//                     email: registerEmail.value,
+//                     username: registerUsername.value,
+//                     password: registerPassword.value
+//                 });
+//                 Swal.fire({
+//                     icon: 'success',
+//                     title: '註冊成功!',
+//                     showConfirmButton: false,
+//                 });
+//                 emit('close');  //假設註冊後關閉彈窗
+//             } else {
+//                 Swal.fire({
+//                     icon: 'error',
+//                     title: 'Registration Failed',
+//                     text: '該email已存在'
+//                 });
+//             }
+//         } catch (error) {
+//             Swal.fire({
+//                 icon: 'error',
+//                 title: 'Registration Failed',
+//                 text: '註冊失敗'
+//             });
+//             console.error('Registration error:', error);
+//         }
+//     }
+// };
+
+// 登入註冊切換
 const switchLoginEvent = () => {
     switchLogin.value = !switchLogin.value;
-    const translateValue = switchLogin.value ? '-0%' : '93%';
-    formBox.value.style.transform = `translateX(${translateValue})`;
+
+    if (window.innerWidth > 768) {
+        const translateValue = switchLogin.value ? '-0%' : '93%';
+        formBox.value.style.transform = `translateX(${translateValue})`;
+    }
+    //RWD
     if (switchLogin.value) {
         loginBox.value.classList.add('hidden');
         registerBox.value.classList.remove('hidden');
@@ -101,6 +287,7 @@ const closeForm = () => {
     isVisible.value = false;
 };
 </script>
+
 
 
 <style lang="scss" scoped>
@@ -181,28 +368,27 @@ const closeForm = () => {
     justify-content: space-between;
     width: 70%;
     margin: 10px 0;
-}
 
-.credentials-container input[type="checkbox"] {
-    width: auto;
-    margin-right: 5px;
-}
+    input[type="checkbox"] {
+        width: auto;
+        margin-right: 5px;
+    }
 
-.credentials-container label {
-    margin-right: auto;
-    color: $secondColor-1
-}
+    label {
+        margin-right: auto;
+        color: $secondColor-1
+    }
 
-.credentials-container .forgot-password {
-    margin-left: auto;
-    color: $secondColor-1;
-    text-decoration: none;
-}
+    .forgot-password {
+        margin-left: auto;
+        color: $secondColor-1;
+        text-decoration: none;
 
-.credentials-container .forgot-password:hover {
-    text-decoration: underline;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
-
 
 .hidden {
     display: none;
@@ -221,37 +407,38 @@ h1 {
     width: 70%;
     margin: 8px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+
+    input {
+        background-color: transparent;
+        width: 90%;
+        color: #fff;
+        border: none;
+        padding: 10px 0;
+        text-indent: 10px;
+        letter-spacing: 2px;
+        font-size: 0.92rem;
+    }
+
+    input::placeholder {
+        color: #fff;
+    }
+
+    input:focus {
+        color: #fff;
+        outline: none;
+        border-bottom: 1px solid #fff;
+        transition: 0.5s;
+
+        input:focus::placeholder {
+            opacity: 1;
+        }
+    }
+
+    .input-icon {
+        color: $secondColor-1;
+    }
 }
 
-input {
-    background-color: transparent;
-    width: 90%;
-    color: #fff;
-    border: none;
-    padding: 10px 0;
-    text-indent: 10px;
-    letter-spacing: 2px;
-    font-size: 0.92rem;
-}
-
-input::placeholder {
-    color: #fff;
-}
-
-input:focus {
-    color: #fff;
-    outline: none;
-    border-bottom: 1px solid #fff;
-    transition: 0.5s;
-}
-
-input:focus::placeholder {
-    opacity: 1;
-}
-
-.input-icon {
-    color: $secondColor-1;
-}
 
 .register-btn,
 .login-btn {
@@ -266,12 +453,12 @@ input:focus::placeholder {
     letter-spacing: 2px;
     border: none;
     cursor: pointer;
-}
 
-.form-box button:hover {
-    background-color: $accentColor-2;
-    color: #fff;
-    transition: background-color 0.5s ease;
+    &:hover {
+        background-color: $accentColor-2;
+        color: #fff;
+        transition: background-color 0.5s ease;
+    }
 }
 
 .con-box {
@@ -283,6 +470,50 @@ input:focus::placeholder {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+
+    h2 {
+        color: #8e9aaf;
+        font-size: 1.5rem;
+        font-weight: bold;
+        letter-spacing: 3px;
+        text-align: center;
+        margin-bottom: 4px;
+    }
+
+    p {
+        font-size: 0.875rem;
+        letter-spacing: 2px;
+        color: #8e9aaf;
+        text-align: center;
+    }
+
+    span {
+        color: $accentColor-1;
+    }
+
+    img {
+        width: 300px;
+        height: 190px;
+        opacity: 0.9;
+        margin: 40px 0;
+    }
+
+    button {
+        margin-top: 3%;
+        background-color: #fff;
+        color: $secondColor-2;
+        border: 1px solid $secondColor-2;
+        padding: 6px 10px;
+        border-radius: 28px;
+        letter-spacing: 1px;
+        outline: none;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $secondColor-2;
+            color: #fff;
+        }
+    }
 }
 
 .con-box.left {
@@ -293,49 +524,6 @@ input:focus::placeholder {
     right: -1%;
 }
 
-.con-box h2 {
-    color: #8e9aaf;
-    font-size: 1.5rem;
-    font-weight: bold;
-    letter-spacing: 3px;
-    text-align: center;
-    margin-bottom: 4px;
-}
-
-.con-box p {
-    font-size: 0.875rem;
-    letter-spacing: 2px;
-    color: #8e9aaf;
-    text-align: center;
-}
-
-.con-box span {
-    color: $accentColor-1;
-}
-
-.con-box img {
-    width: 300px;
-    height: 190px;
-    opacity: 0.9;
-    margin: 40px 0;
-}
-
-.con-box button {
-    margin-top: 3%;
-    background-color: #fff;
-    color: $secondColor-2;
-    border: 1px solid $secondColor-2;
-    padding: 6px 10px;
-    border-radius: 28px;
-    letter-spacing: 1px;
-    outline: none;
-    cursor: pointer;
-}
-
-.con-box button:hover {
-    background-color: $secondColor-2;
-    color: #fff;
-}
 
 .else-way {
     margin-top: 1rem;
@@ -363,5 +551,71 @@ input:focus::placeholder {
 .else-way img {
     width: 8%;
     padding: 0 0.3rem;
+}
+
+.rwd-btn {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .modal {
+        height: 108%;
+    }
+
+    .container {
+        width: 400px;
+        margin: 5% 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .con-box img {
+        display: none;
+    }
+
+
+    .rwd-btn {
+        display: flex;
+        align-items: center;
+        margin-top: 5%;
+
+        button {
+            background-color: $secondColor-1;
+            border-radius: 28px;
+            margin-left: 10px;
+            // padding: 5px;
+        }
+
+        &:hover {
+            text-decoration: dashed;
+        }
+    }
+
+    .close-right-btn {
+        top: -227px;
+        right: 184px;
+    }
+
+    .close-left-btn {
+        position: absolute;
+        display: none;
+    }
+
+    .form-box {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform: translateX(0%);
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .hidden {
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        top: 0;
+    }
 }
 </style>
