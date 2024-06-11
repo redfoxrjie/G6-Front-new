@@ -7,6 +7,7 @@
                     v-for="item in filteredNews" 
                     :key="item.id" 
                     class="list-item"
+                    @click="navigateToNewsPage(item.id)"
                 >
                     <div class="news-img">
                         <img :src="item.img" alt="news image">
@@ -84,6 +85,9 @@ export default {
         },
         hideFilterTabs() {
             this.showFilterTabs = false;
+        },
+        navigateToNewsPage(id) {
+            this.$router.push({ name: 'newsPage', params: { id } });
         }
     }
 };
@@ -94,6 +98,7 @@ export default {
 @import '../assets/styles/base/font';
 
 .news-container {
+    min-height: 380px;
     margin-top: 120px;
     h2 {
         color: $secondColor-2;
@@ -133,6 +138,11 @@ export default {
                     margin-top: 10px;
                     .published-date {
                         margin-right: 16px;
+                    }
+                    .news-type {
+                        background-color: $accentColor-1;
+                        color:$black;
+                        padding: 2px 4px;
                     }
                     .news-title {
                         margin-top: 16px;

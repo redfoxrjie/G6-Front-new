@@ -68,6 +68,11 @@ const router = createRouter({
       path: '/news/:id',
       name: 'newsPage',
       component: () => import('../views/NewsPageView.vue')
+    },
+    {
+      path: '/blogPage',
+      name: 'blogPage',
+      component: () => import('../views/BlogPageView.vue')
     }
   ]
 })
