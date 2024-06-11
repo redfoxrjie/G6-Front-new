@@ -10,6 +10,13 @@ import router from './router/index.js'
 import '@/assets/styles/style.scss'
 import 'leaflet/dist/leaflet.css'
 
+// 引入fontawesome
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faHouse } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+library.add(faHouse);
+
 // import './fixLeafletIcons.js'  // 導入 Leaflet 圖標路徑的文件
 
 const app = createApp(App)
