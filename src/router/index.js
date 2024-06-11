@@ -55,6 +55,13 @@ const router = createRouter({
       name: 'tripsSearchResult',
       component: () => import('../views/TripsSearchResultView.vue')
     },
+    
+    {
+
+      path: '/blogSearchResult',
+      name: 'blogSearchResult',
+      component: () => import('../views/BlogSearchResultView.vue')
+    },
 
 {
       path: '/newsPage',
