@@ -50,10 +50,19 @@ const router = createRouter({
       component: () => import('../views/MemberMainView.vue')
     },
     {
-
       path: '/tripsSearchResult',
       name: 'tripsSearchResult',
       component: () => import('../views/TripsSearchResultView.vue')
+    },
+    {  
+      path: '/TicketOrder',
+      name: 'TicketOrder',
+      component: () => import('../views/TicketOrder.vue')
+    },
+    {
+      path: '/blogSearchResult',
+      name: 'blogSearchResult',
+      component: () => import('../views/BlogSearchResultView.vue')
     },
     {
       path: '/news/:id',
@@ -65,7 +74,6 @@ const router = createRouter({
       name: 'blogPage',
       component: () => import('../views/BlogPageView.vue')
     }
-    
   ]
 })
 

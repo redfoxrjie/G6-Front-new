@@ -8,7 +8,7 @@
     <div class="section-resultDisplay">
         <div class="container">
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-                <trip-card v-for="(n, i) in tripsResultData" :tcImg="tripsResultData[i].trp_img"
+                <GCompTripCard v-for="(n, i) in tripsResultData" :tcImg="tripsResultData[i].trp_img"
                     :tc-title="tripsResultData[i].trp_name" :tcMemName="tripsResultData[i].u_nickname"
                     :key="tripsResultData[i].trp_id" />
 
@@ -22,6 +22,7 @@
 
 </template>
 <script setup>
+import GCompTripCard from '@/components/global/GCompTripCard.vue';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
