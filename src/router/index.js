@@ -54,17 +54,21 @@ const router = createRouter({
       name: 'tripsSearchResult',
       component: () => import('../views/TripsSearchResultView.vue')
     },
-    {  path: '/TicketOrder',
+    {  
+      path: '/TicketOrder',
       name: 'TicketOrder',
       component: () => import('../views/TicketOrder.vue')
     },
     {
-      path: '/newsPage',
+      path: '/blogSearchResult',
+      name: 'blogSearchResult',
+      component: () => import('../views/BlogSearchResultView.vue')
+    },
+    {
+      path: '/news/:id',
       name: 'newsPage',
       component: () => import('../views/NewsPageView.vue')
     }
-
-    
   ]
 })
 
