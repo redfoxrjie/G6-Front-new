@@ -69,7 +69,9 @@
           </tr>
         </table>
       </div>
-      <font-awesome-icon :icon="['fas', 'exclamation']" />    
+      <font-awesome-icon :icon="['fas', 'camera']" />    
+      <font-awesome-icon :icon="['fas', 'skull-crossbones']" />
+      <font-awesome-icon :icon="['fas', 'circle-exclamation']" />      
       <p>請注意本平台不會向您收取任何平台交易手續費，<br>但你下單時使用的第三方支付平台可能會向您收取相關手續費，<br>請參考其相關服務政策和規定，並向你所選的交易服務商取得更多資訊。</p>
     </div>
     <div class="Order">
@@ -115,11 +117,11 @@
     },
   };
   
-  import { library } from '@fortawesome/fontawesome-svg-core';
-  import { faHouse } from '@fortawesome/free-solid-svg-icons';
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  // import { library } from '@fortawesome/fontawesome-svg-core';
+  // import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+  // import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   
-  library.add(faHouse);
+  // library.add(faCircleExclamation);
   
   </script>
   
