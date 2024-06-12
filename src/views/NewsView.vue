@@ -251,7 +251,6 @@ export default {
                     background: center/ contain no-repeat url(@/assets/images/filter-icon.svg);
                     margin-left: auto;
                     cursor: pointer;
-                    // display: none;
                     }
                 }
                 .filter-tab {

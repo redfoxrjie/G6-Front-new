@@ -73,10 +73,10 @@
                                         <div class="mem-name">nabi</div>
                                     </div>
                                 </div>
-                                <div class="comment-text">
+                                <form class="comment-text">
                                     <textarea placeholder="留言回覆"></textarea>
-                                    <button class="submit-btn">回覆</button>
-                                </div>
+                                    <button class="submit-btn" name="回覆" type="submit">回覆</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -112,7 +112,8 @@
     </article>
 </template>
 
-<script></script>
+<script>
+</script>
 
 <style lang="scss" scoped>
 @import '../assets/styles/base/color';
