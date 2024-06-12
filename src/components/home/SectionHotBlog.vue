@@ -9,7 +9,7 @@
         <p>{{ card.content }} <a href="#">《More》</a></p>
       </div>
     </div>
-    <HCompLearnMoreBtn  link="/blog" />
+    <HCompLearnMoreBtn link="/blog" />
   </section>
 </template>
 
@@ -55,46 +55,81 @@ section {
   width: 100%;
   height: 400px;
   margin-bottom: 60px;
+
   .hot-blog-card {
-  flex-direction: column;
-  justify-content: flex-end;
-  display: flex;
-  width: 0px;
-  height: 100%;
-  flex-grow: 1;
-  opacity: .5;
-  transition: .5s ease;
-  border-radius: 20px;
-  margin: 1%;
-  background-position: center center;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    justify-content: flex-end;
+    display: flex;
+    width: 0px;
+    height: 100%;
+    flex-grow: 1;
+    opacity: .5;
+    transition: .5s ease;
+    border-radius: 20px;
+    margin: 1%;
+    background-position: center center;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
     p {
-    display: none;
-    /* Hide paragraph by default */
+      display: none;
+      /* Hide paragraph by default */
     }
-    &:hover{
+
+    &:hover {
       opacity: 1;
       filter: contrast(100%);
+
       p {
-      display: block;
-      /* Show paragraph on hover */
+        display: block;
+        /* Show paragraph on hover */
       }
-    } 
-    h4, p, a {
-    line-height: 1.4;
-    color: $primaryColor;
-    margin-bottom: 1rem;
+    }
+
+    h4,
+    p,
+    a {
+      line-height: 1.4;
+      color: $primaryColor;
+      margin-bottom: 1rem;
     }
   }
+
   .hot-blog-card.active {
     height: 400px;
     flex-grow: 2;
     opacity: 1;
+
     p {
       display: block;
       /* Always show paragraph when active */
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .hot-blog-card-wrapper {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+
+    .hot-blog-card {
+      width: 100%;
+      opacity: 1;
+      height: auto;
+      margin: 10px 0;
+      opacity: 1;
+      padding: 16px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    .hot-blog-card.active {
+      width: 100%;
+      height: 300px;
     }
   }
 }
