@@ -30,7 +30,7 @@
       <div class="blogList-row row row-cols-1 row-cols-md-2 row-cols-lg-3  row-cols-xxl-4">
         <BCBlogCard v-for="(n, index) in currentCardLimit" :bcImg="blogs[index + currentShowIndex].image"
           :bcTitle="blogs[index + currentShowIndex].name" :bcLikesCount="blogs[index + currentShowIndex].likes"
-          :bcViewsCount="blogs[index + currentShowIndex].viewers" :bcDate="blogs[index + currentShowIndex].date" />
+          :bcViewsCount="blogs[index + currentShowIndex].viewers" :bcDate="blogs[index + currentShowIndex].date"/>
       </div>
 
     </div>

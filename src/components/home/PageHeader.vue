@@ -43,9 +43,9 @@
                 <div class="slogan">土狗陪您 TOGO 展開新的旅程</div>
                 <div class="togo-large-text">TOGO</div>
             </div>
-            <div class="logo">
+            <RouterLink to="/" class="logo">
                 <img src="@/assets/images/global/logo/logo.png" alt="Logo">
-            </div>
+            </RouterLink>
         </header>
 
         <section class="content">
