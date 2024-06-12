@@ -2,42 +2,31 @@
     <main>
         <div class="section-full-width">
             <div class="mem-page-banner">
-                <!-- action放置API -->
-                <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
-                    :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple
-                    :limit="3" :on-exceed="handleExceed" :file-list="fileList">
-                    <el-button size="small" type="primary">
-                        <font-awesome-icon :icon="['fas', 'file-pen']" />
-                        編輯封面</el-button>
-                </el-upload>
-
-                <!-- <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple
-                    :on-success="handleSuccess" :on-error="handleError" :before-upload="beforeUpload">
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">將圖片拖曳至此處，或<em>點擊上傳</em></div>
-                    <div class="el-upload__tip" slot="tip">只能上傳jpg/png檔案，且不超過500KB</div>
-                </el-upload> -->
-                <!-- <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple
-                    :on-success="handleSuccess" :on-error="handleError" :before-upload="beforeUpload">
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text"><em>點擊上傳</em></div>
-                </el-upload> -->
+                <div>
+                    <label for="banner-upload" class="banner-lable"><font-awesome-icon
+                            :icon="['fas', 'pen-to-square']" />編輯封面</label>
+                    <input id="banner-upload" type="file" @change="uploadImage" accept="image/*" style="display: none;">
+                    <!-- 如果沒有圖片顯示的默認背景 -->
+                    <div v-if="!imageUrl" class="default-background"></div>
+                </div>
             </div>
             <div class="mem-info">
-
                 <div class="mem-headshot">
                     <img src="@/assets/images/mem-headshot-01.jpg" alt="member headshot photo">
-                    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
-                        :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-
-                        <font-awesome-icon :icon="['fas', 'camera']" />
-                    </el-upload>
                 </div>
+                <label for="headshot-upload" class="headshot-lable"><font-awesome-icon
+                        :icon="['fas', 'camera']" /></label>
+                <input id="headshot-upload" type="file" @change="headshotImage" accept="image/*" style="display: none;">
 
                 <div class="mem-name">Josh Cheng</div>
                 <div class="mem-id">@用戶ID</div>
-                <div class="mem-quote">一台相機，一只皮箱，一趟說走就走的旅行 </div>
+                <!-- <div class="mem-quote">一台相機，一只皮箱，一趟說走就走的旅行 </div> -->
+                <input id="edit-quote" type="text" @change="headshotImage" class="input-quote"
+                    placeholder="Write your quote...">
+                <label for="edit-quote" class="edit-quote">
+                    <font-awesome-icon :icon="['fas', 'pen-to-square']" />
+                </label>
+
 
             </div>
             <div class="content-block container">
@@ -60,11 +49,30 @@
 import { ref } from 'vue';
 import MyBlog from '@/components/layout/MyBlog.vue';
 import MyTrip from '@/components/layout/MyTrip.vue';
-// import { library } from '@fortawesome/fontawesome-svg-core';
-// import { faFilePen, faCamera, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
-// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-// library.add(faFilePen, faCamera, faCircleExclamation);
+const imageUrl = ref('');
+
+const uploadImage = async (event) => {
+    const files = event.target.files;
+    if (!files.length) return;
+
+    const formData = new FormData();
+    formData.append('image', files[0]);
+
+    try {
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const result = await response.json();
+        imageUrl.value = result.filePath;  // 保存返回的文件路徑
+    } catch (error) {
+        console.error('上傳過程發生錯誤', error);
+        alert('上傳失敗');
+    }
+};
+
 
 // 1. 設定"旅行筆記"是預選狀態
 const selectedTab = ref('');
@@ -92,14 +100,15 @@ selectTab('旅行筆記')
         position: relative;
     }
 
-    .el-button {
-        width: 120px;
-        height: 40px;
+
+    .banner-lable {
+        padding: 10px;
         border-radius: 23px;
         background-color: rgb(79, 130, 212, 70%);
         font-size: $base-fontSize;
+        color: $primaryColor;
         border-color: transparent;
-        letter-spacing: $base-fontSize * 0.8125 * 0.1;
+        font-size: $base-fontSize * 0.8125;
         position: absolute;
         bottom: 0%;
         right: 0%;
@@ -110,6 +119,22 @@ selectTab('旅行筆記')
         text-align: center;
         position: relative;
         padding: 50px 0;
+
+        .headshot-lable {
+            padding: 7px;
+            border-radius: 23px;
+            background-color: $primaryColor;
+            font-size: $base-fontSize;
+            ;
+            color: $secondColor-2;
+            border-color: transparent;
+            letter-spacing: 1.3px;
+            position: absolute;
+            bottom: 68%;
+            right: 45%;
+            transform: translate(-50%, -50%);
+        }
+
 
         .mem-headshot {
             width: 100px;
@@ -162,6 +187,26 @@ selectTab('旅行筆記')
             letter-spacing: $base-fontSize * 0.8125 * 0.1;
             color: $gray;
         }
+
+        .input-quote {
+            text-align: center;
+            padding: 8px 12px;
+            color: $black;
+            margin-top: 8px;
+            border: none;
+            // box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            font-size: $base-fontSize*0.875;
+            background-color: $primaryColor;
+        }
+
+        .input-quote:focus {
+            border-bottom: $gray solid 0.1rem;
+            border-color: $grey;
+            outline: none;
+            box-shadow: 0 0 8px $grey;
+        }
+
+
     }
 }
 
