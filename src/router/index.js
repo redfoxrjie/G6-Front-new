@@ -64,6 +64,16 @@ const router = createRouter({
       name: 'TicketOrder',
       component: () => import('../views/TicketOrder.vue')
     },
+    {  
+      path: '/TicketInner',
+      name: 'TicketInner',
+      component: () => import('../views/TicketInner.vue')
+    },
+    {  
+      path: '/ContactView',
+      name: 'ContactView',
+      component: () => import('../views/ContactView.vue')
+    },
     {
       path: '/blogSearchResult',
       name: 'blogSearchResult',

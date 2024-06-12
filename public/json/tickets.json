@@ -1,0 +1,124 @@
+{
+  "tickets":[
+    {
+      "id": 1,
+      "name": "美麗海水族館入場券",
+      "content": "Okinawa Churaumi Aquarium",
+      "price": "TWD 450",
+      "viewers": "157,820 人氣",
+      "image": "../../src/assets/images/ticket_01.jpg"
+    },
+    {
+      "id": 2,
+      "name": "文化王國入場票券",
+      "content": "玉泉洞・王國村・毒蛇博物公園",
+      "price": "TWD 650",
+      "viewers": "157,820 人氣",
+      "image": "../../src/assets/images/ticket_02.jpg"
+    },
+    {
+      "id": 3,
+      "name": "沖繩中北部一日遊｜套裝行程",
+      "content": "美麗海水族館、古宇利島、...",
+      "price": "TWD 1,479",
+      "viewers": "157,820 人氣",
+      "image": "../../src/assets/images/ticket_03.jpg"
+    },
+    {
+      "id": 4,
+      "name": "阿倍野展望台入場票券",
+      "content": "ABENO HARUKAS 300",
+      "price": "TWD 150",
+      "viewers": "157,820 人氣",
+      "image": "../../src/assets/images/ticket_04.jpg"
+    },
+    {
+      "id": 5,
+      "name": "環球影城門票",
+      "content": "Universal Studios Japan",
+      "price": "TWD 1,130",
+      "viewers": "157,820 人氣",
+      "image": "../../src/assets/images/ticket_05.jpg"
+    },
+    {
+      "id": 6,
+      "name": "大阪天保山大摩天輪入場券",
+      "content": "Tempozan Ferris Wheel",
+      "price": "TWD 185",
+      "viewers": "157,820 人氣",
+      "image": "../../src/assets/images/ticket_06.jpg"
+    },
+    {
+      "id": 7,
+      "name": "彩虹雲霄酒店餐廳自助餐",
+      "content": "（76、78樓）",
+      "price": "TWD 838",
+      "viewers": "157,820 人氣",
+      "image": "src/assets/images/ticket_07.jpg"
+    },
+    {
+      "id": 8,
+      "name": "丹嫩莎朵水上市場 + 美功鐵道市集｜套裝行程",
+      "content": "ABENO HARUKAS 300",
+      "price": "TWD 1,170",
+      "viewers": "157,820 人氣",
+      "image": "src/assets/images/ticket_08.jpg"
+    },
+    {
+      "id": 9,
+      "name": "芭堤雅蒂芙尼人妖秀門票",
+      "content": "TIFFANY SHOW PATTAYA",
+      "price": "TWD 1,479",
+      "viewers": "157,820 人氣",
+      "image": "src/assets/images/ticket_09.jpg"
+    },
+    {
+      "id": 10,
+      "name": "EVERLAND 愛寶樂園 一天團",
+      "content": "韓燒晚餐",
+      "price": "TWD 2,058",
+      "viewers": "157,820 人氣",
+      "image": "src/assets/images/ticket_10.jpg"
+    },
+    {
+      "id": 11,
+      "name": "炭烤牛肉餐廳 | 王妃家",
+      "content": "明洞中心店",
+      "price": "TWD 1,170",
+      "viewers": "157,820 人氣",
+      "image": "src/assets/images/ticket_11.jpg"
+    },
+    {
+      "id": 12,
+      "name": "景福宮西花韓服租借",
+      "content": "宮女狐韓服",
+      "price": "TWD 562",
+      "viewers": "157,820 人氣",
+      "image": "src/assets/images/ticket_12.jpg"
+    },
+    {
+      "id": 13,
+      "name": "富國島珍珠遊樂園",
+      "content": "可加選珍珠野生動物園門票",
+      "price": "TWD 1,170",
+      "viewers": "157,820 人氣",
+      "image": "src/assets/images/ticket_13.jpg"
+    },
+    {
+      "id": 14,
+      "name": "富國島珍珠遊樂園",
+      "content": "可加選珍珠野生動物園門票",
+      "price": "TWD 1,170",
+      "viewers": "157,820 人氣",
+      "image": "src/assets/images/ticket_14.jpg"
+    },
+    {
+      "id": 15,
+      "name": "Kiss of The Sea表演門票",
+      "content": "戶外水舞秀",
+      "price": "TWD 1,201",
+      "viewers": "157,820 人氣",
+      "image": "src/assets/images/ticket_15.jpg"
+    }
+  ]
+}
