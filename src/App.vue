@@ -1,4 +1,6 @@
 <template>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js">
     <div id="app">
         <header>
             <div v-if="!isHomePage" id="menuBar">
@@ -29,26 +31,16 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 import { defineComponent, ref, watch } from 'vue'
 import { useRoute, RouterLink, RouterView } from 'vue-router'
-=======
-import { defineComponent } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import SectionA from './components/home/SectionA.vue'
-import SectionB from './components/home/SectionB.vue'
+import PageFooter from './components/footer/PageFooter.vue';
 
-// import SectionC from './components/home/SectionC.vue'
->>>>>>> 0530Reika
-import PageFooter from './components/footer/PageFooter.vue'
-import LoginRegisterModal from './components/layout/LoginRegisterBox.vue'
 
 export default defineComponent({
   components: {
     RouterLink,
     RouterView,
-    PageFooter,
+    PageFooter
   },
   setup(){
     const route = useRoute()

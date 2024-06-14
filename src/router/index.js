@@ -88,6 +88,11 @@ const router = createRouter({
       path: '/blogPage',
       name: 'blogPage',
       component: () => import('../views/BlogPageView.vue')
+    },
+    {
+      path: '/PageFooter',
+      name: 'PageFooter',
+      component: () => import('../components/footer/PageFooter.vue')
     }
   ]
 })
