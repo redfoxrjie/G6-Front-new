@@ -35,6 +35,10 @@
             </div>
         </div>
     </div>
+    <input type="text" v-model="search">
+	<button @click="clear">X</button>
+	<button @click="filterData">ok</button>
+{{ search }}
 </template>
 
 <script>
@@ -51,7 +55,10 @@ export default {
                 { label: '重要公告', value: '重要公告' },
                 { label: '活動公告', value: '活動公告' },
                 { label: '其他公告', value: '其他公告' }
-            ]
+            ],
+            newsData: [],
+            displayData: [],
+            search: ""
         };
     },
     computed: {
@@ -88,6 +95,18 @@ export default {
         },
         navigateToNewsPage(id) {
             this.$router.push({ name: 'newsPage', params: { id } });
+        },
+        filterData(){
+	        console.log(this.search);
+	        this.displayData = this.newsData.filter((item) => {
+		        console.log(item);
+		        return item.title.includes(this.search)
+		        // return item.name == this.search
+	        })
+        },
+        clear(){
+        this.search = ""
+        this.displayData = this.newsData
         }
     }
 };

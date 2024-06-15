@@ -3,6 +3,10 @@
         <h2>最新消息</h2>
         <div class="news-content" v-if="item">
             <div class="news-info">
+                <div class="news-id">
+                    {{ $route.params.id }}
+                    {{newsInfo.title}}
+                </div>
                 <div class="news-title">{{ item.title }}</div>
                 <span class="published-date font-time">{{ item.date }}</span>
                 <span class="news-type font-time">{{ item.type }}</span>
@@ -15,7 +19,6 @@
             </p>
         </div>
         <button class="prev-btn" @click="goBack">返回</button>
-        
     </div>
 </template>
 
@@ -26,24 +29,37 @@ export default {
     data() {
         return {
             item: null,
+            newsInfo: {}
         };
     },
     methods: {
-        loadJsonData() {
-            const newsId = this.$route.params.id;
+        // loadJsonData() {
+        //     const newsId = this.$route.params.id;
+        //     fetch('../../json/news.json')
+        //         .then((response) => response.json())
+        //         .then(data => {
+        //             this.item = data.find(news => news.id == newsId);
+        //         })
+        //         .catch((error) => {
+        //             console.error('Error loading JSON data:', error);
+        //         });
+        // },
+        goBack() {
+            window.history.back(); //返回前一頁
+        },
+        fetchInfo(){
             fetch('../../json/news.json')
                 .then(res => res.json())
-                .then(data => {
-                    this.item = data.find(news => news.id == newsId);
+                .then(json => {
+                    this.newsInfo = json.find(newsInfo => {
+                        return newsInfo.id == this.$route.params.id
+                    })
+                    console.log(this.newsInfo);
                 })
                 .catch((error) => {
                     //捕捉錯誤例外
-                    console.error('Error loading JSON data:', error);
-                    // console.log(`Error: ${error}`);
+                    console.log(`Error: ${error}`);
                 });
-        },
-        goBack() {
-            window.history.back(); //返回前一頁
         }
     },
     mounted() {
