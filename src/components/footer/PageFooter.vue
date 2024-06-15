@@ -45,7 +45,7 @@
                             <h5>認識土狗旅遊</h5>
                         </div>
                         <div class="link">
-                            <h6>關於我們</h6>
+                            <RouterLink to="/about"><h6>關於我們</h6></RouterLink>
                             <h6>使用者政策</h6>
                             <h6>隱私權保護政策</h6>
                         </div>
