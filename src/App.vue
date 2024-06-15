@@ -1,4 +1,6 @@
 <template>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js">
     <div id="app">
         <header>
             <div v-if="!isHomePage" id="menuBar">
@@ -31,14 +33,14 @@
 <script>
 import { defineComponent, ref, watch } from 'vue'
 import { useRoute, RouterLink, RouterView } from 'vue-router'
-import PageFooter from './components/footer/PageFooter.vue'
-import LoginRegisterModal from './components/layout/LoginRegisterBox.vue'
+import PageFooter from './components/footer/PageFooter.vue';
+
 
 export default defineComponent({
   components: {
     RouterLink,
     RouterView,
-    PageFooter,
+    PageFooter
   },
   setup(){
     const route = useRoute()

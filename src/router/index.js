@@ -102,7 +102,11 @@ const router = createRouter({
     //   name: 'NotFound',
     //   component: () => import('../views/NotFoundView.vue') 
     // },
-    
+    {
+      path: '/PageFooter',
+      name: 'PageFooter',
+      component: () => import('../components/footer/PageFooter.vue')
+    }
   ],
   // scrollBehavior (to, from, savedPosition) {
   //   //return 期望滾動到哪個位置
