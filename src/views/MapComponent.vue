@@ -17,7 +17,12 @@
             </div>
         </div>
         <ul class="day-plan-list">
-          <li v-for="location in itinerary" :key="location.place_id || location.osm_id">
+          <li v-for="location in itinerary" :key="location.place_id || location.osm_id"
+            draggable="true"
+            @dragstart="dragStart(location)"
+            @dragend="dragEnd"
+            @dragover="dragOver"
+            @drop="drop">
             <div class="spot-img">
               <img src="https://picsum.photos/300/200/?random=5">
             </div>
@@ -64,7 +69,9 @@ export default {
       searchResults: [], // 搜索结果
       itinerary: [], // 行程列表
       markers: [], // 存储所有标记
-      fuse: null // Fuse.js实例
+      fuse: null, // Fuse.js实例
+      source: null, //儲存被拖曳的實例
+      overItem: null, //儲存被dragover的實例
     };
   },
   computed: {
@@ -205,7 +212,58 @@ export default {
 
       // 从行程列表中移除地点
       this.itinerary = this.itinerary.filter(item => item !== location);
+    },
+    // -------------------------Darg and Drop--------------------------------
+    dragStart(location) {
+      this.source = location;
+    },
+    dragEnd(){
+      this.source = null;
+    },
+    clearOverItem() {
+      if (!this.overItem) return;
+      this.overItem.classList.remove('before');
+      this.overItem.classList.remove('after');
+      this.overItem = null;
+    },
+    dragOver(event) {
+      this.clearOverItem();
+      const target = event.target;
+      if (target.getAttribute('draggable') && target !== this.source) {
+        this.overItem = target;
+
+        if (event.offsetY > target.offsetHeight / 2) {
+          target.classList.add('after');
+        } else {
+          target.classList.add('before');
+        }
+      }
+      event.preventDefault();
+    },
+    drop(event) {
+  if (!this.source) return;
+
+  const list = event.currentTarget.querySelector('ul');
+  const sourceIndex = this.itinerary.indexOf(this.source);
+  this.itinerary.splice(sourceIndex, 1); // 從 itinerary 中移除 this.source
+
+  if (this.overItem) {
+    let overIndex = Array.from(list.children).indexOf(this.overItem);
+
+    if (this.overItem.classList.contains('after')) {
+      overIndex++;
+    } else if (this.overItem.classList.contains('before') && overIndex > 0) {
+      overIndex--;
     }
+
+    this.itinerary.splice(overIndex, 0, this.source);
+  } else {
+    this.itinerary.push(this.source);
+  }
+
+  this.clearOverItem();
+}
+    
   }
 };
 
