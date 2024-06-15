@@ -7,7 +7,10 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      meta: {
+        title: '土狗旅遊'
+      }
     },
     {
       path: '/about',
@@ -28,6 +31,16 @@ const router = createRouter({
       path: '/news',
       name: 'news',
       component: () => import('../views/NewsView.vue')
+    },
+    {
+      path: '/news/:id',
+      name: 'newsPage',
+      component: () => import('../views/NewsPageView.vue')
+    },
+    {
+      path: '/news/newspage/:id',
+      name: 'newsPage2',
+      component: () => import('../views/NewsPage2View.vue')
     },
     {
       path: '/tickets',
@@ -80,16 +93,27 @@ const router = createRouter({
       component: () => import('../views/BlogSearchResultView.vue')
     },
     {
-      path: '/news/:id',
-      name: 'newsPage',
-      component: () => import('../views/NewsPageView.vue')
-    },
-    {
       path: '/blogPage',
       name: 'blogPage',
       component: () => import('../views/BlogPageView.vue')
-    }
-  ]
+    },
+    // {
+    //   path: '/:pathMatch(.*)*',
+    //   name: 'NotFound',
+    //   component: () => import('../views/NotFoundView.vue') 
+    // },
+    
+  ],
+  // scrollBehavior (to, from, savedPosition) {
+  //   //return 期望滾動到哪個位置
+  //   return {top: 0}
+  // }
 })
+
+// router.beforeEach(asyc(to, from) => {
+//   if(to.meta && to.meta.title){
+//     document.title = to.meta.title
+//   }
+// })
 
 export default router

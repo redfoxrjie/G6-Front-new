@@ -71,7 +71,8 @@ export default {
       markers: [], // 存储所有标记
       fuse: null, // Fuse.js实例
       source: null, //儲存被拖曳的實例
-      overItem: null, //儲存被dragover的實例
+      overItem: null, //儲存被觸發dragover的實例
+      search: "",
     };
   },
   computed: {
