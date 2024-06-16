@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="mem-info">
-                <div class="mem-headshot">
+                <div class="mem-headshot" id="">
                     <img src="@/assets/images/mem-headshot-01.jpg" alt="member headshot photo">
                 </div>
                 <label for="headshot-upload" class="headshot-lable"><font-awesome-icon
@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <MyBlog v-if="selectedTab === '旅行筆記'" />
-                <MyTrip v-if="selectedTab === '我的行程'" />
+                <EditMyTrip v-if="selectedTab === '我的行程'" />
             </div>
         </div>
     </main>
@@ -48,9 +48,11 @@
 <script setup>
 import { ref } from 'vue';
 import MyBlog from '@/components/layout/MyBlog.vue';
-import MyTrip from '@/components/layout/MyTrip.vue';
+import EditMyTrip from '@/components/layout/EditMyTrip.vue';
+// import AddTrip from '@/components/layout/AddTrip.vue';
 
 const imageUrl = ref('');
+const headshotUrl = ref('');
 
 const uploadImage = async (event) => {
     const files = event.target.files;
@@ -66,7 +68,7 @@ const uploadImage = async (event) => {
         });
 
         const result = await response.json();
-        imageUrl.value = result.filePath;  // 保存返回的文件路徑
+        imageUrl.value = result.filePath;
     } catch (error) {
         console.error('上傳過程發生錯誤', error);
         alert('上傳失敗');
