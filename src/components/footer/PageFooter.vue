@@ -52,7 +52,7 @@
                     </div>
                     <div class="item">
                         <div class="title">
-                            <h5>聯絡我們</h5>
+                            <RouterLink to="/contact">聯絡我們</RouterLink>
                         </div>
                         <div class="link">
                             <h6>桃園市中壢區復興路46號9樓</h6>

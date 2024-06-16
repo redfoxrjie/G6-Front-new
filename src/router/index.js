@@ -23,6 +23,11 @@ const router = createRouter({
       component: () => import('../views/TripsView.vue')
     },
     {
+      path: '/trips/:trp_id',
+      name: 'mytrip',
+      component: () => import('../views/TripsView.vue')
+    },
+    {
       path: '/blog',
       name: 'blog',
       component: () => import('../views/BlogView.vue')
@@ -77,16 +82,16 @@ const router = createRouter({
       name: 'tripsSearchResult',
       component: () => import('../views/TripsSearchResultView.vue')
     },
-      {  
-        path: '/TicketOrder',
-        name: 'TicketOrder',
-        component: () => import('../views/TicketOrder.vue')
-      },
-      {  
-        path: '/TicketInner/:id',
-        name: 'TicketInner',
-        component: () => import('../views/TicketInner.vue')
-      },
+    {  
+      path: '/TicketOrder',
+      name: 'TicketOrder',
+      component: () => import('../views/TicketOrder.vue')
+    },
+    {  
+      path: '/TicketInner/:id',
+      name: 'TicketInner',
+      component: () => import('../views/TicketInner.vue')
+    },
     {  
       path: '/Contact',
       name: 'Contact',
@@ -107,11 +112,11 @@ const router = createRouter({
     //   name: 'NotFound',
     //   component: () => import('../views/NotFoundView.vue') 
     // },
-    {
-      path: '/PageFooter',
-      name: 'PageFooter',
-      component: () => import('../components/footer/PageFooter.vue')
-    }
+    // {
+    //   path: '/PageFooter',
+    //   name: 'PageFooter',
+    //   component: () => import('../components/footer/PageFooter.vue')
+    // }
   ],
   // scrollBehavior (to, from, savedPosition) {
   //   //return 期望滾動到哪個位置

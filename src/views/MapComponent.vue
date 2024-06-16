@@ -1,22 +1,42 @@
 <template>
   <main>
     <div class="section-full-width row">
-      <div id="itinerary" class="col col-12 col-md-3">
+      <div id="itinerary" class="col col-12 col-md-4 col-lg-3">
         <div class="sidebar-header">
             <div class="cover-img">
-              <img src="https://picsum.photos/300/200/?random=10">
+              <img src="@/assets/images/japan_yufuin-kinrinko.jpg">
             </div>
             <div class="cover-text">
               <div class="plan-region">日本</div>
-              <h4 class="plan-title">九州五天四夜雙人行</h4>
+              <h4 class="plan-title">北九州五天四夜雙人行</h4>
               <div class="plan-dates font-time">2024/05/19－2024/05/23</div>
             </div>
             <div class="functions">
-              <div class="option-btn"></div>
-              <div class="star-rate"></div>
+              <div class="option-btn">
+                <font-awesome-icon icon="ellipsis" size="lg" />
+              </div>
+              <div class="star-rate">
+                <IconStarRating />
+              </div>
             </div>
         </div>
-        <ul class="day-plan-list">
+        <div class="days-tabs">
+          <div
+          v-for="day in daysCount" :key="day"
+          class="tabs" 
+          @click="selectDay(day)"
+          >
+            第{{ day }}天
+          </div>
+        </div>
+        <div class="day-settings">
+          <div class="departure-time">
+            出發時間：
+            <span class="edit-time">04:10</span>
+          </div>
+          <div class="day-info">2024/05/19 (日)</div>
+        </div>
+        <ul v-if="selectedDay !== null" class="day-plan-list">
           <li v-for="location in itinerary" :key="location.place_id || location.osm_id"
             draggable="true"
             @dragstart="dragStart(location)"
@@ -34,13 +54,16 @@
             </div>
           </li>
         </ul>
+        <div class="mb-btn-fixed">
+          <button id="mapSwitch" @click="mbMapToggle">{{ switchBtnText }}</button>
+        </div>
       </div>
       <!-- 地圖部分 -->
-      <div id="map" class="col col-12 col-md-9">
+      <div id="map" class="col col-12 col-md-8 col-lg-9" v-show="isMapVisible">
         <div id="map-container">
           <!-- 搜索功能 -->
           <div id="search-bar">
-            <input type="text" v-model="searchQuery" placeholder="搜索地點" @input="searchLocations">
+            <input type="text" v-model="searchQuery" placeholder="搜尋景點" @input="searchLocations">
             <ul v-if="filteredSearchResults.length" class="search-results">
               <li v-for="result in filteredSearchResults" :key="result.place_id || result.osm_id" @click="addMarker(result.item)">
               {{ result.item.display_name || result.item.name }}
@@ -52,14 +75,13 @@
     </div>
   </main>
 </template>
-
-
 <script>
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';  // 引入leaflet的CSS
 import 'leaflet-control-geocoder'; // 引入地理編碼器
 import { debounce } from 'lodash'; // 引入lodash的去抖動函數
 import Fuse from 'fuse.js'; // 引入Fuse.js
+import IconStarRating from '@/components/icons/IconStarRating.vue';
 
 export default {
   data() {
@@ -73,7 +95,15 @@ export default {
       source: null, //儲存被拖曳的實例
       overItem: null, //儲存被觸發dragover的實例
       search: "",
+      plan: null,
+      daysCount: null, // 儲存計算後的天數
+      selectedDay: 1,
+      isMapVisible: true, 
+      switchBtnText: '返回行程'
     };
+  },
+  components: {
+    IconStarRating //評星小功能
   },
   computed: {
     filteredSearchResults() {
@@ -81,14 +111,10 @@ export default {
         return [];
       }
       return this.fuse ? this.fuse.search(this.searchQuery) : this.searchResults;
-    }
-  },
-  mounted() {
-    this.initializeMap(); // 初始化地图
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this.setCurrentLocation, this.showError); // 获取当前地理位置
-    } else {
-      alert('您的浏览器不支持地理定位功能');
+    },
+    filteredItinerary() {
+      // Filter itinerary based on selectedDay
+      return this.itinerary.filter(item => item.day === this.selectedDay);
     }
   },
   methods: {
@@ -163,7 +189,8 @@ export default {
 
       // 在地图上添加搜索结果的标记
       const marker = L.marker([latlng.lat, latlng.lng]).addTo(this.map)
-        .bindPopup(this.createPopupContent(result));
+      .bindPopup(this.createPopupContent(result));
+        
 
       // 存储标记
       this.markers.push({ location: result, marker: marker });
@@ -229,10 +256,10 @@ export default {
     },
     dragOver(event) {
       this.clearOverItem();
-      const target = event.target;
-      if (target.getAttribute('draggable') && target !== this.source) {
+      const target = event.target.closest('li');
+      if (target && target.getAttribute('draggable') && target !== this.source) {
         this.overItem = target;
-
+      
         if (event.offsetY > target.offsetHeight / 2) {
           target.classList.add('after');
         } else {
@@ -241,33 +268,87 @@ export default {
       }
       event.preventDefault();
     },
+
     drop(event) {
-  if (!this.source) return;
+      if (!this.source) return;
 
-  const list = event.currentTarget.querySelector('ul');
-  const sourceIndex = this.itinerary.indexOf(this.source);
-  this.itinerary.splice(sourceIndex, 1); // 從 itinerary 中移除 this.source
+      // 清除原本位置的 this.source
+      const sourceIndex = this.itinerary.indexOf(this.source);
+      this.itinerary.splice(sourceIndex, 1);
 
-  if (this.overItem) {
-    let overIndex = Array.from(list.children).indexOf(this.overItem);
-
-    if (this.overItem.classList.contains('after')) {
-      overIndex++;
-    } else if (this.overItem.classList.contains('before') && overIndex > 0) {
-      overIndex--;
-    }
-
-    this.itinerary.splice(overIndex, 0, this.source);
-  } else {
-    this.itinerary.push(this.source);
-  }
-
-  this.clearOverItem();
-}
+      // 确认 overItem 的位置，并将 this.source 插入正确的位置
+      if (this.overItem) {
+        const list = this.$el.querySelector('.day-plan-list');
+        let overIndex = Array.from(list.children).indexOf(this.overItem);
+      
+        // 检查 overItem 的位置和 class
+        if (this.overItem.classList.contains('after')) {
+          overIndex++;
+        } else if (this.overItem.classList.contains('before') && overIndex > 0) {
+          overIndex--;
+        }
+      
+        this.itinerary.splice(overIndex, 0, this.source);
+      } else {
+        // 如果没有 overItem，默认将 this.source 插入到列表末尾
+        this.itinerary.push(this.source);
+      }
     
-  }
+      // 清除所有样式和状态
+      this.clearOverItem();
+      this.source = null;
+    
+      // 打印 行程列表 中每个<li>的index值与对应的location.name，检查是否换位正确
+      this.itinerary.forEach((location, index) => {
+        console.log(`Index: ${index}, Name: ${location.name}`);
+      });
+    },
+    //----------------行程資料帶入-----------------
+    loadJsonData() {
+            const trpId = this.$route.params.trp_id;
+            fetch('../../json/mytrips.json')
+                .then(res => res.json())
+                .then(data => {
+                    this.plan = data.find(cards => cards.trp_id == trpId);
+                    console.log(this.plan);
+                })
+                .catch((error) => {
+                    //捕捉錯誤例外
+                    console.error('Error loading JSON data:', error);
+                    // console.log(`Error: ${error}`);
+                });
+        },
+    //-------計算行程天數----------
+    calcDaysDiff(sdate, edate) {
+      const start = new Date(sdate);
+      const end = new Date(edate);
+      const timeDiff = end - start; //結束日期 減 開始日期，得到毫秒差
+      const daysDiff = timeDiff / (1000 * 60 * 60 * 24); //將毫秒數轉換為"天數"
+      this.daysCount = daysDiff + 1; //包含開始和結束日期的總天數
+      console.log('Days Count:', this.daysCount);
+    },
+    //----------選擇第N天的行程表--------
+    selectDay(day) {
+      this.selectedDay = day;
+      console.log(this.selectedDay); //檢查點擊的天數
+    },
+    //----------手機版地圖開關---------
+    mbMapToggle(){
+      this.isMapVisible = !this.isMapVisible;
+      this.switchBtnText = this.isMapVisible ? '返回行程' : '顯示地圖';
+    }
+  },
+  mounted() {
+    this.initializeMap(); // 初始化地图
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(this.setCurrentLocation, this.showError); // 获取当前地理位置
+    } else {
+      alert('您的浏览器不支持地理定位功能');
+    }
+    this.loadJsonData();
+    this.calcDaysDiff('2024/05/19', '2024/05/23');
+  },
 };
-
 
 </script>
 
@@ -278,19 +359,15 @@ export default {
 @import '../assets/styles/base/font';
 
 .section-full-width{
-  margin-top: 70px;
-}
-button.add-to-plan {
-  &::before {
-    content: '+';
-    width: 50px;
-    height: 50px;
-  }
+  margin-top: 54px;
+  margin-bottom: 0;
 }
 
 /* 行程列表樣式 */
 #itinerary {
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 88vh;
   position: relative;
   .sidebar-header {
     position: relative;
@@ -318,16 +395,47 @@ button.add-to-plan {
         width: 70%;
       }
     }
+    .functions {
+      .option-btn{
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        color: #fff;
+        cursor: pointer;
+      }
+      .star-rate {
+        position: absolute;
+        bottom: 12px;
+        right: 16px;
+      }
+    }
   }
+  //出發時間日期樣式
+  .day-settings{
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 12px 12px;
+    font-size: 0.8rem;
+    .departure-time {
+      .edit-time {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+    .day-info {}
+  }
+  //行程景點清單
   .day-plan-list{
     box-sizing: border-box;
     padding: 0 12px;
     overflow-y: scroll;
-    height: 58vh;
-    border-bottom: 1px solid $black;
+    flex-grow: 1;
+    border-bottom: 1px solid red;
     li{
       position: relative;
       width: 100%;
+      
       cursor: grab;
       margin: 12px 0;
       background-color: #fff;
@@ -366,49 +474,139 @@ button.add-to-plan {
         }
       }
     }
+    li.before {
+        width: 100%;
+        height: 2px;
+        background-color: $secondColor-2;
+      }
+  }
+  .days-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    .tabs {
+      cursor: pointer;
+      font-size: 0.8rem;
+      padding: 16px 0px;
+      text-align: center;
+      color: $black;
+      flex-grow: 1;
+    }
+  }
+  .mb-btn-fixed {
+    width: 100%;
+    background-color: #fff;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.1);
+    #mapSwitch {
+      width: 100%;
+      text-align: center;
+      box-sizing: border-box;
+      padding: 12px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: $gray;
+    }
   }
 }
 /* 地圖樣式 */
 #map {
+  position: absolute;
+  top: 10vh;
+  left: 0;
   height: fit-content;
   background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1;
+  &.hidden {
+    display: none;
+  }
   #map-container {
-    height: 85vh;
+    height: 88vh;
     width: 100%;
     z-index: 1;
     position: relative;
     /* 搜索框樣式 */
     #search-bar {
-      width: 30%;
+      font-family: 'HunInn';
+      width: 70%;
       position: absolute;
       top: 20px;
       right: 20px;
       z-index: 401;
       input {
         width: 100%;
-        padding: 0.5rem;
+        padding: 0.5rem 1rem;
         box-sizing: border-box;
         font-size: 1rem;
+        letter-spacing: 0.05rem;
+        border-radius: 10px;
+        border: 2px solid $secondColor-1;
+        font-family: 'HunInn';
+        color: $secondColor-2;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+        &::placeholder {
+          color:  $secondColor-1;
+        }
+        &:focus {
+            border: 2px solid $secondColor-2;
+            outline: unset;
+            &::placeholder {
+              color:  $secondColor-2;
+            }
+          }
       }
       .search-results {
           position: absolute;
           top: 100%;
           left: 0;
-          right: 0;
           background: white;
-          border: 1px solid #ddd;
+          border: 1px solid $secondColor-1;
           max-height: 200px;
           overflow-y: auto;
           z-index: 1;
           li {
-            padding: 0.5rem;
+            color: $black;
+            font-size: 0.875rem;
+            box-sizing: border-box;
+            padding: 8px 12px;
             cursor: pointer;
             &:hover{
-              background-color: #f0f0f0;
+              background-color: $secondColor-2;
+              color: $primaryColor;
             }
           }
+      }
+    }
+  }
+}
+@media screen and (min-width: 768px) {
+  .section-full-width{
+    margin-top: 85px;
+    margin-bottom: 0;
+  }
+  .mb-btn-fixed {
+    display: none;
+  }
+  #map {
+    position: relative;
+    top: unset;
+    left: unset;
+    #map-container{
+      /* 搜索框樣式 */
+      #search-bar {
+        font-family: 'HunInn';
+        width: 30%;
+        min-width: 190px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 401;
       }
     }
   }
