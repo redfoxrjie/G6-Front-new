@@ -20,7 +20,7 @@
                     <RouterLink to="/news">最新消息</RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/booking">票券訂購</RouterLink>
+                    <RouterLink to="/tickets">票券訂購</RouterLink>
                 </li>
                 <li>
                     <RouterLink to="/contact">聯絡我們</RouterLink>

@@ -35,6 +35,11 @@ const router = createRouter({
       component: () => import('../views/TicketsView.vue')
     },
     {
+      path: '/tickets/:id',
+      name: 'ticketsInfo',
+      component: () => import('../views/TicketInner.vue')
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue')
@@ -59,30 +64,25 @@ const router = createRouter({
       name: 'tripsSearchResult',
       component: () => import('../views/TripsSearchResultView.vue')
     },
+      {  
+        path: '/TicketOrder',
+        name: 'TicketOrder',
+        component: () => import('../views/TicketOrder.vue')
+      },
+      {  
+        path: '/TicketInner/:id',
+        name: 'TicketInner',
+        component: () => import('../views/TicketInner.vue')
+      },
     {  
-      path: '/TicketOrder',
-      name: 'TicketOrder',
-      component: () => import('../views/TicketOrder.vue')
-    },
-    {  
-      path: '/TicketInner',
-      name: 'TicketInner',
-      component: () => import('../views/TicketInner.vue')
-    },
-    {  
-      path: '/ContactView',
-      name: 'ContactView',
+      path: '/Contact',
+      name: 'Contact',
       component: () => import('../views/ContactView.vue')
     },
     {
       path: '/blogSearchResult',
       name: 'blogSearchResult',
       component: () => import('../views/BlogSearchResultView.vue')
-    },
-    {
-      path: '/news/:id',
-      name: 'newsPage',
-      component: () => import('../views/NewsPageView.vue')
     },
     {
       path: '/blogPage',

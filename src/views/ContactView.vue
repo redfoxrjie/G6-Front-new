@@ -45,9 +45,9 @@
             <button class="btn-1">確認送出</button>
         </div>
     </section>
-  </template>
+</template>
     
-  <script>
+<script>
     export default{
         data(){
         return{
@@ -57,7 +57,7 @@
         };
     },
     };
-  </script>
+</script>
     
   <style lang="scss" scoped>
     @import '@/assets/styles/base/color';
