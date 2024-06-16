@@ -3,15 +3,20 @@
         <button class="creat-new-plan">建立行程</button>
         <h2>我的行程</h2>
         <div class="trip-card-wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-            <div class="card-container col" v-for="card in cards" :key="card.id">
+            <div 
+            class="card-container col" 
+            v-for="card in cards" 
+            :key="card.trp_id"
+            @click="navigateToTripMap(card.trp_id)"
+            >
                 <div class="trip-card">
                     <div class="option-btn"></div>
                     <div class="trip-img">
-                        <img :src="card.image" :alt="card.name">
+                        <img :src="card.trp_img" :alt="card.trp_name">
                     </div>
                     <div class="trip-info">
-                        <div class="trip-title">{{ card.name }}</div>
-                        <div class="trip-dates font-time">{{ card.startDate }} ~ {{ card.endDate }}</div>
+                        <div class="trip-title">{{ card.trp_name }}</div>
+                        <div class="trip-dates font-time">{{ card.trp_sdate }} ~ {{ card.trp_edate }}</div>
                     </div>
                 </div>
             </div>
@@ -30,8 +35,8 @@
         this.loadJsonData();
     },
     methods: {
-        loadJsonData(){
-            fetch('../../json/mytrips.json')
+            loadJsonData(){
+                fetch('../../json/mytrips.json')
                 .then((response) => response.json())
                 .then(data => {
                     this.cards = data;
@@ -39,7 +44,13 @@
                 .catch((error) => {
                     console.error('Error loading JSON data:', error);
                 });
-            }
+            },
+            navigateToTripMap(trp_id) {
+                this.$router.push({ 
+                    name: 'mytrip', 
+                    params: {trp_id} 
+                });
+            },
         }
     }
 </script>
