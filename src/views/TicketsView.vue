@@ -3,7 +3,7 @@
     <h2>票券一覽</h2>
     <h3 class="Area_TicketTitle">日本-沖繩</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in okinawaTickets" :key="ticket.id">
+      <div class="Card_Container col" v-for="ticket in okinawaTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
         <div class="ticket_Card">
           <div class="ticket-img">
             <img :src="ticket.image" :alt="ticket.name" />
@@ -19,7 +19,7 @@
     </div>
     <h3 class="Area_TicketTitle">日本-大阪</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in osakaTickets" :key="ticket.id">
+      <div class="Card_Container col" v-for="ticket in osakaTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
         <div class="ticket_Card">
           <div class="ticket-img">
             <img :src="ticket.image" :alt="ticket.name" />
@@ -35,7 +35,7 @@
     </div>
     <h3 class="Area_TicketTitle">泰國-曼谷</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in thailandTickets" :key="ticket.id">
+      <div class="Card_Container col" v-for="ticket in thailandTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
         <div class="ticket_Card">
           <div class="ticket-img">
             <img :src="ticket.image" :alt="ticket.name" />
@@ -51,7 +51,7 @@
     </div>
     <h3 class="Area_TicketTitle">韓國-首爾</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in koreaTickets" :key="ticket.id">
+      <div class="Card_Container col" v-for="ticket in koreaTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
         <div class="ticket_Card">
           <div class="ticket-img">
             <img :src="ticket.image" :alt="ticket.name" />
@@ -67,7 +67,7 @@
     </div>
     <h3 class="Area_TicketTitle">越南-富國島</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in vietnamTickets" :key="ticket.id">
+      <div class="Card_Container col" v-for="ticket in vietnamTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
         <div class="ticket_Card">
           <div class="ticket-img">
             <img :src="ticket.image" :alt="ticket.name" />
@@ -88,7 +88,7 @@
 export default {
   data() {
     return {
-      tickets: []
+      tickets: [],
     };
   },
   computed: {
@@ -121,6 +121,9 @@ export default {
         .catch(error => {
           console.error('Error loading JSON data:', error);
         });
+    },
+    goToDetail(id){
+      this.$router.push({ name: 'TicketInner', params: { id } });
     }
   }
 };
