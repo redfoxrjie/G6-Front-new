@@ -14,8 +14,8 @@ import 'leaflet/dist/leaflet.css'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faFilePen, faCamera, faSkullCrossbones, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
-library.add(fas,faFilePen, faCamera, faSkullCrossbones, faCircleExclamation)
+import { faFilePen, faCamera, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+library.add(fas,faFilePen, faCamera, faCircleExclamation)
 
 // import './fixLeafletIcons.js'  // 導入 Leaflet 圖標路徑的文件
 
