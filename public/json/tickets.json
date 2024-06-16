@@ -6,7 +6,7 @@
       "content": "Okinawa Churaumi Aquarium",
       "price": "TWD 450",
       "viewers": "157,820 人氣",
-      "image": "../../src/assets/images/ticket_01.jpg"
+      "image": "src/assets/images/ticket_01.jpg"
     },
     {
       "id": 2,
@@ -51,7 +51,7 @@
     {
       "id": 7,
       "name": "彩虹雲霄酒店餐廳自助餐",
-      "content": "（76、78樓）",
+      "content": "(76、78樓)",
       "price": "TWD 838",
       "viewers": "157,820 人氣",
       "image": "src/assets/images/ticket_07.jpg"
