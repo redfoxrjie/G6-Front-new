@@ -167,10 +167,22 @@ body {
             height: 60vh;
             background-color: #0F125C;
         }
+        @media (max-width: 768px) {
+            footer .footer-text {
+                height: 130vh;
+            }
+        }
         footer .footer-text .container{
             display: flex;
             flex-direction: row;
             margin: 5vh 10vw ;
+        }
+        @media (max-width: 768px) {
+            footer .footer-text .container {
+                display: flex;
+                flex-direction: column;
+                margin: 5vh 10vw ;
+            }
         }
         footer .footer-text .container .item{
             margin-right: 10vw;
