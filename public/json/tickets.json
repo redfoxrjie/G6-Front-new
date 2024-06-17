@@ -14,7 +14,7 @@
       "content": "玉泉洞・王國村・毒蛇博物公園",
       "price": "TWD 650",
       "viewers": "157,820 人氣",
-      "image": "../../src/assets/images/ticket_02.jpg"
+      "image": "src/assets/images/ticket_02.jpg"
     },
     {
       "id": 3,
@@ -22,7 +22,7 @@
       "content": "美麗海水族館、古宇利島、...",
       "price": "TWD 1,479",
       "viewers": "157,820 人氣",
-      "image": "../../src/assets/images/ticket_03.jpg"
+      "image": "src/assets/images/ticket_03.jpg"
     },
     {
       "id": 4,
@@ -30,7 +30,7 @@
       "content": "ABENO HARUKAS 300",
       "price": "TWD 150",
       "viewers": "157,820 人氣",
-      "image": "../../src/assets/images/ticket_04.jpg"
+      "image": "src/assets/images/ticket_04.jpg"
     },
     {
       "id": 5,
@@ -38,7 +38,7 @@
       "content": "Universal Studios Japan",
       "price": "TWD 1,130",
       "viewers": "157,820 人氣",
-      "image": "../../src/assets/images/ticket_05.jpg"
+      "image": "src/assets/images/ticket_05.jpg"
     },
     {
       "id": 6,
@@ -46,7 +46,7 @@
       "content": "Tempozan Ferris Wheel",
       "price": "TWD 185",
       "viewers": "157,820 人氣",
-      "image": "../../src/assets/images/ticket_06.jpg"
+      "image": "src/assets/images/ticket_06.jpg"
     },
     {
       "id": 7,
