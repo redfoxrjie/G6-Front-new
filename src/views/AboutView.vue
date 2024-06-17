@@ -54,8 +54,8 @@ margin col-1 -->
               <img src="https://picsum.photos/200/150/?random=10">
             </div>
             <div class="s-t-mc-title">
-              <p class="title-job">ceo</p>
-              <h3 class="title-name">NNNFISNN</h3>
+              <p class="title-job">CEO</p>
+              <h3 class="title-name">Nihongo</h3>
             </div>
             <div class="s-t-mc-info">
               <p>擁有豐富的產品開發和團隊管理經驗。負責整體戰略規劃，確保平台的功能和用戶體驗達到最高標準。</p>
@@ -76,11 +76,11 @@ margin col-1 -->
     <div class="container">
       <div class="s-p-userCard-list">
         <div class="s-p-userCard-wrap " v-for="n in 4">
-          <div class="s-p-userCard row row-cols-2">
-            <div class="s-p-u-img col-4 col-md-3">
+          <div class="s-p-userCard row row-cols-2 row-cols-md-2">
+            <div class="s-p-u-img col col-md-3">
               <img src="https://fakeimg.pl/200x150/200">
             </div>
-            <div class="s-p-u-content col-8">
+            <div class="s-p-u-content col col-md-8 ">
               <div class="s-p-u-title">
                 <p>知名旅遊部落客</p>
                 <h3>NIjjpjf</h3>
@@ -96,7 +96,7 @@ margin col-1 -->
 <script>
 
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/assets/styles/base/color';
 @import '@/assets/styles/base/font';
 
@@ -257,12 +257,13 @@ margin col-1 -->
 
       .s-p-u-img {
         box-sizing: border-box;
-        padding: 3%;
+        padding: 5%;
         aspect-ratio: 1;
 
         img {
           width: 100%;
           height: 100%;
+          aspect-ratio: 1;
           object-fit: cover;
           object-position: center;
           border-radius: 50%;

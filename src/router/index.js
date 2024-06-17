@@ -107,6 +107,14 @@ const router = createRouter({
       name: 'blogPage',
       component: () => import('../views/BlogPageView.vue')
     },
+
+    {
+      path: '/member',
+      name: 'member',
+      component: () => import('../views/MemberView.vue')
+    }
+  
+
     // {
     //   path: '/:pathMatch(.*)*',
     //   name: 'NotFound',
@@ -122,6 +130,7 @@ const router = createRouter({
   //   //return 期望滾動到哪個位置
   //   return {top: 0}
   // }
+
 })
 
 // router.beforeEach(asyc(to, from) => {
