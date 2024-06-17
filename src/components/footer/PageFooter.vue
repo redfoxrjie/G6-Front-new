@@ -52,7 +52,7 @@
                     </div>
                     <div class="item">
                         <div class="title">
-                            <RouterLink to="/contact">聯絡我們</RouterLink>
+                            <h5>聯絡我們</h5>
                         </div>
                         <div class="link">
                             <h6>桃園市中壢區復興路46號9樓</h6>
@@ -164,12 +164,12 @@ body {
         }
         /*Footer文字*/
         footer .footer-text {
-            height: 60vh;
+            height: 55vh;
             background-color: #0F125C;
         }
         @media (max-width: 768px) {
             footer .footer-text {
-                height: 130vh;
+                height: 110vh;
             }
         }
         footer .footer-text .container{
@@ -186,6 +186,28 @@ body {
         }
         footer .footer-text .container .item{
             margin-right: 10vw;
+        }
+        @media (max-width: 768px) {
+            footer .footer-text .container .item {
+            margin-bottom: 5vh;
+            }
+        }
+        footer .footer-text .container .item .title{
+            margin-top: 5vh;
+            margin-bottom: 5vh;
+        }
+        @media (max-width: 768px) {
+            footer .footer-text .container .item .title{
+            margin-bottom: 2vh;
+            }
+        }
+        footer .footer-text .container .item .link h6{
+            margin-bottom: 2vh;
+        }
+        @media (max-width: 768px) {
+            footer .footer-text .container .item .link h6{
+            margin-bottom: 1vh;
+            }
         }
         footer .footer-text .container .footer_icon{
             display: flex;
