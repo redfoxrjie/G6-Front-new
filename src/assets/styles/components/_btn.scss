@@ -4,10 +4,16 @@
     background-color: $accentColor-1; padding: 7px 15px;
     border-radius: 20px;
     cursor: pointer;
+      &hover{
+        background-color: $accentColor-2;
+        color: $secondColor-3;
+    }
+
 }
 .btn-2{ //藍底白字
     color:$primaryColor;
     background-color: $secondColor-2; padding: 7px 15px;
     border-radius: 20px;
     cursor: pointer;
+
 }

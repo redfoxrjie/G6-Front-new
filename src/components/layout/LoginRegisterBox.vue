@@ -14,13 +14,13 @@
                     <div class="form-input"><input v-model="registerPassword" :type="registerPasswordType"
                             placeholder="設定密碼">
                         <font-awesome-icon
-                            :icon="registerPasswordType === 'password' ? ['fas', 'lock'] : ['fas', 'unlock']"
+                            :icon="registerPasswordType === 'password' ? ['fas', 'eye-slash'] : ['fas', 'eye']"
                             class="input-icon" @click="togglePasswordVisibility('register')" />
                     </div>
                     <div class="form-input"><input v-model="registerPasswordConfirm" :type="registerPasswordConfirmType"
                             placeholder="再次確認密碼">
                         <font-awesome-icon
-                            :icon="registerPasswordConfirmType === 'password' ? ['fas', 'lock'] : ['fas', 'unlock']"
+                            :icon="registerPasswordConfirmType === 'password' ? ['fas', 'eye-slash'] : ['fas', 'eye']"
                             class="input-icon" @click="togglePasswordVisibility('registerConfirm')" />
                     </div>
                     <button class="register-btn" @click="register" type="submit">註冊</button>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="form-input"><input v-model="password" :type="loginPasswordType" placeholder="輸入密碼">
                         <font-awesome-icon
-                            :icon="loginPasswordType === 'password' ? ['fas', 'lock'] : ['fas', 'unlock']"
+                            :icon="loginPasswordType === 'password' ? ['fas', 'eye-slash'] : ['fas', 'eye']"
                             class="input-icon" @click="togglePasswordVisibility('login')" />
                     </div>
                     <div class="credentials-container">
@@ -155,17 +155,20 @@ const login = async () => {
     } else {
         try {
             // 模擬API請求
-            const response = await fetch('/public/json/users.json');
-            const data = await response.json();
-            const user = data.users.find(u => u.email === email.value && u.password === password.value);
+            const response = await fetch('/json/users.json');
+            const { users } = await response.json();
+            const user = users.find(user => user.u_account === email.value && user.u_psw === password.value);
 
             if (user) {
+                emit('close', { status: 'login-success', user: user });
+                ;  //假設登入後關閉彈窗
                 Swal.fire({
                     icon: 'success',
                     title: '登入成功!',
+                    timer: 1500,
                     showConfirmButton: false,
                 });
-                emit('close');  //假設登入後關閉彈窗
+
             } else {
                 Swal.fire({
                     icon: 'error',

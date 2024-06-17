@@ -20,15 +20,20 @@
                     <RouterLink to="/news">最新消息</RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/booking">票券訂購</RouterLink>
+                    <RouterLink to="/tickets">票券訂購</RouterLink>
                 </li>
                 <li>
                     <RouterLink to="/contact">聯絡我們</RouterLink>
                 </li>
                 <!-- <li><RouterLink to="/trips">暫時的地圖編輯位置等到學會怎麼在icon切換頁面</RouterLink></li> -->
-                <!-- 點擊出現會員登入彈窗 -->
-                <li class="openLoginModal">
-                    <button @click="openLoginModal">會員登入</button>
+                <li v-if="user">
+                    <router-link to="/EditMemberMain">
+                        <img :src="user.u_avatar" style="width: 50px; height: 50px;"><br>
+                        <span>{{ user.u_nickname }}</span>
+                    </router-link>
+                </li>
+                <li v-else>
+                    <button class="openLoginModal" @click="openLoginModal">會員登入</button>
                 </li>
             </ul>
             <div class="bottom-section" @click="goToPage('/trips')">
@@ -71,14 +76,15 @@
             </div>
         </section>
         <!-- 會員登入彈窗 -->
-        <LoginRegisterModal :isVisible="isLoginModalVisible" @close="closeLoginModal" />
+        <LoginRegisterModal :isVisible="isLoginModalVisible" @close="closeLoginModal"
+            @login-success="loginSuccessHandler" />
         <!-- <RouterView /> -->
     </div>
 </template>
 
 <script>
 import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue';
-import { RouterLink, RouterView,useRouter } from 'vue-router';
+import { RouterLink, RouterView, useRouter } from 'vue-router';
 import LoginRegisterModal from '../layout/LoginRegisterBox.vue';
 
 export default defineComponent({
@@ -92,6 +98,7 @@ export default defineComponent({
         const menu = ref(null);
         const isLoginMode = ref(true);
         const isLoginModalVisible = ref(false);
+        const user = ref(null);
 
         const toggleMenu = () => {
             isMenuClosed.value = !isMenuClosed.value;
@@ -110,7 +117,7 @@ export default defineComponent({
         });
         // 頁面切換
         const router = useRouter();
-        const goToPage=(toLink)=>{
+        const goToPage = (toLink) => {
             // const router = useRouter();
             router.push(toLink);
         };
@@ -120,9 +127,20 @@ export default defineComponent({
             isLoginModalVisible.value = true;
         };
 
-        const closeLoginModal = () => {
+        // 將登錄成功後傳送會員資料及關閉lightbox
+        const closeLoginModal = (data) => {
             isLoginModalVisible.value = false;
+            if (data && data.status === 'login-success') {
+                loginSuccessHandler(data.user);
+            }
         };
+
+        // 登入成功後更新用戶資料
+        const loginSuccessHandler = (userData) => {
+            console.log("登入成功：", userData);
+            user.value = userData;  // 更新用戶數據
+            closeLoginModal();      // 關閉登入彈窗
+        }
 
         const switchMode = (mode) => {
             isLoginMode.value = mode;
@@ -131,9 +149,11 @@ export default defineComponent({
             isMenuClosed,
             toggleMenu,
             menu,
+            user,
             isLoginModalVisible,
             openLoginModal,
             closeLoginModal,
+            loginSuccessHandler,
             switchMode,
             goToPage
         };
@@ -212,7 +232,7 @@ nav {
             }
         }
 
-        .openLoginModal button {
+        .openLoginModal {
             color: $primaryColor;
             text-decoration: none;
             font-size: 1rem;
