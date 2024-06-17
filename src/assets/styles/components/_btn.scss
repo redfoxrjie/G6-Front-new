@@ -1,7 +1,13 @@
 // 按鈕樣式
-.btn-1{
+.btn-1{ //黃底藍字
     color:$secondColor-2;
     background-color: $accentColor-1; padding: 7px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.btn-2{ //藍底白字
+    color:$primaryColor;
+    background-color: $secondColor-2; padding: 7px 15px;
     border-radius: 20px;
     cursor: pointer;
 }

@@ -15,7 +15,7 @@
                         <RouterLink to="/blog">旅行筆記</RouterLink>
                         <RouterLink to="/news">最新消息</RouterLink>
                         <RouterLink to="/tickets">票券訂購</RouterLink>
-                        <RouterLink to="/login">會員登入</RouterLink>
+                        <RouterLink to="/member">會員登入</RouterLink>
                         <RouterLink to="/trips" class="btn-start-plan">開始規劃</RouterLink>
                     </div>
                 </nav>
