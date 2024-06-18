@@ -1,5 +1,8 @@
 <template>
-    <div class="news-container container" @click="hideFilterTabs">
+    <div class="news-container container">
+        <div class="breadcrumb">
+            <span @click="goToPage('/')">首頁</span> &gt; <span>最新消息</span>
+        </div>
         <h2>最新消息</h2>
         <div class="news-section row">
             <div class="news-list col-12 col-md-9">
@@ -10,7 +13,8 @@
                     @click="navigateToNewsPage(item.id)"
                 >
                     <div class="news-img">
-                        <img :src="item.img" alt="news image">
+                        <img :src="parseServerImg(item.img)" alt="news image">
+                        <!-- <img :src=(item.img) alt="news image"> 原本local圖片路徑參考 -->
                     </div>
                     <div class="news-info">
                         <span class="published-date font-time">{{ item.date }}</span>
@@ -35,12 +39,7 @@
             </div>
         </div>
     </div>
-    <input type="text" v-model="search">
-	<button @click="clear">X</button>
-	<button @click="filterData">ok</button>
-{{ search }}
 </template>
-
 <script>
 import { ref, computed } from 'vue';
 
@@ -56,9 +55,6 @@ export default {
                 { label: '活動公告', value: '活動公告' },
                 { label: '其他公告', value: '其他公告' }
             ],
-            newsData: [],
-            displayData: [],
-            search: ""
         };
     },
     computed: {
@@ -77,18 +73,28 @@ export default {
             fetch(`${import.meta.env.BASE_URL}json/news.json`)
                 .then((response) => response.json())
                 .then(data => {
+                    console.log('Loaded data:', data); // 打印加载的数据
                     this.items = data;
+                    console.log('Items in component:', this.items); // 打印组件中的items
                 })
                 .catch((error) => {
                     console.error('Error loading JSON data:', error);
                 });
+        },
+        parseImg(imgURL) {
+            // 將相對路徑解析成正確的 URL
+            return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
+        },
+        parseServerImg(imgURL) {
+	        // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+            return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
         },
         setFilter(filter) {
             this.selectedFilter = filter;
             this.showFilterTabs = false; // Hide filter tabs after selecting a filter
         },
         toggleFilterTabs() {
-            this.showFilterTabs = !this.showFilterTabs;
+            this.showFilterTabs = !this.showFilterTabs; //change the status of filtet tabs
         },
         hideFilterTabs() {
             this.showFilterTabs = false;
@@ -96,17 +102,8 @@ export default {
         navigateToNewsPage(id) {
             this.$router.push({ name: 'newsPage', params: { id } });
         },
-        filterData(){
-	        console.log(this.search);
-	        this.displayData = this.newsData.filter((item) => {
-		        console.log(item);
-		        return item.title.includes(this.search)
-		        // return item.name == this.search
-	        })
-        },
-        clear(){
-        this.search = ""
-        this.displayData = this.newsData
+        goToPage(toLink) {
+            this.$router.push(toLink);
         }
     }
 };
@@ -119,6 +116,10 @@ export default {
 .news-container {
     min-height: 380px;
     margin-top: 120px;
+    .breadcrumb {
+        margin: 36px 0 16px;
+        vertical-align: middle;
+    }
     h2 {
         color: $secondColor-2;
     }
@@ -197,6 +198,7 @@ export default {
                 box-sizing: border-box;
                 padding: 24px 0;
                 cursor: pointer;
+                user-select: none;
                 &:not(:last-child) {
                     border-bottom: 1px solid $primaryColor;
                 }
