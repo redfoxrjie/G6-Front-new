@@ -583,7 +583,7 @@
     "date": "2024/05/24",
     "viewers": 11532,
     "likes": 150,
-    "image": "https://picsum.photos/300/200/?random=1"
+    "image": "src/assets/images/japan_yufuin-kinrinko.jpg"
   },
   {
     "id": 2,
@@ -591,7 +591,7 @@
     "date": "2024/03/29",
     "viewers": 13990,
     "likes": 200,
-    "image": "https://picsum.photos/300/200/?random=2"
+    "image": "src/assets/images/japan_asakusa_street.jpg"
   },
   {
     "id": 3,
@@ -599,7 +599,7 @@
     "date": "2024/01/18",
     "viewers": 8964,
     "likes": 120,
-    "image": "https://picsum.photos/300/200/?random=3"
+    "image": "src/assets/images/korea_jeju-island.jpg"
   },
   {
     "id": 4,
@@ -607,7 +607,7 @@
     "date": "2024/04/12",
     "viewers": 12500,
     "likes": 130,
-    "image": "https://picsum.photos/300/200/?random=4"
+    "image": "src/assets/images/hongkong_signboard.jpg"
   },
   {
     "id": 5,
@@ -615,7 +615,7 @@
     "date": "2024/02/20",
     "viewers": 9875,
     "likes": 110,
-    "image": "https://picsum.photos/300/200/?random=5"
+    "image": "src/assets/images/tailand_temple.jpg"
   },
   {
     "id": 6,
@@ -623,7 +623,7 @@
     "date": "2024/07/15",
     "viewers": 10500,
     "likes": 145,
-    "image": "https://picsum.photos/300/200/?random=6"
+    "image": "src/assets/images/japan_okinawa-sea.jpg"
   },
   {
     "id": 7,
@@ -631,7 +631,7 @@
     "date": "2024/06/05",
     "viewers": 13450,
     "likes": 190,
-    "image": "https://picsum.photos/300/200/?random=7"
+    "image": "src/assets/images/korea_souel-city.jpg"
   },
   {
     "id": 8,
@@ -639,7 +639,7 @@
     "date": "2024/09/22",
     "viewers": 11200,
     "likes": 160,
-    "image": "https://picsum.photos/300/200/?random=8"
+    "image": "src/assets/images/korea_busan-beach.jpg"
   },
   {
     "id": 9,
@@ -647,7 +647,7 @@
     "date": "2024/11/03",
     "viewers": 14420,
     "likes": 210,
-    "image": "https://picsum.photos/300/200/?random=9"
+    "image": "src/assets/images/japan_kyoto-street.jpg"
   },
   {
     "id": 10,
