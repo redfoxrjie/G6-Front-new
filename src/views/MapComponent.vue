@@ -306,7 +306,7 @@ export default {
     //----------------行程資料帶入-----------------
     loadJsonData() {
             const trpId = this.$route.params.trp_id;
-            fetch('../../json/mytrips.json')
+            fetch(`${import.meta.env.BASE_URL}json/mytrips.json`)
                 .then(res => res.json())
                 .then(data => {
                     this.plan = data.find(cards => cards.trp_id == trpId);
@@ -431,7 +431,6 @@ export default {
     padding: 0 12px;
     overflow-y: scroll;
     flex-grow: 1;
-    border-bottom: 1px solid red;
     li{
       position: relative;
       width: 100%;
@@ -474,11 +473,23 @@ export default {
         }
       }
     }
-    li.before {
-        width: 100%;
-        height: 2px;
-        background-color: $secondColor-2;
-      }
+    li.before::before, li.after::after {
+      content: '';
+      width: 100%;
+      height: 4px;
+      background-color: $secondColor-1;
+      display: block;
+    }
+    li.before::before {
+      position: absolute;
+      top: -5px;
+      left: 0;
+    }
+    li.after::after {
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+    }
   }
   .days-tabs {
     display: flex;

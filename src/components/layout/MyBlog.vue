@@ -33,7 +33,7 @@
     },
     methods: {
         loadJsonData(){
-            fetch('../../json/myblogs.json')
+            fetch(`${import.meta.env.BASE_URL}json/myblogs.json`)
                 .then((response) => response.json())
                 .then(data => {
                     this.cards = data;

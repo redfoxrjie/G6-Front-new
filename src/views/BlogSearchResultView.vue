@@ -35,7 +35,7 @@ const tripsResultData = ref([]);
 const tripsResultLength = ref(0);
 const fetchData = async () => {
     try {
-        const response = await fetch('/json/searchData.json');
+        const response = await fetch(`${import.meta.env.BASE_URL}json/searchData.json`);
         const data = await response.json();
         tripsResultData.value = data.blogsSearch;
         tripsResultLength.value = data.blogsSearch.length;

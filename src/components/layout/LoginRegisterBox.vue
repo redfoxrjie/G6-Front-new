@@ -155,7 +155,7 @@ const login = async () => {
     } else {
         try {
             // 模擬API請求
-            const response = await fetch('/json/users.json');
+            const response = await fetch(`${import.meta.env.BASE_URL}json/users.json`);
             const { users } = await response.json();
             const user = users.find(user => user.u_account === email.value && user.u_psw === password.value);
 

@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     loadJsonData() {
-      fetch('/json/tickets.json')
+      fetch(`${import.meta.env.BASE_URL}json/tickets.json`)
         .then(response => response.json())
         .then(data => {
           this.tickets = data.tickets;

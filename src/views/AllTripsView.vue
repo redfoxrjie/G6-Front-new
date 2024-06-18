@@ -87,7 +87,7 @@ const selectedCase = ref('jp');
 
 const fetchData = async () => {
   try {
-    const response = await fetch('/json/data.json');
+    const response = await fetch(`${import.meta.env.BASE_URL}json/data.json`);
     const data = await response.json();
     //先根據地區區分 暫存陣列位置
     const classifiedTrips = {

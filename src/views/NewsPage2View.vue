@@ -48,7 +48,7 @@ export default {
             window.history.back(); //返回前一頁
         },
         fetchInfo(){
-            fetch('../../json/news.json')
+            fetch(`${import.meta.env.BASE_URL}json/news.json`)
                 .then(res => res.json())
                 .then(json => {
                     this.newsInfo = json.find(newsInfo => {
