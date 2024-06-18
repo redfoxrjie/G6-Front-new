@@ -23,7 +23,6 @@
                 </nav>
             </div>
         </header>
-
         <RouterView />
         <PageFooter />
     </div>
@@ -68,9 +67,10 @@ export default defineComponent({
 @import '@/assets/styles/style.scss';
 
 header {
+    // opacity: .3;
     position: relative;
     #menuBar {
-        width: 100vw;
+    width: 100vw;
         position: relative;
         background-color: $secondColor-2;
         color: $primaryColor;
