@@ -74,7 +74,7 @@ export default {
     },
     methods: {
         loadJsonData() {
-            fetch('../../json/news.json')
+            fetch(`${import.meta.env.BASE_URL}json/news.json`)
                 .then((response) => response.json())
                 .then(data => {
                     this.items = data;

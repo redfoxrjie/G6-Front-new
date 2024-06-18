@@ -31,7 +31,7 @@ export default {
     methods: {
         loadJsonData() {
             const newsId = this.$route.params.id;
-            fetch('../../json/news.json')
+            fetch(`${import.meta.env.BASE_URL}json/news.json`)
                 .then(res => res.json())
                 .then(data => {
                     this.item = data.find(news => news.id == newsId);

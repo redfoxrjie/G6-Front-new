@@ -163,7 +163,7 @@ const blogsCount = ref(5); //先建立存取位置
 //data:資料總長度
 const fetchData = async () => {
   try {
-    const response = await fetch('/json/data.json');
+    const response = await fetch(`${import.meta.env.BASE_URL}json/data.json`);
     const data = await response.json();
 
 

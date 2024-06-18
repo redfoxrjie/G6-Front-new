@@ -38,7 +38,7 @@ export default{
         }
     },
     mounted() {
-        fetch("/product.json")
+        fetch(`${import.meta.env.BASE_URL}product.json`)
         .then(data=>data.json())
         .then(res=>{
             //備份用

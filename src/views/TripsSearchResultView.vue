@@ -29,7 +29,7 @@ import { useRouter } from 'vue-router';
 const tripsResultData = ref([]);
 const fetchData = async () => {
     try {
-        const response = await fetch('/json/searchData.json');
+        const response = await fetch(`${import.meta.env.BASE_URL}json/searchData.json`);
         const data = await response.json();
         tripsResultData.value = data.tripsSearch;
         console.log(data.tripsSearch);
