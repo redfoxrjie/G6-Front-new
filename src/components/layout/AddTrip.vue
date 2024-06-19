@@ -2,7 +2,7 @@
     <div class="lightbox" v-if="isVisible">
         <button class="close-right-btn" @click="close">✖</button>
         <div class="lightbox-content">
-            <h4>請選擇行程</h4>
+            <h3>請選擇行程</h3>
             <select v-model="selectedCountry" class="select-country">
                 <option disabled value="">請選擇國家</option>
                 <option>日本</option>
@@ -20,12 +20,14 @@
                 <router-link to="/trips">
                     <p><font-awesome-icon :icon="['fas', 'plus']" />新建空白行程</p>
                 </router-link>
-
             </button>
 
             <div class="trip-state">
-                <input type="radio">我的行程
-                <input type="radio">團隊行程
+                <input type="radio" id="myTrip" value="myTrip" v-model="tripState" @click="toggleRadio('myTrip')" />
+                <label for="myTrip">我的行程</label>
+                <input type="radio" id="teamTrip" value="teamTrip" v-model="tripState"
+                    @click="toggleRadio('teamTrip')" />
+                <label for="teamTrip">團隊行程</label>
                 <div class="trip-private">
                     <input type="checkbox" id="toggle" class="toggle-input" v-model="isToggled"
                         @change="handleToggle" />
@@ -37,8 +39,10 @@
                     </label>
                 </div>
             </div>
-            <button @click="addTripModal" class="creat-new-plan">取消</button>
-            <button @click="addTripModal" class="creat-new-plan">建立</button>
+            <div class="btn-wrap">
+                <button @click="addTripModal" class="cancel-btn">取消</button>
+                <button @click="addTripModal" class="creat-btn">建立</button>
+            </div>
 
         </div>
     </div>
@@ -58,9 +62,8 @@ export default {
     setup(props, { emit }) {
         const selectedCountry = ref('');
         const filterTrip = ref([]);
-
+        const tripState = ref('');
         const isToggled = ref(false);
-
         const handleToggle = () => {
             console.log('Switch state:', isToggled.value);
         };
@@ -97,12 +100,21 @@ export default {
             emit('update:isVisible', false);
         };
 
+        const toggleRadio = (value) => {
+            if (tripState.value === value) {
+                tripState.value = '';
+            } else {
+                tripState.value = value;
+            }
+        };
         return {
             isToggled,
             handleToggle,
             selectedCountry,
             filterTrip,
-            close
+            close,
+            toggleRadio,
+            tripState,
         };
     }
 };
@@ -113,67 +125,14 @@ export default {
 @import '@/assets/styles/base/color';
 @import '@/assets/styles/base/font';
 
-
-.trip-state {
-    display: flex;
-    margin-top: 20%;
-    align-items: center
-}
-
-.trip-private {
-    display: flex;
-    align-items: center;
-
-    .toggle-input {
-        display: none;
-    }
-
-    .toggle-label {
-        display: flex;
-        align-items: center;
-        width: 70px;
-        padding: 5px 10px;
-        margin-left: 8px;
-        justify-content: center;
-        border: 2px solid $secondColor-2;
-        border-radius: 20px;
-        background-color: transparent;
-        color: $secondColor-2;
-        font-size: $base-fontSize ;
-        cursor: pointer;
-        transition: background-color 0.3s, color 0.3s;
-
-        .toggle-text {
-            margin-left: 8px;
-        }
-
-        .toggle-icon {
-            display: flex;
-            align-items: center;
-
-            i {
-                font-size: 20px;
-            }
-        }
-    }
-
-    .toggle-input:checked+.toggle-label {
-        background-color: $secondColor-2;
-        color: $primaryColor;
-    }
-
-
-
-}
-
 .lightbox {
-    width: 28%;
+    width: 350px;
     display: block;
     // position: fixed;
     position: absolute;
     z-index: 1;
-    top: 104%;
-    right: 28%;
+    top: 800px;
+    right: 5%;
     overflow: auto;
     background-color: #fff;
     border-radius: 20px;
@@ -193,60 +152,146 @@ export default {
         outline: none;
         cursor: pointer;
     }
-}
 
-.lightbox-content {
-    background-color: #fefefe;
-    margin: 10% auto;
-    width: 85%;
-}
+    .lightbox-content {
+        background-color: #fefefe;
+        margin: 0 auto;
+        width: 78%;
 
-.select-country {
-    width: 85%;
-    padding: 5px;
-    border-radius: 5px;
-    margin-top: 10px;
-    font-size: $base-fontSize ;
+        .select-country {
+            width: 100%;
+            padding: 7px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: $base-fontSize;
 
-    &:focus {
-        border: 2px solid $secondColor-2;
-    }
+            &:focus {
+                border: 2px solid $secondColor-2;
+            }
 
-}
-
-.filter-trip {
-    margin-top: 10px;
-    width: 85%;
-
-    li {
-        padding: 10px 15px;
-
-        &:hover {
-            background-color: $secondColor-1;
-            color: #fff;
         }
+
+        .filter-trip {
+            margin-top: 15px;
+            width: 100%;
+
+            li {
+                padding: 10px 15px;
+
+                &:hover {
+                    background-color: $secondColor-1;
+                    color: #fff;
+                }
+            }
+        }
+
+        .add-trip {
+            color: $secondColor-2;
+            width: 100%;
+            padding: 3px;
+            margin-top: 10px;
+            border: $secondColor-2 dotted 1px;
+
+            p {
+                padding: 5px 0;
+            }
+
+            .fa-plus {
+                margin-right: 10px;
+            }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .select-country .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .trip-state {
+            display: flex;
+            margin-top: 20%;
+            align-items: center;
+            justify-content: center;
+
+            .trip-private {
+                display: flex;
+                align-items: center;
+
+                .toggle-input {
+                    display: none;
+                }
+
+                .toggle-label {
+                    display: flex;
+                    align-items: center;
+                    width: 70px;
+                    padding: 5px 10px;
+                    margin-left: 8px;
+                    justify-content: center;
+                    border: 2px solid $secondColor-2;
+                    border-radius: 20px;
+                    background-color: transparent;
+                    color: $secondColor-2;
+                    font-size: $base-fontSize ;
+                    cursor: pointer;
+                    transition: background-color 0.3s, color 0.3s;
+
+                    .toggle-text {
+                        margin-left: 8px;
+                    }
+
+                    .toggle-icon {
+                        display: flex;
+                        align-items: center;
+
+                        i {
+                            font-size: 20px;
+                        }
+                    }
+                }
+
+                .toggle-input:checked+.toggle-label {
+                    background-color: $secondColor-2;
+                    color: $primaryColor;
+                }
+            }
+        }
+
+        .btn-wrap {
+            display: flex;
+            margin: 10px auto 30px;
+
+            .creat-btn,
+            .cancel-btn {
+                width: fit-content;
+                background-color: $secondColor-2;
+                padding: 6px 40px;
+                color: $primaryColor;
+                font-size: $base-fontSize * 1.125;
+                letter-spacing: $base-fontSize * 1.125 * 0.1;
+                border-radius: 36px;
+                margin: auto;
+                margin-top: 18px;
+                display: block;
+                cursor: pointer;
+            }
+
+            .cancel-btn {
+                padding: 4px 38px;
+                background-color: #fff;
+                color: $secondColor-2;
+                border: $secondColor-2 solid 2px;
+            }
+        }
+
     }
-}
-
-.add-trip {
-    color: $secondColor-2;
-    width: 85%;
-    padding: 5px;
-    margin-top: 10px;
-    border: $secondColor-2 dotted 1px;
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.select-country .close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
 }
 </style>
