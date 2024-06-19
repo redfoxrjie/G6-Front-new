@@ -1,6 +1,7 @@
 <template>
     <div class="blog-card-wrapper col ">
         <div class="blog-card">
+
             <div class="bc-imgWrap">
                 <img class="bc-i-img" :src="bcImg">
                 <div class="bc-i-likes">
@@ -53,6 +54,11 @@ const props = defineProps({
     }
 
 })
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const goToPage = (toLink) => {
+    router.push(toLink)
+}
 </script>
 <style lang="scss" scoped>
 @import '@/assets/styles/base/color';

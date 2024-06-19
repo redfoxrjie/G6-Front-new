@@ -173,6 +173,7 @@ body {
 
 header {
     position: relative;
+    padding-bottom: 20px;
 }
 
 nav {
@@ -357,6 +358,8 @@ nav.closed {
     background: rgba(246, 245, 241, 0.6);
     padding: 14px 20px;
     border-radius: 10px;
+    text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
+
     // z-index: 1;
 }
 
@@ -370,6 +373,7 @@ nav.closed {
     letter-spacing: 50px;
     z-index: 1;
     text-align: center;
+    text-shadow: 1px 2px 1px rgba(69, 69, 69, 0.5);
 }
 
 @keyframes morph {
@@ -452,6 +456,7 @@ nav.closed {
     justify-content: center;
     align-items: center;
     overflow: hidden;
+
     /* 防止溢出 */
 }
 
@@ -473,6 +478,7 @@ nav.closed {
     text-align: center;
     flex-direction: column;
     box-sizing: border-box;
+    padding: 10px 0;
 }
 
 
@@ -492,15 +498,17 @@ nav.closed {
         width: 300px;
         height: 300px;
         background: url('../../assets/images/index_amoeba1.jpg') center/cover no-repeat;
-        -webkit-mask: url('../../assets/images/amoeba/NO1.svg') center/cover no-repeat;
-        mask: url('../../assets/images/amoeba/NO1.svg') center/cover no-repeat;
-        -webkit-mask-size: cover;
-        mask-size: cover;
-        animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+        -webkit-mask: url('../../assets/images/amoeba/NO1.svg') center/contain no-repeat;
+        // mask: url('../../assets/images/amoeba/NO1.svg') center/contain no-repeat;
+        mask: url('../../assets/images/amoeba/NO1.svg') center/contain no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        // animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
     }
 
     .text {
         font-size: 1.2rem;
+        margin: 10px 0;
     }
 }
 
@@ -513,37 +521,39 @@ nav.closed {
         height: 300px;
         background: url('../../assets/images/index_amoeba2.jpg') center/cover no-repeat;
         -webkit-mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
-        mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
-        -webkit-mask-size: cover;
-        mask-size: cover;
+        mask: url('../../assets/images/amoeba/NO2.svg') center/contain no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
         animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
     }
-}
 
-.content-item-2 .text {
-    font-size: 1.2rem;
+    .text {
+        font-size: 1.2rem;
+    }
+
 }
 
 .content-item-3 {
     bottom: 5%;
     left: 20%;
 
+    .pic {
+        width: 300px;
+        height: 300px;
+        background: url('../../assets/images/index_amoeba3.jpg') center/cover no-repeat;
+        -webkit-mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
+        mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+    }
+
+    .text {
+        font-size: 1.2rem;
+    }
 }
 
-.content-item-3 .pic {
-    width: 300px;
-    height: 300px;
-    background: url('../../assets/images/index_amoeba3.jpg') center/cover no-repeat;
-    -webkit-mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
-    mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
-    -webkit-mask-size: cover;
-    mask-size: cover;
-    animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
-}
 
-.content-item-3 .text {
-    font-size: 1.2rem;
-}
 
 .content-item-4 {
     bottom: 0%;
@@ -556,8 +566,8 @@ nav.closed {
     background: url('../../assets/images/index_amoeba4.jpg') center/cover no-repeat;
     -webkit-mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
     mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
-    -webkit-mask-size: cover;
-    mask-size: cover;
+    -webkit-mask-size: contain;
+        mask-size: contain;
     animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
 }
 

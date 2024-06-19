@@ -42,15 +42,6 @@
 @import '@/assets/styles/base/font';
 @import '@/assets/styles/components/btn';
 
-//區塊內推
-// .panelview {
-//     box-sizing: border-box;
-//     padding: 0 20px;
-// }
-
-
-
-
 .panelwrap {
     .tabsList {
         border-bottom: 2px solid $secondColor-2 ;
@@ -89,9 +80,16 @@
                         padding: 0 2px;
                         border-radius: 5px;
                     }
+
                 }                
             }
 
+        }
+        .panelBtns{
+            float: right;
+            button{
+                margin-left: 10px;
+            }
         }
     }
 }
