@@ -6,65 +6,86 @@
             <img class="leftHand" src="../assets/images/contactusDog_03.png" alt="">
             <img class="rightHand" src="../assets/images/contactusDog_02.png" alt="">
         </div>
-
-        <table class="container">
-            <tbody id="contactus">
-                <tr class="form_group form_name">  
-                    <td>姓名</td>
-                    <td><input type="text" id="name"></td>
-                </tr>
-                <tr class="form_group">
-                    <td>聯絡電話</td>
-                    <td><input type="tel" id="tel"></td>
-                </tr>
-                <tr class="form_group">
-                    <td>e-mail</td>
-                    <td><input for="email" id="email"></td>
-                </tr>
+        <div id="contactus">
+            <table>
+                <tbody>
+                    <div class="form_frame">
+                        <tr class="form_group form_name">  
+                            <td>姓名</td>
+                            <td><input type="text" id="name"></td>
+                        </tr>
+                        <tr class="form_group form_phone">
+                            <td>聯絡電話</td>
+                            <td><input type="tel" id="tel"></td>
+                        </tr>
+                        <tr class="form_group">
+                            <td>E-mail</td>
+                            <td><input for="email" id="email"></td>
+                        </tr>
+                    </div>
+                </tbody>
                 <div class="form_group form_choice">
                     <p>想詢問項目</p>
                     {{ checkbox }}<br />
                     <label >
-                    <input type="checkbox" value="0" v-model="checkbox" />介面操作
+                    <input type="checkbox" v-model="checkbox" />介面操作
                     <!-- <span class="coverStyle"></span> -->
                     </label>
                     <label >
-                    <input type="checkbox" value="1" v-model="checkbox" />已購入票券
+                    <input type="checkbox" v-model="checkbox" />已購入票券
                     </label>
                     <label >
-                    <input type="checkbox" value="2" v-model="checkbox" />其他
+                    <input type="checkbox" v-model="checkbox" />其他
                     </label>
                 </div>
                 <div class="form_group">
                     <label for="message"></label>
                     <textarea id="message" placeholder="想詢問什麼呢"></textarea>
                 </div>
-            </tbody>
-        </table>
+            </table>
+        </div>
         <div class="btn">
-            <button class="btn-1">確認送出</button>
+            <button class="btn-1" @click="contactFinish">確認送出</button>
         </div>
     </section>
 </template>
-    
+
 <script>
-    export default{
-        data(){
-        return{
-            name:'',
-            text:'',
-            checkbox:[]
-        };
+import Swal from 'sweetalert2';
+export default {
+    data() {
+        return {
+        
+        }
     },
-    };
+    methods:{
+        contactFinish(){
+            this.showSuccessAlert();
+        },
+        showSuccessAlert(){
+            Swal.fire({
+                title: '已送出',
+                text: '系統已送出訊息 請耐心等候專人回覆',
+                icon: 'success',
+                iconColor: '#4F82D4',
+                confirmButtonText: '確定',
+                confirmButtonColor: '#4F82D4'
+            })
+        }
+    }
+}
 </script>
+
     
-  <style lang="scss" scoped>
+    
+<style lang="scss" scoped>
     @import '@/assets/styles/base/color';
-    @import '@/assets/styles/base/font';    
+    @import '@/assets/styles/base/font';  
+    
     h3{
         text-align: center;
-        margin: 180px 0px;
+        margin-top: 120px;
+        margin-bottom: 230px;
         color:$secondColor-2;
     }
     .contactus_pic{
@@ -109,54 +130,59 @@
             }
         }
     }
-
-    .container{
-        // outline: 1px solid red;
+    #contactus{
         display: flex;
         justify-content: center;
+        flex-direction: column;
+        height: auto;
+        width: 450px;
+        margin-left: 32%;
+        // outline: 1px solid red;
+        border-radius: 30px;
+        background-color: #E2F1FF;
+        position: relative;
+        .form_frame{
+            // border: 1px solid red;
+            padding: 0px 80px;
+            padding-top: 80px;
+        }
+        .form_group{
+            padding: 0px 80px;
+            padding-top: 50px;
+            color:$secondColor-2;
+        }
+        .form_name{
+            padding-top: 100px;
+        }
+        .form_choice p{
+            color:$secondColor-2;
+            padding-bottom: 10px;
+        }
+        .form_group label{
+            color: $secondColor-2;
+        }
+        .form_group input{
+            border: 1px solid $secondColor-1;
+            width: auto;
+            height: 25px;
+            padding: 0px 10px;
+            border-radius: 5px;
+            // padding: 0px 20px;
+        }
+        .form_group textarea{
+            padding: 10px;
+            margin-bottom: 50px;
+            height: 200px;
+            width: 100%;
+            // box-sizing: border-box;
+            border: 1px solid $secondColor-1;
+            border-radius: 5px;
+            resize: none;
+        }
+    }
+    @media (max-width: 768px) {
         #contactus{
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            height: auto;
-            width: 450px;
-            // outline: 1px solid red;
-            border-radius: 30px;
-            background-color: #E2F1FF;
-            position: relative;
-            .form_group{
-                padding: 0px 80px;
-                padding-top: 50px;
-                color:$secondColor-2;
-            }
-            .form_name{
-                padding-top: 100px;
-            }
-            .form_choice p{
-                color:$secondColor-2;
-                padding-bottom: 10px;
-            }
-            .form_group label{
-                color: $secondColor-2;
-                padding-right: 5px;
-            }
-            .form_group input{
-                border: 1px solid $secondColor-1;
-                width: auto;
-                height: 20px;
-                border-radius: 5px;
-                // padding: 0px 20px;
-            }
-            .form_group textarea{
-                padding: 10px;
-                margin-bottom: 50px;
-                height: 200px;
-                width: 100%;
-                // box-sizing: border-box;
-                border: 1px solid $secondColor-1;
-                border-radius: 5px;
-                resize: none;
-            }
+            margin: 0px;
         }
     }
     .btn{

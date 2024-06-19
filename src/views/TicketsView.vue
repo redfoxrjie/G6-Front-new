@@ -98,10 +98,10 @@ export default {
     osakaTickets() {
       return this.tickets.filter(ticket => [4, 5, 6].includes(ticket.id));
     },
-    koreaTickets() {
+    thailandTickets() {
       return this.tickets.filter(ticket => [7, 8, 9].includes(ticket.id));
     },
-    thailandTickets() {
+    koreaTickets() {
       return this.tickets.filter(ticket => [10, 11, 12].includes(ticket.id));
     },
     vietnamTickets() {
@@ -136,8 +136,7 @@ export default {
 .Ticket_Section {
   padding: 100px;
   h2{
-    margin-top: 100px;
-    margin-bottom: 80px;
+    margin: 50px 0px;
     text-align: center;
     color: $secondColor-2;
   }

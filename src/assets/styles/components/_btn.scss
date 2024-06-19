@@ -4,9 +4,9 @@
     background-color: $accentColor-1; padding: 7px 15px;
     border-radius: 20px;
     cursor: pointer;
-      &hover{
-        background-color: $accentColor-2;
-        color: $secondColor-3;
+        &:hover{
+            background-color: $accentColor-2;
+            color: $secondColor-3;
     }
 
 }
