@@ -3,41 +3,37 @@
         <button @click="addTripModal" class="creat-new-plan">建立行程</button>
         <h2>我的行程</h2>
         <div class="trip-card-wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-            <div class="card-container col" v-for="card in cards" :key="card.id">
+            <div class="card-container col" v-for="card in cards" :key="card.trp_id"
+                @click="navigateToTripMap(card.trp_id)">
                 <div class="trip-card">
-                    <div class="option-btn" @click="toggleDropdown(card)" style="cursor: pointer;">
+                    <div class="option-btn" @click.stop="Dropdown(card)" style="cursor: pointer;">
                         <ul v-show="card.isDropdownOpen" class="dropdown-menu">
                             <li v-for="option in options" :key="option.id" @click.stop="selectOption(option, card)">
                                 {{ option.label }}
                             </li>
                         </ul>
-
                     </div>
                     <div class="trip-img">
-                        <img :src="card.image" :alt="card.name">
+                        <img :src="card.trp_img" :alt="card.trp_name">
                     </div>
                     <div class="trip-info">
-                        <div class="trip-title">{{ card.name }}</div>
-                        <div class="trip-dates font-time">{{ card.startDate }} ~ {{ card.endDate }}</div>
+                        <div class="trip-title">{{ card.trp_name }}</div>
+                        <div class="trip-dates font-time">{{ card.trp_sdate }} ~ {{ card.trp_edate }}</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <AddTrip :isVisible="isModalVisible" @update:isVisible="isModalVisible = $event" />
-
 </template>
 
 <script>
-import { ref } from 'vue';
 import AddTrip from '@/components/layout/AddTrip.vue';
-
 export default {
     name: 'MyComponent',
     components: {
         AddTrip// 註冊組件
     },
-
     props: {
         options: {
             type: Array,
@@ -47,29 +43,30 @@ export default {
                 { id: 3, label: '複製行程' },
             ],
         },
-
-
     },
+
     data() {
         return {
-            isDropdownOpen: false,
-            selectedOption: "path/to/sr",
             cards: [],
+            isDropdownOpen: false,
+            selectedOption: null,
             isModalVisible: false
-        }
+        };
     },
     mounted() {
+
         this.loadJsonData();
     },
     methods: {
-        toggleDropdown(card) {
+        //卡片下拉選單開合
+        Dropdown(card) {
             card.isDropdownOpen = !card.isDropdownOpen;
         },
         loadJsonData() {
             fetch('../../json/mytrips.json')
                 .then((response) => response.json())
                 .then(data => {
-                    this.cards = data.map(card => ({ ...card, isDropdownOpen: false }));
+                    this.cards = data;
                 })
                 .catch((error) => {
                     console.error('Error loading JSON data:', error);
@@ -77,11 +74,24 @@ export default {
         },
         addTripModal() {
             this.isModalVisible = true;
+        },
+        navigateToTripMap(trp_id) {
+            this.$router.push({
+                name: 'mytrip',
+                params: { trp_id }
+            });
+        },
+        //下拉選單點擊事件
+        selectOption(option, card) {
+            if (option.label === '編輯行程') {
+                this.navigateToTripMap(card.trp_id);
+            } else {
+                console.log('Selected option:', option, 'for card:', card);
+            }
         }
     }
-};
+}
 </script>
-
 
 <style lang="scss" scoped>
 @import '@/assets/styles/base/color';
@@ -162,7 +172,6 @@ export default {
                             color: $secondColor-2;
                         }
                     }
-
                 }
 
                 .trip-img {
