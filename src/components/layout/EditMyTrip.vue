@@ -63,7 +63,7 @@ export default {
             card.isDropdownOpen = !card.isDropdownOpen;
         },
         loadJsonData() {
-            fetch('../../json/mytrips.json')
+            fetch(`${import.meta.env.BASE_URL}json/mytrips.json`)
                 .then((response) => response.json())
                 .then(data => {
                     this.cards = data;

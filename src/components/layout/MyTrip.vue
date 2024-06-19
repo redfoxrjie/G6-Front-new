@@ -31,8 +31,12 @@ export default {
         this.loadJsonData();
     },
     methods: {
-        loadJsonData() {
-            fetch('../../json/mytrips.json')
+
+        
+
+            loadJsonData(){
+                fetch(`${import.meta.env.BASE_URL}json/mytrips.json`)
+
                 .then((response) => response.json())
                 .then(data => {
                     this.cards = data;

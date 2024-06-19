@@ -576,247 +576,199 @@
             "trp_img": "https://picsum.photos/300/200/?random=81"
         }
     ],
-    "blog":[
-  {
-    "id": 1,
-    "name": "北九州五天四夜|浪漫花海、私房夜景看不完",
-    "date": "2024/05/24",
-    "viewers": 11532,
-    "likes": 150,
-    "image": "https://picsum.photos/300/200/?random=1"
-  },
-  {
-    "id": 2,
-    "name": "東京粉色自由行| 沉浸式賞櫻與參拜之旅",
-    "date": "2024/03/29",
-    "viewers": 13990,
-    "likes": 200,
-    "image": "https://picsum.photos/300/200/?random=2"
-  },
-  {
-    "id": 3,
-    "name": "濟州島fun輕鬆|走進神話般的壯麗美景",
-    "date": "2024/01/18",
-    "viewers": 8964,
-    "likes": 120,
-    "image": "https://picsum.photos/300/200/?random=3"
-  },
-  {
-    "id": 4,
-    "name": "香港美食探秘|品味地道風味",
-    "date": "2024/04/12",
-    "viewers": 12500,
-    "likes": 130,
-    "image": "https://picsum.photos/300/200/?random=4"
-  },
-  {
-    "id": 5,
-    "name": "泰國清邁探險|熱帶叢林與古廟",
-    "date": "2024/02/20",
-    "viewers": 9875,
-    "likes": 110,
-    "image": "https://picsum.photos/300/200/?random=5"
-  },
-  {
-    "id": 6,
-    "name": "沖繩陽光海灘|海上活動與悠閒時光",
-    "date": "2024/07/15",
-    "viewers": 10500,
-    "likes": 145,
-    "image": "https://picsum.photos/300/200/?random=6"
-  },
-  {
-    "id": 7,
-    "name": "首爾時尚之旅|潮流購物與美食",
-    "date": "2024/06/05",
-    "viewers": 13450,
-    "likes": 190,
-    "image": "https://picsum.photos/300/200/?random=7"
-  },
-  {
-    "id": 8,
-    "name": "釜山海濱度假|感受韓國風情",
-    "date": "2024/09/22",
-    "viewers": 11200,
-    "likes": 160,
-    "image": "https://picsum.photos/300/200/?random=8"
-  },
-  {
-    "id": 9,
-    "name": "京都古都魅力|歷史與文化之旅",
-    "date": "2024/11/03",
-    "viewers": 14420,
-    "likes": 210,
-    "image": "https://picsum.photos/300/200/?random=9"
-  },
-  {
-    "id": 10,
-    "name": "橫濱家庭樂園|親子互動與遊樂設施",
-    "date": "2024/08/12",
-    "viewers": 11800,
-    "likes": 175,
-    "image": "https://picsum.photos/300/200/?random=10"
-  },
-  {
-    "id": 11,
-    "name": "大阪購物天堂|電器街與美食街",
-    "date": "2024/05/19",
-    "viewers": 15600,
-    "likes": 220,
-    "image": "https://picsum.photos/300/200/?random=11"
-  },
-  {
-    "id": 12,
-    "name": "名古屋工業風情|傳統與現代的交融",
-    "date": "2024/10/25",
-    "viewers": 9900,
-    "likes": 130,
-    "image": "https://picsum.photos/300/200/?random=12"
-  },
-  {
-    "id": 13,
-    "name": "台北夜市探險|地道小吃與夜生活",
-    "date": "2024/04/30",
-    "viewers": 12980,
-    "likes": 195,
-    "image": "https://picsum.photos/300/200/?random=13"
-  },
-  {
-    "id": 14,
-    "name": "曼谷大皇宮|文化與建築之美",
-    "date": "2024/03/14",
-    "viewers": 11540,
-    "likes": 175,
-    "image": "https://picsum.photos/300/200/?random=14"
-  },
-  {
-    "id": 15,
-    "name": "清邁悠閒之旅|古城與自然美景",
-    "date": "2024/01/07",
-    "viewers": 10400,
-    "likes": 140,
-    "image": "https://picsum.photos/300/200/?random=15"
-  },
-  {
-    "id": 16,
-    "name": "福岡美食之旅|品味九州風味",
-    "date": "2024/08/20",
-    "viewers": 12030,
-    "likes": 165,
-    "image": "https://picsum.photos/300/200/?random=16"
-  },
-  {
-    "id": 17,
-    "name": "首爾文化探索|傳統與現代的交融",
-    "date": "2024/07/29",
-    "viewers": 13650,
-    "likes": 205,
-    "image": "https://picsum.photos/300/200/?random=17"
-  },
-  {
-    "id": 18,
-    "name": "濟州島自然美景|壯麗火山與海岸",
-    "date": "2024/07/10",
-    "viewers": 10980,
-    "likes": 140,
-    "image": "https://picsum.photos/300/200/?random=18"
-  },
-  {
-    "id": 19,
-    "name": "香港文化之旅|歷史與現代的融合",
-    "date": "2024/09/01",
-    "viewers": 12700,
-    "likes": 150,
-    "image": "https://picsum.photos/300/200/?random=19"
-  },
-  {
-    "id": 20,
-    "name": "沖繩海洋之旅|潛水與珊瑚礁探險",
-    "date": "2024/06/18",
-    "viewers": 11350,
-    "likes": 160,
-    "image": "https://picsum.photos/300/200/?random=20"
-  },
-  {
-    "id": 21,
-    "name": "台中休閒之旅|自然風光與人文景點",
-    "date": "2024/05/01",
-    "viewers": 10800,
-    "likes": 140,
-    "image": "https://picsum.photos/300/200/?random=21"
-  },
-  {
-    "id": 22,
-    "name": "曼谷夜市之旅|熱鬧市集與美食",
-    "date": "2024/11/11",
-    "viewers": 12100,
-    "likes": 170,
-    "image": "https://picsum.photos/300/200/?random=22"
-  },
-  {
-    "id": 23,
-    "name": "清邁寺廟巡禮|心靈與文化之旅",
-    "date": "2024/10/05",
-    "viewers": 10340,
-    "likes": 135,
-    "image": "https://picsum.photos/300/200/?random=23"
-  },
-  {
-    "id": 24,
-    "name": "大阪傳統祭典|體驗日本文化",
-    "date": "2024/08/22",
-    "viewers": 14600,
-    "likes": 210,
-    "image": "https://picsum.photos/300/200/?random=24"
-  },
-  {
-    "id": 25,
-    "name": "橫濱觀光之旅|海港與都市魅力",
-    "date": "2024/07/13",
-    "viewers": 11580,
-    "likes": 155,
-    "image": "https://picsum.photos/300/200/?random=25"
-  },
-  {
-    "id": 26,
-    "name": "福岡城市探索|現代與歷史交融",
-    "date": "2024/06/30",
-    "viewers": 13240,
-    "likes": 185,
-    "image": "https://picsum.photos/300/200/?random=26"
-  },
-  {
-    "id": 27,
-    "name": "首爾夜生活|熱鬧酒吧與夜市",
-    "date": "2024/05/21",
-    "viewers": 13780,
-    "likes": 195,
-    "image": "https://picsum.photos/300/200/?random=27"
-  },
-  {
-    "id": 28,
-    "name": "台北市區漫遊|購物與文化景點",
-    "date": "2024/04/09",
-    "viewers": 11890,
-    "likes": 170,
-    "image": "https://picsum.photos/300/200/?random=28"
-  },
-  {
-    "id": 29,
-    "name": "香港購物天堂|時尚品牌與特色店鋪",
-    "date": "2024/03/22",
-    "viewers": 13100,
-    "likes": 180,
-    "image": "https://picsum.photos/300/200/?random=29"
-  },
-  {
-    "id": 30,
-    "name": "泰國普吉島|熱帶海島的浪漫假期",
-    "date": "2024/02/14",
-    "viewers": 10740,
-    "likes": 145,
-    "image": "https://picsum.photos/300/200/?random=30"
-  }
+    "blog": [
+        {
+          "b_id": 1,
+          "b_title": "北九州五天四夜|浪漫花海、私房夜景看不完",
+          "b_date": "2024/05/24",
+          "b_viewers": 11532,
+          "b_likes": 150,
+          "b_img": "japan_yufuin-kinrinko.jpg"
+        },
+        {
+          "b_id": 2,
+          "b_title": "東京粉色自由行| 沉浸式賞櫻與參拜之旅",
+          "b_date": "2024/03/29",
+          "b_viewers": 13990,
+          "b_likes": 200,
+          "b_img": "japan_asakusa_street.jpg"
+        },
+        {
+          "b_id": 3,
+          "b_title": "濟州島fun輕鬆|走進神話般的壯麗美景",
+          "b_date": "2024/01/18",
+          "b_viewers": 8964,
+          "b_likes": 120,
+          "b_img": "korea_jeju-island.jpg"
+        },
+        {
+          "b_id": 4,
+          "b_title": "香港美食探秘|品味地道風味",
+          "b_date": "2024/04/12",
+          "b_viewers": 12500,
+          "b_likes": 130,
+          "b_img": "hongkong_signboard.jpg"
+        },
+        {
+          "b_id": 5,
+          "b_title": "泰國清邁探險|熱帶叢林與古廟",
+          "b_date": "2024/02/20",
+          "b_viewers": 9875,
+          "b_likes": 110,
+          "b_img": "tailand_temple.jpg"
+        },
+        {
+          "b_id": 6,
+          "b_title": "沖繩陽光海灘|海上活動與悠閒時光",
+          "b_date": "2024/07/15",
+          "b_viewers": 10500,
+          "b_likes": 145,
+          "b_img": "japan_okinawa-sea.jpg"
+        },
+        {
+          "b_id": 7,
+          "b_title": "首爾時尚之旅|潮流購物與美食",
+          "b_date": "2024/06/05",
+          "b_viewers": 13450,
+          "b_likes": 190,
+          "b_img": "korea_souel-city.jpg"
+        },
+        {
+          "b_id": 8,
+          "b_title": "釜山海濱度假|感受韓國風情",
+          "b_date": "2024/09/22",
+          "b_viewers": 11200,
+          "b_likes": 160,
+          "b_img": "korea_busan-beach.jpg"
+        },
+        {
+          "b_id": 9,
+          "b_title": "京都古都魅力|歷史與文化之旅",
+          "b_date": "2024/11/03",
+          "b_viewers": 14420,
+          "b_likes": 210,
+          "b_img": "japan_kyoto-street.jpg"
+        },
+        {
+          "b_id": 10,
+          "b_title": "橫濱家庭樂園|親子互動與遊樂設施",
+          "b_date": "2024/08/12",
+          "b_viewers": 11800,
+          "b_likes": 175,
+          "b_img": "Ticket_innerpic_13.jpg"
+        },
+        {
+          "b_id": 11,
+          "b_title": "大阪購物天堂|電器街與美食街",
+          "b_date": "2024/05/19",
+          "b_viewers": 15600,
+          "b_likes": 220,
+          "b_img": "japan_osaka-street.jpg"
+        },
+        {
+          "b_id": 12,
+          "b_title": "名古屋工業風情|傳統與現代的交融",
+          "b_date": "2024/10/25",
+          "b_viewers": 9900,
+          "b_likes": 130,
+          "b_img": "japan_nagoya-station.jpg"
+        },
+        {
+          "b_id": 13,
+          "b_title": "台北夜市探險|道地小吃越夜越美麗",
+          "b_date": "2024/04/30",
+          "b_viewers": 12980,
+          "b_likes": 195,
+          "b_img": "taiwan_night-market.jpg"
+        },
+        {
+          "b_id": 14,
+          "b_title": "曼谷大皇宮|金碧輝煌古都之美",
+          "b_date": "2024/03/14",
+          "b_viewers": 11540,
+          "b_likes": 175,
+          "b_img": "tailand_palace.jpg"
+        },
+        {
+          "b_id": 15,
+          "b_title": "清邁悠閒之旅|古城與自然美景",
+          "b_date": "2024/01/07",
+          "b_viewers": 10400,
+          "b_likes": 140,
+          "b_img": "tailand_chiangmai.jpg"
+        },
+        {
+          "b_id": 16,
+          "b_title": "福岡美食之旅|品味九州風味",
+          "b_date": "2024/08/20",
+          "b_viewers": 12030,
+          "b_likes": 165,
+          "b_img": "japan_hakata-station.jpg"
+        },
+        {
+          "b_id": 17,
+          "b_title": "首爾文化探索|傳統與現代的交融",
+          "b_date": "2024/07/29",
+          "b_viewers": 13650,
+          "b_likes": 205,
+          "b_img": "korea_souel-city.jpg"
+        },
+        {
+          "b_id": 18,
+          "b_title": "濟州島自然美景|壯麗火山與海岸",
+          "b_date": "2024/07/10",
+          "b_viewers": 10980,
+          "b_likes": 140,
+          "b_img": "korea_jeju-island.jpg"
+        },
+        {
+          "b_id": 19,
+          "b_title": "香港文化之旅|歷史與現代的融合",
+          "b_date": "2024/09/01",
+          "b_viewers": 12700,
+          "b_likes": 150,
+          "b_img": "hongkong_street.jpg"
+        },
+        {
+          "b_id": 20,
+          "b_title": "沖繩海洋之旅|潛水與珊瑚礁探險",
+          "b_date": "2024/06/18",
+          "b_viewers": 11350,
+          "b_likes": 160,
+          "b_img": "Ticket_order.jpg"
+        },
+        {
+          "b_id": 21,
+          "b_title": "台中休閒之旅|自然風光與人文景點",
+          "b_date": "2024/05/01",
+          "b_viewers": 10800,
+          "b_likes": 140,
+          "b_img": "taiwan_taichung-bridge.jpg"
+        },
+        {
+          "b_id": 22,
+          "b_title": "曼谷夜市之旅|熱鬧市集與美食",
+          "b_date": "2024/11/11",
+          "b_viewers": 12100,
+          "b_likes": 170,
+          "b_img": "tailand_nightmarket.jpg"
+        },
+        {
+          "b_id": 23,
+          "b_title": "清邁寺廟巡禮|心靈與文化之旅",
+          "b_date": "2024/10/05",
+          "b_viewers": 10340,
+          "b_likes": 135,
+          "b_img": "tailand_chiangmai.jpg"
+        },
+        {
+          "b_id": 24,
+          "b_title": "大阪傳統祭典|體驗日本文化",
+          "b_date": "2024/08/22",
+          "b_viewers": 14600,
+          "b_likes": 210,
+          "b_img": "japan_osaka-matsuri.jpg"
+        }
 ]
 
 

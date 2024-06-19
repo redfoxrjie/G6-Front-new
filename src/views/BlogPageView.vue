@@ -1,12 +1,20 @@
 <template>
     <article>
         <div class="container">
-            <div class="journey-banner">
-                <div class="journey-data">
-                    <div class="publish-date font-time">2024/05/22 </div>
-                    <div class="journey-title">北九州五天四夜|浪漫花海、私房夜景看不完</div>
+            <div class="goback-wrapper">
+                <div class="prev-arrow" @click="goBack">
+                    <font-awesome-icon icon="arrow-left" />
                 </div>
-                <div class="like-count">1128 個讚</div>
+                <span>返回</span>
+            </div>
+            <div class="journey-banner"
+                :style="{ backgroundImage:'url(' + parseServerImg(item.b_img) + ')' }"
+            >
+                <div class="journey-data">
+                    <div class="publish-date font-time">{{ item.b_date }} </div>
+                    <div class="journey-title">{{ item.b_title }}</div>
+                </div>
+                <div class="like-count">{{ item.b_likes }} 個讚</div>
             </div>
             <div class="journey-main row">
                 <div class="journey-content col-12 col-md-9">
@@ -113,6 +121,46 @@
 </template>
 
 <script>
+export default {
+    data() {
+        return {
+            item: []
+        };
+    },
+    methods: {
+        async loadJsonData() {
+            const blogId = this.$route.params.b_id;
+            try {
+                const response = await fetch(`${import.meta.env.BASE_URL}json/data.json`);
+                const data = await response.json();
+                
+                // 確認 data 中的 blog 是一個陣列
+                if (data.blog && Array.isArray(data.blog)) {
+                    this.item = data.blog.find(blog => blog.b_id == blogId);
+                    console.log('Loaded item:', this.item);
+                } else {
+                    throw new Error('Data format is incorrect');
+                }
+            } catch (error) {
+                console.error('Error loading JSON data:', error);
+            }
+        },
+        parseImg(imgURL) {
+            // 將相對路徑解析成正確的 URL
+            return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
+        },
+        parseServerImg(imgURL) {
+            // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+            return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+        },
+        goBack() {
+            window.history.back(); // 返回前一頁
+        }
+    },
+    mounted() {
+        this.loadJsonData(); // 在組件mounted之後載入data
+    },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -122,6 +170,27 @@
 article {
     margin-top: 120px;
     .container {
+        .goback-wrapper {
+            margin: 12px 0 16px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            width: fit-content;
+            .prev-arrow {
+                border: 1px solid $black;
+                width: fit-content;
+                padding: 8px;
+                margin-right: 8px;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+            &:hover{
+                color: $secondColor-2;
+                .prev-arrow {
+                    border: 1px solid $secondColor-2;
+                }
+            }
+        }
         .journey-banner {
             width: 100%;
             aspect-ratio: 2.87/1;

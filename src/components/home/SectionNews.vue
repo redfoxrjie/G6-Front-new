@@ -30,7 +30,7 @@ import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
 const newsContentDate = ref([])
 const fetchData = async () => {
     try {
-        const response = await fetch('/json/homepagedata.json');
+        const response = await fetch(`${import.meta.env.BASE_URL}json/homepagedata.json`);
         const data = await response.json();
         newsContentDate.value = data.news;
     } catch (error) {

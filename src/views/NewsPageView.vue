@@ -1,5 +1,8 @@
 <template>
     <div class="page-container container">
+        <div class="prev-arrow" @click="goBack">
+            <font-awesome-icon icon="arrow-left" />
+        </div>
         <h2>最新消息</h2>
         <div class="news-content" v-if="item">
             <div class="news-info">
@@ -8,14 +11,13 @@
                 <span class="news-type font-time">{{ item.type }}</span>
             </div>
             <div class="news-img">
-                <img :src="item.img" alt="news image">
+                <img :src="parseServerImg(item.img)" alt="news image">
             </div>
             <p class="news-paragraph">
                 {{ item.content }}
             </p>
         </div>
         <button class="prev-btn" @click="goBack">返回</button>
-        
     </div>
 </template>
 
@@ -25,32 +27,40 @@ import { ref, computed } from 'vue';
 export default {
     data() {
         return {
-            item: null,
+            item: []
         };
     },
     methods: {
         loadJsonData() {
             const newsId = this.$route.params.id;
-            fetch('../../json/news.json')
+            fetch(`${import.meta.env.BASE_URL}json/news.json`)
                 .then(res => res.json())
                 .then(data => {
                     this.item = data.find(news => news.id == newsId);
+                    console.log('Loaded item:', this.item);
                 })
                 .catch((error) => {
-                    //捕捉錯誤例外
                     console.error('Error loading JSON data:', error);
-                    // console.log(`Error: ${error}`);
                 });
         },
+        parseImg(imgURL) {
+            // 將相對路徑解析成正確的 URL
+            return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
+        },
+        parseServerImg(imgURL) {
+	        // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+            return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
+        },
         goBack() {
-            window.history.back(); //返回前一頁
+            window.history.back(); // 返回前一頁
         }
     },
     mounted() {
-        this.loadJsonData();
+        this.loadJsonData(); // 在组件挂载后加载数据
     },
-}
+};
 </script>
+
 
 <style lang="scss" scoped>
 @import '../assets/styles/base/color';
@@ -59,6 +69,18 @@ export default {
 .page-container {
     margin-top: 120px;
     width: 75vw;
+    .prev-arrow {
+        border: 1px solid $black;
+        width: fit-content;
+        padding: 8px;
+        border-radius: 50%;
+        cursor: pointer;
+        &:hover {
+            color: $secondColor-2;
+            border: 1px solid $secondColor-2;
+            transition: all .3s ease;
+        }
+    }
     h2 { 
         color: $secondColor-2;
         margin: 36px 0;
@@ -69,7 +91,12 @@ export default {
                 font-size: $base-fontSize * 1.33;
                 line-height: 140%;
             }
+            .news-type {
+                background-color: $accentColor-1;
+                padding: 2px 4px;
+            }
             .published-date, .news-type {
+                color:$black;
                 display: inline-block;
                 margin: 20px 0;
                 margin-right: 16px;

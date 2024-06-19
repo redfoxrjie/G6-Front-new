@@ -39,7 +39,8 @@ const props = defineProps({
 .trip-card-wrapper {
     // background-color: #8b3535;
     box-sizing: border-box;
-    padding: 5px;
+    padding: 5px;  max-width: 400px;
+
 
 }
 
