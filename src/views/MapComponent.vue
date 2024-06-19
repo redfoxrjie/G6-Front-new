@@ -86,12 +86,12 @@ import IconStarRating from '@/components/icons/IconStarRating.vue';
 export default {
   data() {
     return {
-      map: null, // 存储地图实例
-      searchQuery: '', // 搜索查询
+      map: null, // 儲存地圖實例
+      searchQuery: '', // 搜索查詢
       searchResults: [], // 搜索结果
       itinerary: [], // 行程列表
-      markers: [], // 存储所有标记
-      fuse: null, // Fuse.js实例
+      markers: [], // 儲存所有marker
+      fuse: null, // Fuse.js實例
       source: null, //儲存被拖曳的實例
       overItem: null, //儲存被觸發dragover的實例
       search: "",
@@ -99,7 +99,8 @@ export default {
       daysCount: null, // 儲存計算後的天數
       selectedDay: 1,
       isMapVisible: true, 
-      switchBtnText: '返回行程'
+      switchBtnText: '返回行程',
+      defaultMarkerIcon: null //保存自定義marker icon
     };
   },
   components: {
@@ -113,39 +114,51 @@ export default {
       return this.fuse ? this.fuse.search(this.searchQuery) : this.searchResults;
     },
     filteredItinerary() {
-      // Filter itinerary based on selectedDay
+      // Filter itinerary based on selectedDay (this function now is unfunctional)
       return this.itinerary.filter(item => item.day === this.selectedDay);
     }
   },
   methods: {
-    // 初始化地图
+    // 初始化地圖
     initializeMap() {
       this.map = L.map('map-container').setView([24.958277478835058, 121.22528019206256], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(this.map);
 
-      // 初始化地理编码器
+      // 自定義 marker 圖片路徑
+      const markerIcon = new L.Icon({
+        iconUrl: 'https://tibamef2e.com/cid101/g6/front/images/togo-marker-icon-2x.png',
+        iconSize: [44, 72], // 圖片大小
+        iconAnchor: [12, 41], // 圖片錨點
+        popupAnchor: [1, -34],
+        shadowUrl: 'https://tibamef2e.com/cid101/g6/front/images/togo-marker-shadow.png', // 如果有陰影圖片
+        shadowSize: [46, 46] // 陰影圖片大小
+      });
+
+      this.defaultMarkerIcon = markerIcon; // 保存到 this.defaultMarkerIcon 中
+
+      // 初始化地理編碼器
       this.geocoder = L.Control.Geocoder.nominatim({
         geocodingQueryParams: {
-          limit: 50, // 增加返回结果的数量上限
-          countrycodes: 'tw', // 限制结果在台湾
-          viewbox: '120.8,25.3,122.1,21.8', // 限制在台湾范围
-          bounded: 1 // 使视图框架生效
+          limit: 50, // 增加返回结果的數量上限
+          countrycodes: 'tw', // 限制结果在台灣
+          viewbox: '120.8,25.3,122.1,21.8', // 限制在台灣範圍
+          bounded: 1 // 使視圖框架生效
         }
       });
     },
-    // 设置当前地理位置
+    // 設置當前的地理位置
     setCurrentLocation(position) {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
       this.map.setView([lat, lng], 13);
     },
-    // 显示定位失败错误
+    // 顯示定位失敗的錯誤訊息 (此功能必要性再檢討)
     showError() {
-      alert('定位失败，请手动输入坐标');
+      alert('定位失敗，請手動輸入座標');
     },
-    // 搜索地点
+    // 搜尋地點
     searchLocations: debounce(function () {
       if (!this.searchQuery) {
         this.searchResults = [];
@@ -171,31 +184,30 @@ export default {
             full_address: `${result.address?.postcode || ''}${result.address?.country || ''}${result.address?.city || ''} ${result.address?.town || ''} ${result.address?.road|| ''}`
           }));
 
-          // 创建或更新 Fuse.js 实例
+          // 創建或更新 Fuse.js 實例
           this.fuse = new Fuse(this.searchResults, {
             keys: ['display_name'],
-            threshold: 0.3, // 设置模糊搜索的阈值，值越低，匹配越严格
-            includeScore: true, // 包含匹配分数
+            threshold: 0.3, // 設置模糊搜尋的域值，值越低，匹配條件越嚴格
+            includeScore: true, // 包含匹配分數
             shouldSort: true // 按匹配度排序
           });
         })
         .catch(error => console.error('Error fetching geocoding data:', error));
-    }, 300), // 300毫秒的去抖动
+    }, 300), // 300毫秒的去抖動
 
-    // 添加标记
+    // 添加marker
     addMarker(result) {
       const latlng = { lat: result.lat, lng: result.lon };
       this.map.setView([latlng.lat, latlng.lng], 13);
 
-      // 在地图上添加搜索结果的标记
-      const marker = L.marker([latlng.lat, latlng.lng]).addTo(this.map)
+      // 在地圖上添加搜索结果的marker
+      const marker = L.marker([latlng.lat, latlng.lng], { icon: this.defaultMarkerIcon }).addTo(this.map)
       .bindPopup(this.createPopupContent(result));
         
-
-      // 存储标记
+      // 儲存標記
       this.markers.push({ location: result, marker: marker });
 
-      // 清空搜索结果和搜索查询
+      // 清空搜索结果和搜索查詢
       this.searchResults = [];
       this.searchQuery = '';
 
@@ -203,7 +215,7 @@ export default {
       this.filteredSearchResults = [];
     },
 
-    // 创建弹出框内容
+    // 創建popup彈出框內容
     createPopupContent(result) {
       const container = document.createElement('div');
       container.innerHTML = `<div style='font-size: 16px; font-weight: bold;'>${result.name}</div><div style='color: #888'>${result.full_address}</div>`;
@@ -225,20 +237,20 @@ export default {
       }
     },
 
-    // 删除行程中的地点
+    // 删除行程中的地點
     removeLocation(location) {
-      // 找到对应的标记
+      // 找到對應的標記
       const markerObj = this.markers.find(marker => marker.location === location);
 
       if (markerObj) {
-        // 从地图上移除标记
+        // 從地圖上移除標記
         this.map.removeLayer(markerObj.marker);
 
-        // 从标记数组中移除标记
+        // 從標記數組中移除標記
         this.markers = this.markers.filter(marker => marker !== markerObj);
       }
 
-      // 从行程列表中移除地点
+      // 從行程表中移除地點
       this.itinerary = this.itinerary.filter(item => item !== location);
     },
     // -------------------------Darg and Drop--------------------------------
@@ -276,12 +288,12 @@ export default {
       const sourceIndex = this.itinerary.indexOf(this.source);
       this.itinerary.splice(sourceIndex, 1);
 
-      // 确认 overItem 的位置，并将 this.source 插入正确的位置
+      // 確認 overItem 的位置，並將 this.source 插入正確的位置
       if (this.overItem) {
         const list = this.$el.querySelector('.day-plan-list');
         let overIndex = Array.from(list.children).indexOf(this.overItem);
       
-        // 检查 overItem 的位置和 class
+        // 檢查 overItem 的位置和 class
         if (this.overItem.classList.contains('after')) {
           overIndex++;
         } else if (this.overItem.classList.contains('before') && overIndex > 0) {
@@ -290,15 +302,15 @@ export default {
       
         this.itinerary.splice(overIndex, 0, this.source);
       } else {
-        // 如果没有 overItem，默认将 this.source 插入到列表末尾
+        // 如果没有 overItem，默認将 this.source 插入到列表末尾
         this.itinerary.push(this.source);
       }
     
-      // 清除所有样式和状态
+      // 清除所有樣式和狀態
       this.clearOverItem();
       this.source = null;
     
-      // 打印 行程列表 中每个<li>的index值与对应的location.name，检查是否换位正确
+      // console.log出 行程列表 中每個<li>的index值與對應的location.name，藉此檢查是否換位正確
       this.itinerary.forEach((location, index) => {
         console.log(`Index: ${index}, Name: ${location.name}`);
       });
@@ -339,9 +351,9 @@ export default {
     }
   },
   mounted() {
-    this.initializeMap(); // 初始化地图
+    this.initializeMap(); // 初始化地圖
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this.setCurrentLocation, this.showError); // 获取当前地理位置
+      navigator.geolocation.getCurrentPosition(this.setCurrentLocation, this.showError); // 獲取目前的地理位置
     } else {
       alert('您的浏览器不支持地理定位功能');
     }
@@ -528,7 +540,7 @@ export default {
 /* 地圖樣式 */
 #map {
   position: absolute;
-  top: 10vh;
+  top: 8vh;
   left: 0;
   height: fit-content;
   background-color: white;
