@@ -33,6 +33,11 @@ const router = createRouter({
       component: () => import('../views/BlogView.vue')
     },
     {
+      path: '/blog/:b_id',
+      name: 'blogPage',
+      component: () => import('../views/BlogPageView.vue')
+    },
+    {
       path: '/news',
       name: 'news',
       component: () => import('../views/NewsView.vue')
@@ -41,11 +46,6 @@ const router = createRouter({
       path: '/news/:id',
       name: 'newsPage',
       component: () => import('../views/NewsPageView.vue')
-    },
-    {
-      path: '/news/newspage/:id',
-      name: 'newsPage2',
-      component: () => import('../views/NewsPage2View.vue')
     },
     {
       path: '/tickets',
@@ -102,11 +102,11 @@ const router = createRouter({
       name: 'blogSearchResult',
       component: () => import('../views/BlogSearchResultView.vue')
     },
-    {
-      path: '/blogPage',
-      name: 'blogPage',
-      component: () => import('../views/BlogPageView.vue')
-    },
+    // {
+    //   path: '/blogPage',
+    //   name: 'blogPage',
+    //   component: () => import('../views/BlogPageView.vue')
+    // },
 
     {
       path: '/member',
