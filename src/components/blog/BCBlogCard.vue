@@ -1,8 +1,9 @@
 <template>
     <div class="blog-card-wrapper col ">
         <div class="blog-card">
-            <div class="bc-imgWrap" @click="goToPage('/blogpage')">
-                <img class="bc-i-img" :src="bcImg"></img>
+
+            <div class="bc-imgWrap">
+                <img class="bc-i-img" :src="bcImg">
                 <div class="bc-i-likes">
                     <div class="bc-i-likes-icon">
                         <img src="@/assets/images/global/icons/bones-xs-svg.svg" alt="" class="likes-iconImg">

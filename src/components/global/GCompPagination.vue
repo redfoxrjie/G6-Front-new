@@ -2,22 +2,27 @@
  用於一覽頁搜尋結果 會需要切分資料頁面
  顯示數量 參數傳入顯示和點擊事件 -->
  
-<template>
-    <!-- :class="{ active: n === pageIndex }" -->
+ <template>
     <div class="pagination-wrap">
-        <div class="indexButton" v-for="(n,i) in pagesCount" :key="n" :class="{ active: n === pageIndex }"
-            @click="clickEmitHandle(n)">
+        <div class="indexButton" 
+        v-for="n in pagesCount" 
+        :key="n" 
+        @click="clickEmitHandle(n)"
+        :class="{ active: n === pageIndex }"
+        >
             {{ n }}
         </div>
     </div>
 </template>
+
 <script setup>
-import { ref, defineProps,defineEmits } from 'vue';
+import { computed } from 'vue';
+import { defineProps, defineEmits } from 'vue';
+
 const props = defineProps({
     pageIndex: {
         type: Number,
         default: 1
-        // ,require: required
     },
     totalItems: {
         type: Number,
@@ -28,15 +33,22 @@ const props = defineProps({
         default: 3
     }
 })
-const pagesCount = Math.ceil( props.totalItems/props.pageLimit);
-// console.log(props.pageIndex)
+
 const emit = defineEmits(['emitClick']);
-function clickEmitHandle(msg){
-    emit('emitClick', msg);
+
+// 使用computed計算總頁數，確保頁數會隨著資料總數變動而更新
+const pagesCount = computed(() => { 
+    return Math.ceil(props.totalItems / props.pageLimit);
+});
+
+// 點擊處理
+function clickEmitHandle(n){
+    emit('emitClick', n);
+    console.log('Clicked page', n);
 }
-
-
 </script>
+
+
 <style lang="scss" scope>
 @import '@/assets/styles/base/color';
 @import '@/assets/styles/base/font';
