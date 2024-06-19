@@ -37,11 +37,11 @@
   </div>
   <GCompPagination :totalItems="blogsCount" :pageLimit="9" :pageIndex="currentIndex"
     @emitClick="pagenationClickHandle" />
-<p>debug用 此頁顯示{{ currentCardLimit }} 筆資料,共有{{blogsCount}}筆資料</p>
-  <div class="debuggerCurrentShow">
+<!-- <p>debug用 此頁顯示{{ currentCardLimit }} 筆資料,共有{{blogsCount}}筆資料</p> -->
+  <!-- <div class="debuggerCurrentShow">
     <span>(這裡是資料區塊之後會刪除並把按鈕移到下面)</span><span>父層ref---PAGE IS {{ currentIndex }}-----</span>
     <span v-for="(n, index) in itemsLimit">{{ blogs[index + currentShowIndex] }}</span>
-  </div>
+  </div> -->
 
 
 

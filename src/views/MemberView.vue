@@ -154,7 +154,8 @@ const logoutTask = () => {
         border-radius: 4px;
         box-sizing: border-box;
         padding: 0px 20px;
-        min-height: 600px;
+        min-height: 500px;
+        padding-bottom: 20px;
         .p-v-title{
             color: $secondColor-2;
             margin-top: 60px;

@@ -1,7 +1,8 @@
 <template>
     <div class="blog-card-wrapper col ">
         <div class="blog-card">
-            <div class="bc-imgWrap">
+            <div class="bc-imgWrap" @click="goToPage('/blogpage')">
+                <img class="bc-i-tape" src="@/assets/images/tape-sticker.png" alt="">
                 <img class="bc-i-img" :src="bcImg"></img>
                 <div class="bc-i-likes">
                     <div class="bc-i-likes-icon">
@@ -16,9 +17,10 @@
                 <p class="bc-c-date">{{ bcDate }}</p>
                 <div class="bc-c-viewsWrap">
                     <div class="bc-c-v-icon">
-                        <img src="@/assets/images/global/icons/views-xs-svg.svg" alt="">                    </div>
+                        <img src="@/assets/images/global/icons/views-xs-svg.svg" alt="">
+                    </div>
                     <p class="bc-c-v-count">
-                        
+
                         {{ bcViewsCount }}次觀看
                     </p>
                 </div>
@@ -26,7 +28,7 @@
             </div>
         </div>
     </div>
-    
+
 </template>
 <script setup>
 import { defineProps } from 'vue';
@@ -53,6 +55,11 @@ const props = defineProps({
     }
 
 })
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const goToPage = (toLink) => {
+    router.push(toLink)
+}
 </script>
 <style lang="scss" scoped>
 @import '@/assets/styles/base/color';
@@ -61,7 +68,7 @@ const props = defineProps({
 .blog-card-wrapper {
     box-sizing: border-box;
     padding: 5px 10px;
-    padding-top: 20px;
+    padding-top: 50px; //需要多計算貼紙空間
     margin-bottom: 5px;
 
 }
@@ -78,11 +85,23 @@ const props = defineProps({
     box-shadow: 1px 2px 8px rgba(0, 0, 0, .15);
     max-width: 300px; // 相片解析度不高
     margin: auto;
+    transition: .2s;
+
+    &:hover {
+        transform: scale(1.02);
+    }
 
     .bc-imgWrap {
         position: relative;
         aspect-ratio: 3/4;
-        overflow: hidden;
+        // overflow: hidden;
+
+        .bc-i-tape {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(-80%)
+        }
 
         .bc-i-img {
             width: 100%;
@@ -130,16 +149,19 @@ const props = defineProps({
         .bc-c-date {
             color: $grey;
         }
-        .bc-c-viewsWrap{
+
+        .bc-c-viewsWrap {
             display: flex;
             width: 100%;
             justify-content: end;
             gap: 5px;
+
             .bc-c-v-icon {
                 width: $base-fontSize;
                 aspect-ratio: 1;
                 position: relative;
-                img{
+
+                img {
                     display: block;
                     width: 100%;
                     aspect-ratio: 1;

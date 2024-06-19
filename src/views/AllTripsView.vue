@@ -395,6 +395,8 @@ $searchBarHeight: 30px;
 }
 
 .section-tripList {
+background-color: $subtle-bgDrop;
+padding: 60px 0;
   .row-btns {
     justify-content: end;
     // border: 1px solid #000;
@@ -451,6 +453,13 @@ $searchBarHeight: 30px;
       }
     }
   }
+
+    .tripList-row{
+      justify-content: center;
+      background-color: $subtle-bgDrop;
+
+    }
+  
 }
 
 
@@ -556,10 +565,10 @@ $searchBarHeight: 30px;
       padding-bottom: 10px;
     }
   }
-  .section-tripList{
-    .tripList-row{
-      justify-content: center;
-    }
-  }
+  // .section-tripList{
+  //   .tripList-row{
+  //     justify-content: center;
+  //   }
+  // }
 }
 </style>
