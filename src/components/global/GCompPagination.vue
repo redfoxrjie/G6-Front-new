@@ -38,21 +38,32 @@ function clickEmitHandle(msg){
 
 </script>
 <style lang="scss" scope>
-.pagination-wrap {
-    margin: auto;
-    width: fit-content;
+@import '@/assets/styles/base/color';
+@import '@/assets/styles/base/font';
 
+.pagination-wrap {
+    margin: 80px auto 40px;
+    width: fit-content;
+    display: flex;
+    gap: 10px;
     .indexButton {
         display: inline-block;
         width: 40px;
         line-height: 40px;
         border-radius: 20px;
-        background-color: #acacac;
+        background-color: $secondColor-1;
+        color: $primaryColor;
         text-align: center;
+        cursor: pointer;
+        user-select: none;
+        &:hover {
+            background-color: $secondColor-2;
+            transition: background-color .2s ease;
+        }
     }
-
     .active {
-        background-color: #fad1d1;
+        background-color: $secondColor-2;
+        transition: background-color .2s ease;
     }
 }
 </style>

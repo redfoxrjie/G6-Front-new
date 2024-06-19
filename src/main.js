@@ -17,6 +17,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faFilePen, faCamera, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 library.add(fas,faFilePen, faCamera, faCircleExclamation)
 
+//引入sweetAlert2
+import Swal from 'sweetalert2';
+
 // import './fixLeafletIcons.js'  // 導入 Leaflet 圖標路徑的文件
 
 const app = createApp(App)
@@ -27,6 +30,8 @@ app.component('user-account',  GCompUserAccount
 app.component('trip-card',  GCompTripCard
 )
 app.component('font-awesome-icon', FontAwesomeIcon)
+
+app.config.globalProperties.$swal = Swal;
 
 app.use(createPinia())
 app.use(router)

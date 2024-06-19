@@ -2,7 +2,7 @@
     <div class="blog-card-wrapper col ">
         <div class="blog-card">
             <div class="bc-imgWrap" @click="goToPage('/blogpage')">
-                <img class="bc-i-tape" src="@/assets/images/tape-sticker.png" alt="">
+               // <img class="bc-i-tape" src="@/assets/images/tape-sticker.png" alt="">
                 <img class="bc-i-img" :src="bcImg"></img>
                 <div class="bc-i-likes">
                     <div class="bc-i-likes-icon">
@@ -10,21 +10,21 @@
                     </div>
                     <p class="bc-i-likes-count">{{ bcLikesCount }}個讚</p>
                 </div>
-                <!-- <img src="https://fakeimg.pl/300x200/200"> -->
             </div>
             <div class="bc-contentWrap">
                 <h4 class="bc-c-title">{{ bcTitle }}</h4>
-                <p class="bc-c-date">{{ bcDate }}</p>
-                <div class="bc-c-viewsWrap">
-                    <div class="bc-c-v-icon">
-                        <img src="@/assets/images/global/icons/views-xs-svg.svg" alt="">
+
+                <div class="bc-c-data">
+                    <p class="bc-c-date">{{ bcDate }}</p>
+                    <div class="bc-c-viewsWrap">
+                        <div class="bc-c-v-icon">
+                            <img src="@/assets/images/global/icons/views-xs-svg.svg" alt="">
+                        </div>
+                        <p class="bc-c-v-count">
+                            {{ bcViewsCount }} 次觀看
+                        </p>
                     </div>
-                    <p class="bc-c-v-count">
-
-                        {{ bcViewsCount }}次觀看
-                    </p>
                 </div>
-
             </div>
         </div>
     </div>
@@ -66,114 +66,121 @@ const goToPage = (toLink) => {
 @import '@/assets/styles/base/font';
 
 .blog-card-wrapper {
+    position: relative;
     box-sizing: border-box;
-    padding: 5px 10px;
-    padding-top: 50px; //需要多計算貼紙空間
-    margin-bottom: 5px;
 
-}
+    padding: 20px 10px 5px;
+    margin: 18px 0 16px;
+    &::before {
+        content: '';
+            width: 20%;
+            max-width: 80px;
+            min-width: 60px;
+            aspect-ratio: 1/0.77;
+            display: block;
+            background: no-repeat center/contain url(@/assets/images/tape-sticker.png);
 
-
-
-
-
-.blog-card {
-    box-sizing: border-box;
-    padding: 20px;
-    background-color: #fff;
-    aspect-ratio: 3/4;
-    box-shadow: 1px 2px 8px rgba(0, 0, 0, .15);
-    max-width: 300px; // 相片解析度不高
-    margin: auto;
-    transition: .2s;
-
-    &:hover {
-        transform: scale(1.02);
-    }
-
-    .bc-imgWrap {
-        position: relative;
-        aspect-ratio: 3/4;
-        // overflow: hidden;
-
-        .bc-i-tape {
             position: absolute;
-            top: 0;
+            top: 0%;
             left: 50%;
-            transform: translateX(-50%) translateY(-80%)
-        }
-
-        .bc-i-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center bottom;
-        }
-
-        .bc-i-likes {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            padding: 5px;
-
-
-            .bc-i-likes-icon {
-                margin-left: 25%;
-                margin-right: 25%;
-                width: 50%;
-                aspect-ratio: 1;
-
-                img {
-                    width: 100%;
-                    aspect-ratio: 1;
-                }
-            }
-
-            .bc-i-likes-count {
-                color: $primaryColor;
-                font-size: 14px;
-                text-shadow: .5px .1px $black;
-                // text-shadow: ;
-            }
-
-
-        }
-
+            transform: translate(-50%, -10%);
+            z-index: 1;
     }
-
-    .bc-contentWrap {
+    .blog-card {
         box-sizing: border-box;
-        // padding: 0 5%;
-        margin-top: 5%;
-
-        .bc-c-date {
-            color: $grey;
-        }
-
-        .bc-c-viewsWrap {
-            display: flex;
-            width: 100%;
-            justify-content: end;
-            gap: 5px;
-
-            .bc-c-v-icon {
-                width: $base-fontSize;
-                aspect-ratio: 1;
-                position: relative;
-
-                img {
-                    display: block;
-                    width: 100%;
+        padding: 33px 21px 15px;
+        background-color: #fff;
+        aspect-ratio: 3/4;
+        box-shadow: 1px 2px 8px rgba(0, 0, 0, .15);
+        width: 100%;
+        max-width: 300px;
+        height: 100%;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        cursor: pointer;
+        .bc-imgWrap {
+            position: relative;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            .bc-i-img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center bottom;
+            }
+            .bc-i-likes {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                padding: 5px;
+                .bc-i-likes-icon {
+                    margin-left: 25%;
+                    margin-right: 25%;
+                    width: 50%;
                     aspect-ratio: 1;
+                    img {
+                        width: 100%;
+                        aspect-ratio: 1;
+                    }
+                }
+                .bc-i-likes-count {
+                    color: $primaryColor;
+                    font-size: 14px;
+                    text-shadow: .5px .1px $black;
                 }
             }
+        }
 
-            .bc-c-v-count {
-                text-align: right;
-                color: $secondColor-1;
+        .bc-contentWrap {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            box-sizing: border-box;
+            margin-top: 5%;
+            .bc-c-title{
+                margin-bottom: 12px;
             }
+            .bc-c-data {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.875rem;
+                .bc-c-date { 
+                    color: $grey;
+                    margin-top: auto;
+                    display: inline-block;
+                    letter-spacing: unset;
+                }
+                .bc-c-viewsWrap{
+                    display: flex;
 
+                    display: block;
+                    margin-top: auto;
+                    .bc-c-v-icon {
+                        width: $base-fontSize;
+                        aspect-ratio: 1;
+                        display: inline-block;
+                        margin-right: 4px;
+                        img{
+                            display: inline-block;
+                            width: 1rem;
+                            vertical-align: middle;
+                            aspect-ratio: 1;
+                        }
+                    }
+                    .bc-c-v-count {
+                        letter-spacing: unset;
+                        display: inline-block;
+                        text-align: right;
+                        color: $secondColor-2;
+                    }
+                }
+            }
         }
     }
 }
+
 </style>
