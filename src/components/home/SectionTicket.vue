@@ -15,9 +15,9 @@ import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
                         </div>
                         <div class="Ticket_Txt">
                             <h4>{{ ticket.name }}</h4>
-                            <p>{{ ticket.content }}</p>
+                            <p class="content">{{ ticket.content }}</p>
                             <span class="TicketPrice">{{ ticket.price }}</span>
-                            <p>{{ ticket.viewers }}</p>
+                            <p class="viewer">{{ ticket.viewers }}</p>
                         </div>
                     </div>
                 </div>
@@ -91,8 +91,12 @@ export default {
             padding: 5% 20%;
             color: $black;
             cursor: pointer;
-            .TicketPrice{
-                background-color: $accentColor-2;
+            .content{
+                padding: 5% 0px;
+            }
+            .viewer{
+                padding-top: 3%;
+                font-size: 12px;
             }
         }
     }

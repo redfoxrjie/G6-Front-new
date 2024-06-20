@@ -112,14 +112,12 @@ const router = createRouter({
       path: '/member',
       name: 'member',
       component: () => import('../views/MemberView.vue')
-    }
-  
-
-    // {
-    //   path: '/:pathMatch(.*)*',
-    //   name: 'NotFound',
-    //   component: () => import('../views/NotFoundView.vue') 
-    // },
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('../views/NotFoundView.vue') 
+    },
     // {
     //   path: '/PageFooter',
     //   name: 'PageFooter',

@@ -229,8 +229,8 @@ export default {
             display: flex;
             gap: 10%;
             .totalPrice_color{
-                color: $secondColor-3;
-                background-color: $accentColor-2;
+                color: $secondColor-2;
+                // background-color: $accentColor-2;
             }
         };
         .btn-1{

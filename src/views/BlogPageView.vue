@@ -336,6 +336,7 @@ article {
                                     width: 100%;
                                     min-height: 50px;
                                     background-color: $primaryColor;
+                                    resize: none;
                                 }
                                 .submit-btn{
                                     background-color: $accentColor-1;
