@@ -72,7 +72,7 @@
             <div class="content-item content-item-4">
                 <div class="pic">
                 </div>
-                <div class="text">世界各地美景<br>隨時隨地<br>輕鬆計劃您的下一次冒險</div>
+                <div class="text">隨時隨地<br>輕鬆計劃您的下一次冒險</div>
             </div>
         </section>
         <!-- 會員登入彈窗 -->
@@ -177,18 +177,6 @@ header {
 }
 
 nav {
-    .menu-button div:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
-    }
-
-    .menu-button div:nth-child(2) {
-        opacity: 0;
-    }
-
-    .menu-button div:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
-    }
-
     background-color: $secondColor-2;
     color: $accentColor-2;
     width: 200px;
@@ -204,6 +192,9 @@ nav {
     right: 0;
     transition: height 0.3s ease-in-out;
     z-index: 100;
+    .menu-button div:nth-child(1) {transform: translateY(8px) rotate(45deg);}
+    .menu-button div:nth-child(2) {opacity: 0;}
+    .menu-button div:nth-child(3) {transform: translateY(-8px) rotate(-45deg);}
 
     ul {
         list-style: none;
@@ -216,6 +207,7 @@ nav {
         flex-grow: 1;
         height: fit-content;
         transition: height 0.3s ease-in-out;
+        order: 2;
 
         li {
             text-align: center;
@@ -254,6 +246,7 @@ nav {
         box-sizing: border-box;
         border-top: solid 1px $primaryColor;
         cursor: pointer;
+        order: 3;
 
         img {
             width: 30px;
@@ -275,8 +268,8 @@ nav {
     border: none;
     cursor: pointer;
     margin-bottom: 20px;
-    align-self: center;
-
+    align-self: right;
+    order: 1;
     div {
         width: 25px;
         height: 3px;
@@ -340,17 +333,13 @@ nav.closed {
     width: 96vw;
     height: 100%;
     background: url('../../assets/images/index_banner.jpg') center/cover no-repeat;
-    // -webkit-mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
-    // mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
-    // -webkit-mask-size: cover;
-    // mask-size: cover;
     animation: morph 5s ease-in-out infinite alternate, change 30s linear infinite alternate;
     box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
 }
 
 .slogan {
     font-size: 1.9rem;
-    letter-spacing: 16px;
+    letter-spacing: 1.25vw;
     position: absolute;
     top: 40%;
     left: 20%;
@@ -359,18 +348,16 @@ nav.closed {
     padding: 14px 20px;
     border-radius: 10px;
     text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
-
-    // z-index: 1;
 }
 
 .togo-large-text {
     position: absolute;
-    bottom: 10%;
+    top: 55%;
     right: 20%;
     transform: translate(10%, -10%);
     font-size: 10rem;
     color: $primaryColor;
-    letter-spacing: 50px;
+    letter-spacing: 4vw;
     z-index: 1;
     text-align: center;
     text-shadow: 1px 2px 1px rgba(69, 69, 69, 0.5);
@@ -407,6 +394,9 @@ nav.closed {
         left: 0;
         right: 0;
         z-index: 1000;
+        .bottom-section {order: 1;}
+        .menu-button {order: 3;}
+        ul {order: 2;}
     }
 
     nav.closed {
@@ -451,13 +441,11 @@ nav.closed {
 .content {
     position: relative;
     width: 100%;
-    height: 1000px;
+    height: 1300px;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-
-    /* 防止溢出 */
 }
 
 .center-background {
@@ -471,7 +459,7 @@ nav.closed {
 
 .content-item {
     position: absolute;
-    width: 20%;
+    width: fit-content;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -485,21 +473,23 @@ nav.closed {
 .text {
     color: $black;
     font-size: 1rem;
+    line-height: 1.6rem;
     text-align: center;
     padding: 10px;
     border-radius: 5px;
 }
-
+.pic {
+    width: 40vw;
+    max-width: 400px;
+    aspect-ratio: 1/1;
+}
 .content-item-1 {
     top: 5%;
     left: 10%;
 
     .pic {
-        width: 300px;
-        height: 300px;
         background: url('../../assets/images/index_amoeba1.jpg') center/cover no-repeat;
         -webkit-mask: url('../../assets/images/amoeba/NO1.svg') center/contain no-repeat;
-        // mask: url('../../assets/images/amoeba/NO1.svg') center/contain no-repeat;
         mask: url('../../assets/images/amoeba/NO1.svg') center/contain no-repeat;
         -webkit-mask-size: contain;
         mask-size: contain;
@@ -513,12 +503,10 @@ nav.closed {
 }
 
 .content-item-2 {
-    top: 10%;
-    right: 20%;
+    top: 15%;
+    right: 14%;
 
     .pic {
-        width: 300px;
-        height: 300px;
         background: url('../../assets/images/index_amoeba2.jpg') center/cover no-repeat;
         -webkit-mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
         mask: url('../../assets/images/amoeba/NO2.svg') center/contain no-repeat;
@@ -534,12 +522,10 @@ nav.closed {
 }
 
 .content-item-3 {
-    bottom: 5%;
-    left: 20%;
+    bottom: 15%;
+    left: 15%;
 
     .pic {
-        width: 300px;
-        height: 300px;
         background: url('../../assets/images/index_amoeba3.jpg') center/cover no-repeat;
         -webkit-mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
         mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
@@ -553,27 +539,22 @@ nav.closed {
     }
 }
 
-
-
 .content-item-4 {
-    bottom: 0%;
+    bottom: 5%;
     right: 10%;
-}
-
-.content-item-4 .pic {
-    width: 300px;
-    height: 300px;
-    background: url('../../assets/images/index_amoeba4.jpg') center/cover no-repeat;
-    -webkit-mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
-    mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
-    -webkit-mask-size: contain;
+    .pic {
+        background: url('../../assets/images/index_amoeba4.jpg') center/cover no-repeat;
+        -webkit-mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
+        mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
+        -webkit-mask-size: contain;
         mask-size: contain;
-    animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+        animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+    }
+    .text {
+        font-size: 1.2rem;
+    }
 }
 
-.content-item-4 .text {
-    font-size: 1.2rem;
-}
 
 .footer {
     width: 100%;
@@ -584,74 +565,141 @@ nav.closed {
 }
 
 @media (max-width: 768px) {
-    .content-item {
-        width: 40%;
+    .content {
+        width: 100%;
+        height: 960px;
+        .content-item {
+            width: fit-content;
+        }
+        .text {
+            font-size: 1rem;
+            line-height: 1.2rem;
+        }
     }
-
-    .text {
-        font-size: 0.8rem;
-    }
-
+    
     .content-item-1 {
-        top: 15%;
-        left: 10%;
+        top: 5%;
+        left: 5%;
     }
 
     .content-item-2 {
         top: 15%;
-        right: 10%;
+        right: 5%;
     }
 
     .content-item-3 {
-        bottom: 10%;
-        left: 10%;
+        bottom: 15%;
+        left: 5%;
     }
 
     .content-item-4 {
-        bottom: 10%;
-        right: 10%;
+        bottom: 5%;
+        right: 5%;
     }
 
     .center-background {
-        width: 100%;
-        height: 100%;
-        top: 20%;
+        width: 80%;
+        height: 80%;
+        top: 10%;
+    }
+    nav {
+        .bottom-section {order: 1;}
+        .menu-button {order: 3;}
+        ul {order: 2;}
+    }
+    .slogan {
+        font-size: 1.4rem;
+        letter-spacing: 1.25vw;
+        position: absolute;
+        top: 40%;
+        left: 20%;
+        color: $black;
+        background: rgba(246, 245, 241, 0.6);
+        padding: 14px 20px;
+        border-radius: 10px;
+        text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
+    }
+    .togo-large-text {
+        position: absolute;
+        top: 55%;
+        right: 20%;
+        transform: translate(10%, -10%);
+        font-size: 8rem;
+        color: $primaryColor;
+        letter-spacing: 4vw;
+        z-index: 1;
+        text-align: center;
+        text-shadow: 1px 2px 1px rgba(69, 69, 69, 0.5);
     }
 }
 
 @media (max-width: 480px) {
-    .content-item {
-        width: 60%;
+    .content {
+        width: 100%;
+        height: 700px;
+        .content-item {
+            width: fit-content;
+        }
+        .text {
+            font-size: 0.875rem;
+            line-height: 1rem;
+        }
     }
-
-    .text {
-        font-size: 0.6rem;
-    }
-
     .content-item-1 {
-        top: 20%;
+        top: 5%;
         left: 5%;
     }
-
     .content-item-2 {
-        top: 20%;
+        top: 15%;
         right: 5%;
     }
-
     .content-item-3 {
-        bottom: 5%;
+        bottom: 15%;
         left: 5%;
     }
-
     .content-item-4 {
         bottom: 5%;
         right: 5%;
     }
 
     .center-background {
-        width: 110%;
-        height: 110%;
+        width: 90%;
+        height: 90%;
         top: 25%;
+    }
+    nav {
+        .bottom-section {order: 1;}
+        .menu-button {order: 3;}
+        ul {order: 2;}
+    }
+    .amoeba {
+        position: absolute;
+        top: -16%;
+        right: -4vw;
+    }
+    .slogan {
+    font-size: 1.2rem;
+    letter-spacing: .5vw;
+    position: absolute;
+    top: 45%;
+    left: 8%;
+    color: $black;
+    background: rgba(246, 245, 241, 0.6);
+    padding: 7px 10px;
+    border-radius: 10px;
+    text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
+    }
+    .togo-large-text {
+        position: absolute;
+        top: 65%;
+        right: 20%;
+        transform: translate(10%, -10%);
+        font-size: 4rem;
+        color: $primaryColor;
+        letter-spacing: 4vw;
+        z-index: 1;
+        text-align: center;
+        text-shadow: 1px 2px 1px rgba(69, 69, 69, 0.5);
     }
 }
 </style>

@@ -119,6 +119,13 @@ export default {
     .breadcrumb {
         margin: 36px 0 16px;
         vertical-align: middle;
+        cursor: pointer;
+        span {
+            &:hover {
+                color: $accentColor-2;
+            }
+        }
+        
     }
     h2 {
         color: $secondColor-2;
