@@ -6,7 +6,7 @@
       "content": "Okinawa Churaumi Aquarium",
       "price": "TWD 450",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_01.jpg"
+      "image": "ticket_01.jpg"
     },
     {
       "id": 2,
@@ -14,7 +14,7 @@
       "content": "玉泉洞・王國村・毒蛇博物公園",
       "price": "TWD 650",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_02.jpg"
+      "image": "ticket_02.jpg"
     },
     {
       "id": 3,
@@ -22,7 +22,7 @@
       "content": "美麗海水族館、古宇利島、...",
       "price": "TWD 1,479",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_03.jpg"
+      "image": "ticket_03.jpg"
     },
     {
       "id": 4,
@@ -30,7 +30,7 @@
       "content": "ABENO HARUKAS 300",
       "price": "TWD 150",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_04.jpg"
+      "image": "ticket_04.jpg"
     },
     {
       "id": 5,
@@ -38,7 +38,7 @@
       "content": "Universal Studios Japan",
       "price": "TWD 1,130",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_05.jpg"
+      "image": "ticket_05.jpg"
     },
     {
       "id": 6,
@@ -46,7 +46,7 @@
       "content": "Tempozan Ferris Wheel",
       "price": "TWD 185",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_06.jpg"
+      "image": "ticket_06.jpg"
     },
     {
       "id": 7,
@@ -54,7 +54,7 @@
       "content": "(76、78樓)",
       "price": "TWD 838",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_07.jpg"
+      "image": "ticket_07.jpg"
     },
     {
       "id": 8,
@@ -62,7 +62,7 @@
       "content": "ABENO HARUKAS 300",
       "price": "TWD 1,170",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_08.jpg"
+      "image": "ticket_08.jpg"
     },
     {
       "id": 9,
@@ -70,7 +70,7 @@
       "content": "TIFFANY SHOW PATTAYA",
       "price": "TWD 1,479",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_09.jpg"
+      "image": "ticket_09.jpg"
     },
     {
       "id": 10,
@@ -78,7 +78,7 @@
       "content": "韓燒晚餐",
       "price": "TWD 2,058",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_10.jpg"
+      "image": "ticket_10.jpg"
     },
     {
       "id": 11,
@@ -86,7 +86,7 @@
       "content": "明洞中心店",
       "price": "TWD 1,170",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_11.jpg"
+      "image": "ticket_11.jpg"
     },
     {
       "id": 12,
@@ -94,7 +94,7 @@
       "content": "宮女狐韓服",
       "price": "TWD 562",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_12.jpg"
+      "image": "ticket_12.jpg"
     },
     {
       "id": 13,
@@ -102,7 +102,7 @@
       "content": "可加選珍珠野生動物園門票",
       "price": "TWD 1,170",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_13.jpg"
+      "image": "ticket_13.jpg"
     },
     {
       "id": 14,
@@ -110,7 +110,7 @@
       "content": "可加選珍珠野生動物園門票",
       "price": "TWD 1,170",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_14.jpg"
+      "image": "ticket_14.jpg"
     },
     {
       "id": 15,
@@ -118,7 +118,7 @@
       "content": "戶外水舞秀",
       "price": "TWD 1,201",
       "viewers": "157,820 人氣",
-      "image": "src/assets/images/ticket_15.jpg"
+      "image": "ticket_15.jpg"
     }
   ]
 }
