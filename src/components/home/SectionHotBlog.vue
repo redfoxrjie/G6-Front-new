@@ -22,17 +22,17 @@ const cards = ref([
   {
     title: '北九州五天四夜|浪漫花海、私房夜景看不完',
     content: '這次來到日本北九州，感受到了獨特的歷史與現代交織的魅力。品嚐了當地美食，探索了壯麗的自然景觀與文遺產。參觀了古老的城堡和博物館，體驗了溫泉的放鬆...',
-    imageSrc: '/src/assets/images/japan_yufuin-kinrinko.jpg'
+    imageSrc: 'https://tibamef2e.com/cid101/g6/front/images/japan_yufuin-kinrinko.jpg'
   },
   {
     title: '東京粉色自由行| 沉浸式賞櫻與參拜之旅',
     content: '春天的東京，粉色花海美不勝收。本次自由行深入東京的隱秘角落，賞櫻並體驗日本的傳統文化。參拜歷史悠久的淺草寺，感受古老神社的神聖氛圍...',
-    imageSrc: '/src/assets/images/japan_asakusa_street.jpg'
+    imageSrc: 'https://tibamef2e.com/cid101/g6/front/images/japan_asakusa_street.jpg'
   },
   {
     title: '濟州島fun輕鬆|走進神話般的壯麗美景',
     content: '從濟州的火山岩石海岸線到神秘的瀑布，每一處都讓人感覺如同步入了神話世界。遊覽青翠的山巒，探索隱藏在深林中的寺廟，每一刻都讓人心曠神怡...',
-    imageSrc: '/src/assets/images/korea_jeju-island.jpg'
+    imageSrc: 'https://tibamef2e.com/cid101/g6/front/images/korea_jeju-island.jpg'
   }
 ]);
 const activeIndex = ref(0);
