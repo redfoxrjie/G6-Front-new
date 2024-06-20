@@ -41,7 +41,7 @@ export default {
 
         const fetchData = async () => {
             try {
-                const response = await fetch('/json/news.json'); // 使用相對路徑
+                const response = await fetch(`${import.meta.env.BASE_URL}json/news.json`); // 使用相對路徑
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
