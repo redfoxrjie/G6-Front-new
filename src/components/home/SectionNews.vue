@@ -3,15 +3,15 @@
         <div class="container">
             <HCompSectionTitle title="最新消息" />
             <div class="hs-news-items-wrap">
-                <div class="hs-news-items " v-for="n in newsContentDate" :key="n">
+                <div class="hs-news-items " v-for="(n,index) in newsContentDate" :key="n" @click="goToPage(`/news/${n.id}`)">
                     <div class="hs-news-item">
                         <span class="hs-news-published-date ">
-                            {{ n.n_time }}
+                            {{ n.date }}
                         </span>
-                        <span class="hs-news-item-title-category">{{ n.nc_name }}</span>
+                        <span class="hs-news-item-title-category">{{ n.type }}</span>
                         <p class="hs-news-item-title">
 
-                            {{ n.n_title }}
+                            {{ n.title }}
                         </p>
                     </div>
                 </div>
@@ -30,14 +30,22 @@ import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
 const newsContentDate = ref([])
 const fetchData = async () => {
     try {
-        const response = await fetch(`${import.meta.env.BASE_URL}json/homepagedata.json`);
+        const response = await fetch(`${import.meta.env.BASE_URL}json/news.json`);
         const data = await response.json();
-        newsContentDate.value = data.news;
+        // console.log(data)
+        const selection = data.slice(0,3)
+        newsContentDate.value = selection;
     } catch (error) {
         console.log('fetch error:',error)
     }
 
 }
+
+import { useRouter } from 'vue-router';
+    const router = useRouter();
+    const goToPage=(toLink)=>{
+        router.push(toLink)
+    }
 fetchData();
 </script>
 
@@ -62,6 +70,11 @@ section {
     border-radius: 10px;
     background-color: $primaryColor;
     margin-bottom: $base-fontSize;
+    transition: .1s ease-in-out;
+    cursor: pointer;
+    &:hover{
+        box-shadow:  4px 4px 1px rgba(243, 215, 58, 0.897);
+    }
 
 
     .hs-news-item-title-category {

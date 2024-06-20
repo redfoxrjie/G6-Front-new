@@ -126,10 +126,10 @@ const router = createRouter({
     //   component: () => import('../components/footer/PageFooter.vue')
     // }
   ],
-  // scrollBehavior (to, from, savedPosition) {
-  //   //return 期望滾動到哪個位置
-  //   return {top: 0}
-  // }
+  scrollBehavior (to, from, savedPosition) {
+    //return 期望滾動到哪個位置
+    return {top: 0}
+  }
 
 })
 
