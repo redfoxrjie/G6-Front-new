@@ -35,6 +35,14 @@ import { useRouter } from 'vue-router';
         border-radius: 10px;
         padding: 2px 30px ;
         cursor: pointer;
+        transition: .08s ease-in-out;
+        &:hover{
+            box-shadow: inset 0px 0px 20px .2px #fffd70c7;
+            transform: scale(1.05);
+        }
+        &:active{
+          transform: scale(0.97) ;
+        }
 
     }
 </style>

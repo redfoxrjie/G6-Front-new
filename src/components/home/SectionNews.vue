@@ -3,6 +3,7 @@
         <div class="container">
             <HCompSectionTitle title="最新消息" />
             <div class="hs-news-items-wrap">
+
                 <div class="hs-news-items" v-for="n in state.newsContentFirstFour" :key="n.id" @click="navigateToNewsPage(n.id)">
                     <div class="hs-news-item">
                         <span class="hs-news-published-date">
@@ -10,6 +11,7 @@
                         </span>
                         <span class="hs-news-item-title-category">{{ n.type }}</span>
                         <p class="hs-news-item-title">
+
                             {{ n.title }}
                         </p>
                     </div>
@@ -26,6 +28,7 @@ import { useRouter } from 'vue-router';
 
 import HCompSectionTitle from './HCompSectionTitle.vue';
 import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
+
 
 export default {
     components: {
@@ -77,6 +80,7 @@ export default {
         };
     }
 };
+
 </script>
 
 
@@ -104,7 +108,13 @@ section {
     border-radius: 10px;
     background-color: $primaryColor;
     margin-bottom: $base-fontSize;
+
+    transition: .1s ease-in-out;
     cursor: pointer;
+    &:hover{
+        box-shadow:  4px 4px 1px rgba(243, 215, 58, 0.897);
+    }
+
 
 
     .hs-news-item-title-category {
