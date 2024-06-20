@@ -22,7 +22,7 @@
       <div class="Card_Container col" v-for="ticket in osakaTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
         <div class="ticket_Card">
           <div class="ticket-img">
-           <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
+            <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
           </div>
           <div class="Ticket_Txt">
             <h4>{{ ticket.name }}</h4>
@@ -38,7 +38,7 @@
       <div class="Card_Container col" v-for="ticket in thailandTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
         <div class="ticket_Card">
           <div class="ticket-img">
-           <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
+            <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
           </div>
           <div class="Ticket_Txt">
             <h4>{{ ticket.name }}</h4>
@@ -54,7 +54,7 @@
       <div class="Card_Container col" v-for="ticket in koreaTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
         <div class="ticket_Card">
           <div class="ticket-img">
-           <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
+            <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
           </div>
           <div class="Ticket_Txt">
             <h4>{{ ticket.name }}</h4>
@@ -70,7 +70,7 @@
       <div class="Card_Container col" v-for="ticket in vietnamTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
         <div class="ticket_Card">
           <div class="ticket-img">
-           <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
+            <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
           </div>
           <div class="Ticket_Txt">
             <h4>{{ ticket.name }}</h4>
@@ -126,13 +126,13 @@ export default {
       this.$router.push({ name: 'TicketInner', params: { id } });
     },
     parseImg(imgURL) {
-            // 將相對路徑解析成正確的 URL
-            return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
+      // 將相對路徑解析成正確的 URL
+      return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
     },
     parseServerImg(imgURL) {
-	    // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
-        return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
-    },
+          // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+                return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
+    }
   }
 };
 </script>

@@ -1,9 +1,9 @@
-me<template>
+<template>
     <div>
         <div class="frame_change">
             <div class="Ordertest1">
                 <div class="Ticket_pic">
-                    <img :src="ticket.image" :alt="ticket.name" />
+                    <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
                     <div class="Ticket_pic_txt">
                         <h4 class="Title_2" v-for="feature in ticket.features" :key="feature"><font-awesome-icon :icon="['fas', 'paw']" style="color: #FFD43B;" /> {{ feature }}</h4>
                     </div>
@@ -115,6 +115,14 @@ export default {
                     totalPrice: this.totalPrice
                 }
             });
+        },
+        parseImg(imgURL) {
+      // 將相對路徑解析成正確的 URL
+            return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
+        },
+        parseServerImg(imgURL) {
+            // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+            return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
         }
     }
 };
@@ -176,8 +184,7 @@ export default {
         top: 120px;
         box-sizing: border-box;
         h4{
-            margin: 30px 0px;
-            text-align: center;
+            margin: 30px 2%;
         }
     @media (max-width: 768px) {
         .Order {
@@ -220,7 +227,7 @@ export default {
         };
         .Count_2{
             display: flex;
-            gap: 20%;
+            gap: 10%;
             .totalPrice_color{
                 color: $secondColor-3;
                 background-color: $accentColor-2;

@@ -11,7 +11,7 @@ import HCompLearnMoreBtn from './HCompLearnMoreBtn.vue';
                 <div class="TK_card col" v-for="ticket in popularTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
                     <div class="ticket_Card">
                         <div class="ticket-img">
-                            <img :src="ticket.image" :alt="ticket.name" />
+                            <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
                         </div>
                         <div class="Ticket_Txt">
                             <h4>{{ ticket.name }}</h4>
@@ -55,6 +55,14 @@ export default {
         },
         goToDetail(id){
             this.$router.push({ name: 'TicketInner', params: { id } });
+        },
+        parseImg(imgURL) {
+      // 將相對路徑解析成正確的 URL
+        return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
+        },
+        parseServerImg(imgURL) {
+            // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+                    return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
         }
     }
 };
@@ -68,6 +76,8 @@ export default {
         margin: 5% 0px;
         .ticket-img img{
             width: 80%;
+            display: block;
+            margin: auto;
             border-radius: 80px;
             cursor: pointer;
             transform: translate(0, -10%);
@@ -78,7 +88,7 @@ export default {
             }
         }
         .Ticket_Txt{
-            padding: 5% 10%;
+            padding: 5% 20%;
             color: $black;
             cursor: pointer;
             .TicketPrice{

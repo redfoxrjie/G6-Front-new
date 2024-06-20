@@ -1,33 +1,32 @@
 <template>
     <main>
         <div class="section-full-width">
-            <div class="mem-page-banner">
+            <div class="mem-page-banner"
+                :style="{ backgroundImage: `url(${bannerImageUrl || defaultBannerImageUrl})` }">
                 <div>
-                    <label for="banner-upload" class="banner-lable"><font-awesome-icon
-                            :icon="['fas', 'pen-to-square']" />編輯封面</label>
-                    <input id="banner-upload" type="file" @change="uploadImage" accept="image/*" style="display: none;">
-                    <!-- 如果沒有圖片顯示的默認背景 -->
-                    <div v-if="!imageUrl" class="default-background"></div>
+                    <label for="banner-upload" class="banner-label">
+                        <font-awesome-icon :icon="['fas', 'pen-to-square']" /> 編輯封面
+                    </label>
+                    <input id="banner-upload" type="file" @change="uploadImage('bannerImage', $event)" accept="image/*"
+                        style="display: none;">
                 </div>
             </div>
             <div class="mem-info">
-                <div class="mem-headshot" id="">
-                    <img src="@/assets/images/mem-headshot-01.jpg" alt="member headshot photo">
-                </div>
-                <label for="headshot-upload" class="headshot-lable"><font-awesome-icon
-                        :icon="['fas', 'camera']" /></label>
-                <input id="headshot-upload" type="file" @change="headshotImage" accept="image/*" style="display: none;">
+                <div class="mem-headshot">
+                    <img :src="headshotImageUrl || defaultHeadshotImageUrl" alt="member headshot photo">
 
+                    <input id="headshot-upload" type="file" @change="uploadImage('headshotImage', $event)"
+                        accept="image/*" style="display: none;">
+                </div>
+                <label for="headshot-upload" class="headshot-label">
+                    <font-awesome-icon :icon="['fas', 'camera']" />
+                </label>
                 <div class="mem-name">Josh Cheng</div>
                 <div class="mem-id">@用戶ID</div>
-                <!-- <div class="mem-quote">一台相機，一只皮箱，一趟說走就走的旅行 </div> -->
-                <input id="edit-quote" type="text" @change="headshotImage" class="input-quote"
-                    placeholder="Write your quote...">
+                <input id="edit-quote" type="text" class="input-quote" placeholder="Write your quote...">
                 <label for="edit-quote" class="edit-quote">
                     <font-awesome-icon :icon="['fas', 'pen-to-square']" />
                 </label>
-
-
             </div>
             <div class="content-block container">
                 <div class="tabs-wrapper">
@@ -46,48 +45,54 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import MyBlog from '@/components/layout/MyBlog.vue';
 import EditMyTrip from '@/components/layout/EditMyTrip.vue';
-// import AddTrip from '@/components/layout/AddTrip.vue';
 
-const imageUrl = ref('');
-const headshotUrl = ref('');
 
-const uploadImage = async (event) => {
+// const defaultBannerImageUrl = require('@/assets/images/mem-page-banner.jpg');
+// const defaultHeadshotImageUrl = require('../assets/images/global/logo/logo.png');
+
+const bannerImageUrl = ref('');
+const headshotImageUrl = ref('');
+
+//更換背景照片及大頭照
+const uploadImage = (type, event) => {
     const files = event.target.files;
     if (!files.length) return;
 
-    const formData = new FormData();
-    formData.append('image', files[0]);
-
-    try {
-        const response = await fetch('/upload', {
-            method: 'POST',
-            body: formData,
-        });
-
-        const result = await response.json();
-        imageUrl.value = result.filePath;
-    } catch (error) {
-        console.error('上傳過程發生錯誤', error);
-        alert('上傳失敗');
-    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        if (type === 'bannerImage') {
+            bannerImageUrl.value = e.target.result;
+            localStorage.setItem('bannerImage', e.target.result);
+        } else if (type === 'headshotImage') {
+            headshotImageUrl.value = e.target.result;
+            localStorage.setItem('headshotImage', e.target.result);
+        }
+    };
+    reader.readAsDataURL(files[0]);
 };
 
+// 設定"旅行筆記"為預選狀態
+const selectedTab = ref('旅行筆記');
 
-// 1. 設定"旅行筆記"是預選狀態
-const selectedTab = ref('');
-
-
-// 2. 點選tab時更新selectedTab的值
 const selectTab = (tabName) => {
     selectedTab.value = tabName;
 };
 
-// 將這些變量和方法暴露出去以在模板中使用
-// export { selectedTab, selectTab};
-selectTab('旅行筆記')
+// 從localStorage 加載圖片
+onMounted(() => {
+    const storedBannerImage = localStorage.getItem('bannerImage');
+    if (storedBannerImage) {
+        bannerImageUrl.value = storedBannerImage;
+    }
+
+    const storedHeadshotImage = localStorage.getItem('headshotImage');
+    if (storedHeadshotImage) {
+        headshotImageUrl.value = storedHeadshotImage;
+    }
+});
 </script>
 
 <style lang="scss" scoped>
@@ -98,23 +103,36 @@ selectTab('旅行筆記')
     .mem-page-banner {
         width: 100%;
         aspect-ratio: 3.72/1;
-        background: no-repeat center/cover url(@/assets/images/mem-page-banner.jpg);
+        // background: no-repeat center/cover url(@/assets/images/mem-page-banner.jpg);
         position: relative;
     }
 
-
-    .banner-lable {
+    .banner-label {
         padding: 10px;
         border-radius: 23px;
-        background-color: rgb(79, 130, 212, 70%);
+        background-color: rgba(79, 130, 212, 0.7);
         font-size: $base-fontSize;
         color: $primaryColor;
         border-color: transparent;
-        font-size: $base-fontSize * 0.8125;
         position: absolute;
-        bottom: 0%;
-        right: 0%;
+        bottom: 0;
+        right: 0;
+        line-height: 1.25;
+        letter-spacing: .1em;
         transform: translate(-50%, -50%);
+    }
+
+    .fa-camera {
+        background-color: $primaryColor ;
+        border-radius: 50%;
+        top: 25px;
+        cursor: pointer;
+        height: 28px;
+        padding: 4px;
+        position: absolute;
+        right: 578px;
+        width: 25px;
+        color: $secondColor-2;
     }
 
     .mem-info {
@@ -127,7 +145,6 @@ selectTab('旅行筆記')
             border-radius: 23px;
             background-color: $primaryColor;
             font-size: $base-fontSize;
-            ;
             color: $secondColor-2;
             border-color: transparent;
             letter-spacing: 1.3px;
@@ -136,7 +153,6 @@ selectTab('旅行筆記')
             right: 45%;
             transform: translate(-50%, -50%);
         }
-
 
         .mem-headshot {
             width: 100px;
@@ -154,19 +170,6 @@ selectTab('旅行筆記')
             img {
                 object-fit: cover;
                 width: 100%;
-            }
-
-            .fa-camera {
-                background-color: $primaryColor ;
-                border-radius: 50%;
-                bottom: 0;
-                cursor: pointer;
-                height: 28px;
-                padding: 4px;
-                position: absolute;
-                right: 0;
-                width: 25px;
-                color: $secondColor-2;
             }
         }
 
@@ -207,8 +210,6 @@ selectTab('旅行筆記')
             outline: none;
             box-shadow: 0 0 8px $grey;
         }
-
-
     }
 }
 
