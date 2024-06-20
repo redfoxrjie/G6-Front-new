@@ -37,7 +37,7 @@
         <div class="Order_Check frame">
           <h5>確認行程</h5>
           <div class="Check_Card">
-            <img :src="formData.ticketImage" alt="Ticket Image" />
+            <img :src="parseServerImg(formData.ticketImage)" :alt="formData.ticketName" />
             <div class="Check_Txt">
               {{ formData.ticketName }}
               <p>{{ todayDate }}<br>無有效期限</p>
@@ -163,6 +163,14 @@ export default {
           }
         });
       }
+    },
+    parseImg(imgURL) {
+      // 將相對路徑解析成正確的 URL
+      return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
+    },
+    parseServerImg(imgURL) {
+          // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+                return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
     }
   },
   mounted(){

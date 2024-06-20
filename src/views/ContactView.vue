@@ -7,42 +7,42 @@
             <img class="rightHand" src="../assets/images/contactusDog_02.png" alt="">
         </div>
         <div id="contactus">
-            <table>
-                <tbody>
-                    <div class="form_frame">
-                        <tr class="form_group form_name">  
-                            <td>姓名</td>
-                            <td><input type="text" id="name"></td>
-                        </tr>
-                        <tr class="form_group form_phone">
-                            <td>聯絡電話</td>
-                            <td><input type="tel" id="tel"></td>
-                        </tr>
-                        <tr class="form_group">
-                            <td>E-mail</td>
-                            <td><input for="email" id="email"></td>
-                        </tr>
+            <div class="form_frame">
+                <table>
+                    <tbody>
+                            <tr class="form_group form_name">  
+                                <!-- <td>姓名</td> -->
+                                <td><input type="text" id="name" placeholder="請輸入姓名"></td>
+                            </tr>
+                            <tr class="form_group form_phone">
+                                <!-- <td>聯絡電話</td> -->
+                                <td><input type="tel" id="tel" placeholder="請輸入電話"></td>
+                            </tr>
+                            <tr class="form_group form_email">
+                                <!-- <td>E-mail</td> -->
+                                <td><input for="email" id="email" placeholder="請輸入e-mail"></td>
+                            </tr>
+                    </tbody>
+                    <div class="form_group form_choice">
+                        <p>想詢問項目</p>
+                        {{ checkbox }}<br />
+                        <label >
+                        <input type="checkbox">介面操作
+                        <!-- <span class="coverStyle"></span> -->
+                        </label>
+                        <label >
+                        <input type="checkbox">已購入票券
+                        </label>
+                        <label >
+                        <input type="checkbox">其他
+                        </label>
                     </div>
-                </tbody>
-                <div class="form_group form_choice">
-                    <p>想詢問項目</p>
-                    {{ checkbox }}<br />
-                    <label >
-                    <input type="checkbox" v-model="checkbox" />介面操作
-                    <!-- <span class="coverStyle"></span> -->
-                    </label>
-                    <label >
-                    <input type="checkbox" v-model="checkbox" />已購入票券
-                    </label>
-                    <label >
-                    <input type="checkbox" v-model="checkbox" />其他
-                    </label>
-                </div>
-                <div class="form_group">
-                    <label for="message"></label>
-                    <textarea id="message" placeholder="想詢問什麼呢"></textarea>
-                </div>
-            </table>
+                    <div class="form_group">
+                        <label for="message"></label>
+                        <textarea id="message" placeholder="想詢問什麼呢"></textarea>
+                    </div>
+                </table>
+            </div>
         </div>
         <div class="btn">
             <button class="btn-1" @click="contactFinish">確認送出</button>
@@ -110,6 +110,25 @@ export default {
             bottom: -40px;
             z-index: 5;
         }
+        @media (max-width: 996px) {
+            .head{
+                width: 25%;
+                left: 38%;
+            }
+            .leftHand{
+                width: 10%;
+                position: absolute;
+                left: 38%;
+                z-index: 5;
+            }
+            .rightHand{
+                width: 10%;
+                position: absolute;
+                left: 53%;
+                bottom: -40px;
+                z-index: 5;
+            }
+        }
         @media (max-width: 768px) {
             .head{
                 width: 50%;
@@ -136,15 +155,14 @@ export default {
         flex-direction: column;
         height: auto;
         width: 450px;
-        margin-left: 32%;
+        margin: 0 auto;
         // outline: 1px solid red;
         border-radius: 30px;
         background-color: #E2F1FF;
         position: relative;
         .form_frame{
             // border: 1px solid red;
-            padding: 0px 80px;
-            padding-top: 80px;
+            padding: 20px;
         }
         .form_group{
             padding: 0px 80px;
@@ -163,11 +181,10 @@ export default {
         }
         .form_group input{
             border: 1px solid $secondColor-1;
-            width: auto;
+            // width: 100%;
             height: 25px;
-            padding: 0px 10px;
+            box-sizing: border-box;
             border-radius: 5px;
-            // padding: 0px 20px;
         }
         .form_group textarea{
             padding: 10px;
@@ -180,10 +197,16 @@ export default {
             resize: none;
         }
     }
-    @media (max-width: 768px) {
-        #contactus{
-            margin: 0px;
-        }
+    .form_frame .form_name input{
+        margin-top: 15%;
+        margin-left: 20%;
+    }
+    .form_frame .form_phone input{
+        margin: 5% 0px;
+        margin-left: 20%;
+    }
+    .form_frame .form_email input{
+        margin-left: 20%;
     }
     .btn{
         text-align: center;

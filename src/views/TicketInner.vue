@@ -184,8 +184,7 @@ export default {
         top: 120px;
         box-sizing: border-box;
         h4{
-            margin: 30px 0px;
-            text-align: center;
+            margin: 30px 2%;
         }
     @media (max-width: 768px) {
         .Order {
@@ -228,7 +227,7 @@ export default {
         };
         .Count_2{
             display: flex;
-            gap: 20%;
+            gap: 10%;
             .totalPrice_color{
                 color: $secondColor-3;
                 background-color: $accentColor-2;
