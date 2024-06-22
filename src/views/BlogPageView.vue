@@ -14,7 +14,8 @@
                     <div class="publish-date font-time">{{ item.b_date }} </div>
                     <div class="journey-title">{{ item.b_title }}</div>
                 </div>
-                <div class="like-count">{{ item.b_likes }} 個讚</div>
+                <div class="like-count" @click="toggleLikes">
+                    <font-awesome-icon :icon="['fas', 'bone']" class="like_icon" /> {{ item.b_likes }} 個讚</div>
             </div>
             <div class="journey-main row">
                 <div class="journey-content col-12 col-md-9">
@@ -124,8 +125,9 @@
 export default {
     data() {
         return {
-            item: []
-        };
+            item: [],
+            liked: false
+        }
     },
     methods: {
         async loadJsonData() {
@@ -144,6 +146,14 @@ export default {
             } catch (error) {
                 console.error('Error loading JSON data:', error);
             }
+        },
+        toggleLikes() {
+            if (this.item.liked) {
+                this.item.b_likes -= 1;
+            } else {
+                this.item.b_likes += 1;
+            }
+        this.item.liked = !this.item.liked;
         },
         parseImg(imgURL) {
             // 將相對路徑解析成正確的 URL
@@ -214,15 +224,23 @@ article {
             }
             .like-count {
                 font-size: $base-fontSize * 0.75;
-                &::before{
-                    content: '';
-                    width: 28px;
-                    height: 24px;
-                    background: no-repeat center/contain url(@/assets/images/bone-stroke.png);
-                    display: inline-block;
-                    margin-right: 8px;
-                    vertical-align: middle;
+                // &::before{
+                //     content: '';
+                //     width: 28px;
+                //     height: 24px;
+                //     background: no-repeat center/contain url(@/assets/images/bone-stroke.png);
+                //     display: inline-block;
+                //     margin-right: 8px;
+                //     vertical-align: middle;
+                //     cursor: pointer;
+                // }
+                .like_icon{
+                    font-size: 22px;
+                    color: #ffffff;
                     cursor: pointer;
+                    &:hover{
+                        color: $accent-bgDrop;
+                    }
                 }
             }
         }

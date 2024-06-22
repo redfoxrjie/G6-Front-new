@@ -86,7 +86,7 @@ export default {
                 ...ticket,
                 features: [ticket.feature1, ticket.feature2, ticket.feature3],
                 price:parseFloat(ticket.price),
-                count: 0
+                count: 1
             };
             } else {
             console.error(`Ticket with id ${id} not found.`);
@@ -97,7 +97,7 @@ export default {
             this.ticket.count += 1;
         },
         minus(){
-            if (this.ticket.count > 0) {
+            if (this.ticket.count > 1) {
                 this.ticket.count -= 1;
             }
         },
