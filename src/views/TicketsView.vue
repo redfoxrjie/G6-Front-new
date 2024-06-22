@@ -153,7 +153,14 @@ export default {
     color: $secondColor-2;
   }
 }
-
+@media (max-width: 768px) {
+  .Ticket_Section {
+    padding: 5% 0px;
+    h3{
+      margin: 0px 5%;
+    }
+  }
+}
 .TicketCard_Wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -184,6 +191,7 @@ export default {
     }
   }
 }
+
 
 
 </style>

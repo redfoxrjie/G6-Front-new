@@ -1,8 +1,15 @@
 <template>
     <div class="notFound">
-    <h1>404</h1>
-    <img src="" alt="">
-    <button @click="goHome">回到首頁</button>
+        <div class="notFound_txt">
+            <h1>404 ERROR</h1>
+            <h2>這個網頁似乎出現了一些問題...</h2>
+            <div class="btn">
+                <button @click="goHome">返回首頁</button>   
+            </div>
+        </div>
+        <div class="notFound_pic">
+            <img src="../assets/images/404_NotFound.png" alt="">
+        </div>
     </div>
 </template>
 
@@ -24,25 +31,38 @@ export default {
 
 .notFound {
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100vh;
         text-align: center;
-    }
-    h1 {
-        font-size: 6rem;
+        color: #a4a1a0;
+        margin-top: 15%;
+    .notFound_txt h1 {
+        font-size: 4rem;
         margin: 0;
     }
-    button {
-        padding: 10px 20px;
-        background-color: $secondColor-2;
-        border: none;
-        color: white;
-        cursor: pointer;
-        margin-top: 20px;
+    .notFound_pic img{
+        width: 55%;
     }
-    button:hover {
-        background-color: #138496;
+}
+@media (max-width: 768px) {
+    .notFound{
+        display: flex;
+        flex-direction: column;
+        margin-top: 25%;
+    }
+    .notFound_pic{
+        order: 1;
+    }
+    .notFound_txt{
+        order: 2;
+    }
+}
+.btn button {
+        cursor: pointer;
+        margin-top: 5%;
+        color:$primaryColor;
+        background-color: $secondColor-2;
+        padding: 7px 15px;
+        border-radius: 20px;
     }
 </style>
