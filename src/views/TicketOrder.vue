@@ -46,29 +46,28 @@
           <div class="Check_Note">
             <textarea placeholder="特殊需求備註"></textarea>
           </div>
-          <button class="btn-1">繼續</button>
         </div>
-        <div class="Order_Purchase frame">
+        <div class="Order_Purchase frame" ref="accountSection" >
           <h5>請確認付款資訊</h5>
           <div class="ECPay">
-            <input type="checkbox">
-            <label for="">綠界</label>
+            <input type="checkbox" v-model="formData.ecpay">
+            <label>綠界</label>
           </div>
           <div class="Account">
-            <input type="checkbox">
-            <label for="">轉帳</label>
+            <input type="checkbox" v-model="formData.transfer">
+            <label>轉帳</label>
             <table class="Account_Title">
               <tr class="Account_Price">
                 <td>轉出金額</td>
-                <td><input type="text"></td>
+                <td><input type="text" v-model="formData.transferAmount"></td>
               </tr>
               <tr class="Account_Number1">
                 <td>銀行代碼</td>
-                <td><input type="text"></td>
+                <td><input type="text" v-model="formData.bankCode"></td>
               </tr>
               <tr class="Account_Number1">
                 <td>轉出帳號</td>
-                <td><input type="text"></td>
+                <td><input type="text" v-model="formData.accountNumber"></td>
               </tr>
             </table>
           </div>
@@ -103,13 +102,42 @@ export default {
     // console.log("totalPrice:"+ this.$route.query.totalPrice);
     return {
       formData: {
+        name: '',
+        birthdate: '',
+        country: '',
+        phone: '',
+        email: '',
+        ecpay: false,
+        transfer: false,
+        transferAmount: '',
+        bankCode: '',
+        accountNumber: '',
+
         count: parseInt(this.$route.query.count) || 0,
         ticketName: this.$route.query.ticketName || '',
         ticketImage: this.$route.query.ticketImage || '',
         totalPrice: parseFloat(this.$route.query.totalPrice) || 0
       },
-      todayDate: ''
+      todayDate: '',
     };
+  },
+  computed: {
+    isFormValid() { //確認框一是否都有填寫
+      return this.formData.name !== '' &&
+        this.formData.birthdate !== '' &&
+        this.formData.country !== '' &&
+        this.formData.phone !== '' &&
+        this.formData.email !== '';
+    },
+    isOrderValid() { //確認框一框二填寫
+      const isTransferValid = this.formData.transfer
+      ? (this.formData.transferAmount !== '' &&
+      this.formData.bankCode !== '' &&
+      this.formData.accountNumber !== '')
+      : true;
+      
+      return this.isFormValid && (this.formData.ecpay || (this.formData.transfer && isTransferValid));     
+    }
   },
   methods:{
     getTodayDate(){
@@ -120,7 +148,11 @@ export default {
       return `${year}-${month}-${day}`;
     },
     orderFinish(){
-      this.showSuccessAlert();
+      if (this.isOrderValid){
+        this.showSuccessAlert();
+      }else{
+        this.showErrorAlert();
+      }
     },
     showSuccessAlert(){
       Swal.fire({
@@ -130,6 +162,14 @@ export default {
         iconColor: '#4F82D4',
         confirmButtonText: '確定',
         confirmButtonColor: '#4F82D4'
+      })
+    },
+    showErrorAlert(){
+      Swal.fire({
+        title: '尚未填寫完成無法訂購',
+        text: '請完整填寫所有必填項目',
+        icon: 'warning',
+        confirmButtonText: '確定',
       })
     },
     showSplit(e){
@@ -171,6 +211,19 @@ export default {
     parseServerImg(imgURL) {
           // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
                 return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
+    },
+    submitForm() {
+      // 在这里处理表单提交逻辑，例如发送邮件等操作
+      if (this.isFormValid) {
+        this.scrollnext(); 
+      } else {
+        // 表单无效，提示用户填写完整信息
+        alert('請填入完整資訊');
+      }
+    },
+    scrollnext(){
+      // 使用 $refs 获取 accountSection 元素，并进行滚动操作
+      this.$refs.accountSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   },
   mounted(){

@@ -21,6 +21,7 @@
     "leaflet": "^1.9.4",
     "leaflet-control-geocoder": "^2.4.0",
     "leaflet-routing-machine": "^3.2.12",
+    "nodemailer": "^6.9.14",
     "pinia": "^2.1.7",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.11.1",
