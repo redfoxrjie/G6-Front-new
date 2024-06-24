@@ -41,7 +41,6 @@
                 <span>開始規劃</span>
             </div>
         </nav>
-
         <header>
             <div id="amoeba-container">
                 <div class="amoeba"></div>
@@ -192,9 +191,18 @@ nav {
     right: 0;
     transition: height 0.3s ease-in-out;
     z-index: 100;
-    .menu-button div:nth-child(1) {transform: translateY(8px) rotate(45deg);}
-    .menu-button div:nth-child(2) {opacity: 0;}
-    .menu-button div:nth-child(3) {transform: translateY(-8px) rotate(-45deg);}
+
+    .menu-button div:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .menu-button div:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-button div:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
 
     ul {
         list-style: none;
@@ -270,6 +278,7 @@ nav {
     margin-bottom: 20px;
     align-self: right;
     order: 1;
+
     div {
         width: 25px;
         height: 3px;
@@ -394,9 +403,18 @@ nav.closed {
         left: 0;
         right: 0;
         z-index: 1000;
-        .bottom-section {order: 1;}
-        .menu-button {order: 3;}
-        ul {order: 2;}
+
+        .bottom-section {
+            order: 1;
+        }
+
+        .menu-button {
+            order: 3;
+        }
+
+        ul {
+            order: 2;
+        }
     }
 
     nav.closed {
@@ -478,11 +496,13 @@ nav.closed {
     padding: 10px;
     border-radius: 5px;
 }
+
 .pic {
     width: 40vw;
     max-width: 400px;
     aspect-ratio: 1/1;
 }
+
 .content-item-1 {
     top: 5%;
     left: 10%;
@@ -542,6 +562,7 @@ nav.closed {
 .content-item-4 {
     bottom: 5%;
     right: 10%;
+
     .pic {
         background: url('../../assets/images/index_amoeba4.jpg') center/cover no-repeat;
         -webkit-mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
@@ -550,6 +571,7 @@ nav.closed {
         mask-size: contain;
         animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
     }
+
     .text {
         font-size: 1.2rem;
     }
@@ -568,15 +590,17 @@ nav.closed {
     .content {
         width: 100%;
         height: 960px;
+
         .content-item {
             width: fit-content;
         }
+
         .text {
             font-size: 1rem;
             line-height: 1.2rem;
         }
     }
-    
+
     .content-item-1 {
         top: 5%;
         left: 5%;
@@ -602,11 +626,21 @@ nav.closed {
         height: 80%;
         top: 10%;
     }
+
     nav {
-        .bottom-section {order: 1;}
-        .menu-button {order: 3;}
-        ul {order: 2;}
+        .bottom-section {
+            order: 1;
+        }
+
+        .menu-button {
+            order: 3;
+        }
+
+        ul {
+            order: 2;
+        }
     }
+
     .slogan {
         font-size: 1.4rem;
         letter-spacing: 1.25vw;
@@ -619,6 +653,7 @@ nav.closed {
         border-radius: 10px;
         text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
     }
+
     .togo-large-text {
         position: absolute;
         top: 55%;
@@ -637,26 +672,32 @@ nav.closed {
     .content {
         width: 100%;
         height: 700px;
+
         .content-item {
             width: fit-content;
         }
+
         .text {
             font-size: 0.875rem;
             line-height: 1rem;
         }
     }
+
     .content-item-1 {
         top: 5%;
         left: 5%;
     }
+
     .content-item-2 {
         top: 15%;
         right: 5%;
     }
+
     .content-item-3 {
         bottom: 15%;
         left: 5%;
     }
+
     .content-item-4 {
         bottom: 5%;
         right: 5%;
@@ -667,28 +708,40 @@ nav.closed {
         height: 90%;
         top: 25%;
     }
+
     nav {
-        .bottom-section {order: 1;}
-        .menu-button {order: 3;}
-        ul {order: 2;}
+        .bottom-section {
+            order: 1;
+        }
+
+        .menu-button {
+            order: 3;
+        }
+
+        ul {
+            order: 2;
+        }
     }
+
     .amoeba {
         position: absolute;
         top: -16%;
         right: -4vw;
     }
+
     .slogan {
-    font-size: 1.2rem;
-    letter-spacing: .5vw;
-    position: absolute;
-    top: 45%;
-    left: 8%;
-    color: $black;
-    background: rgba(246, 245, 241, 0.6);
-    padding: 7px 10px;
-    border-radius: 10px;
-    text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
+        font-size: 1.2rem;
+        letter-spacing: .5vw;
+        position: absolute;
+        top: 45%;
+        left: 8%;
+        color: $black;
+        background: rgba(246, 245, 241, 0.6);
+        padding: 7px 10px;
+        border-radius: 10px;
+        text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
     }
+
     .togo-large-text {
         position: absolute;
         top: 65%;
