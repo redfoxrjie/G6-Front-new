@@ -24,7 +24,6 @@
   <div class="section-tripRank">
     <div class="container">
       <div class="tripRank-tabs-wrapper col-11 col-md-12">
-
         <div class="tr-tab  col-3 col-md-2 " v-for="(area, index) in areaFormat" :key="index" @click="tabSwitch(index)"
           :class="{ 'tr-tab-active': selectedCase == index }">
           <h4 class="bdradius-half">{{ area }}</h4>
@@ -47,7 +46,6 @@
                   </h4>
                 </div>
                 <user-account :uName="trips[selectedCase][index].u_nickname" />
-
               </div>
             </div>
           </div>
@@ -182,7 +180,7 @@ fetchData();
   margin: auto;
   display: flex;
   margin-bottom: 20px;
-  // background-color: #605252;
+  cursor: pointer;
 
   .tr-item {
     position: relative;
@@ -192,13 +190,14 @@ fetchData();
 
     .tr-item-img {
       aspect-ratio: 19/15;
-
+      overflow: hidden;
 
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
+        transition: scale .3s ease-in-out;
       }
     }
 
@@ -236,6 +235,12 @@ fetchData();
       background-color: $accentColor-1;
       transform: translateY(15%);
       text-align: center;
+    }
+  }
+  &:hover {
+    img {
+      scale: 1.05;
+      transition: scale .3s ease-in-out;
     }
   }
 }

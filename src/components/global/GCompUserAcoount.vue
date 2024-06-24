@@ -28,13 +28,13 @@ const props = defineProps({
         .ua-name{
             height: fit-content;
             margin-left: 5px;
-            // line-height: $compSize;
+            font-size: $compSize * .43;
         }   
 
         .ua-img{
         // height: 100%;
-        width: $compSize * .8;
-        aspect-ratio: 1;
+        width: $compSize * .6;
+        aspect-ratio: 1/1;
         border-radius: 50%;
         overflow: hidden;
             img{
