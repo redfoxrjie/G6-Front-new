@@ -1,3 +1,0 @@
-這是我目前製作的景點搜尋及規劃行程系統，透過在input search-bar中輸入景點關鍵字可以找到景點，並且將景點以<li>標籤加入當前day的day-plan-list中。
-我想請你幫我更改設定，在不影響其他功能的情況下，根據當前的day將day-plan-list裡面的<li>設定index值。也就是在不同的day中有不同的<li>陣列，因此當我在methods的drop中使用console.log(`Index: ${index}, Name: ${location.name}`);時，只會印出當前day中day-plan-list的<li>項目。
-備註：目前當使用console.log印出index時，不會根據不同天數而只印出該天數的相應內容，反而是印出全部的<li>，而這不是我期待的結果。
