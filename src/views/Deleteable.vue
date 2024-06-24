@@ -430,6 +430,7 @@ export default {
 /* 行程列表樣式 */
 li.dragging{
       opacity: 1 !important;
+      border: red 1px solid;
     }
 #itinerary {
   display: flex;

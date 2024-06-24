@@ -3,7 +3,6 @@
         <div class="container">
             <HCompSectionTitle title="最新消息" />
             <div class="hs-news-items-wrap">
-
                 <div class="hs-news-items" v-for="n in state.newsContentFirstFour" :key="n.id" @click="navigateToNewsPage(n.id)">
                     <div class="hs-news-item">
                         <span class="hs-news-published-date">
@@ -84,9 +83,6 @@ export default {
 </script>
 
 
-
-
-
 <style lang="scss" scoped>
 @import '../../assets/styles/base/color';
 @import '../../assets/styles/base/font';
@@ -99,6 +95,7 @@ section {
 }
 
 .hs-news-item {
+    font-size: 1.125rem;
     display: flex;
     position: relative;
     align-items: center;
@@ -108,7 +105,6 @@ section {
     border-radius: 10px;
     background-color: $primaryColor;
     margin-bottom: $base-fontSize;
-
     transition: .1s ease-in-out;
     cursor: pointer;
     &:hover{

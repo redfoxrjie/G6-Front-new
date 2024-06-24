@@ -94,7 +94,8 @@ const props = defineProps({
             flex-direction: column;
             flex-grow: 1;
             .card-title--myTrip {
-                font-size: 1rem;
+                font-size: 1.125rem;
+                letter-spacing: 0.1rem;
                 margin-bottom: 16px;
             }
             .member {
