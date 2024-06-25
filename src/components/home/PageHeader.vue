@@ -41,6 +41,7 @@
                 <span>開始規劃</span>
             </div>
         </nav>
+
         <header>
             <div id="amoeba-container">
                 <div class="amoeba"></div>
@@ -71,7 +72,7 @@
             <div class="content-item content-item-4">
                 <div class="pic">
                 </div>
-                <div class="text">隨時隨地<br>輕鬆計劃您的下一次冒險</div>
+                <div class="text">世界各地美景<br>隨時隨地<br>輕鬆計劃您的下一次冒險</div>
             </div>
         </section>
         <!-- 會員登入彈窗 -->
@@ -172,10 +173,21 @@ body {
 
 header {
     position: relative;
-    padding-bottom: 20px;
 }
 
 nav {
+    .menu-button div:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .menu-button div:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-button div:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
     background-color: $secondColor-2;
     color: $accentColor-2;
     width: 200px;
@@ -192,18 +204,6 @@ nav {
     transition: height 0.3s ease-in-out;
     z-index: 100;
 
-    .menu-button div:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
-    }
-
-    .menu-button div:nth-child(2) {
-        opacity: 0;
-    }
-
-    .menu-button div:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
-    }
-
     ul {
         list-style: none;
         width: 100%;
@@ -215,7 +215,6 @@ nav {
         flex-grow: 1;
         height: fit-content;
         transition: height 0.3s ease-in-out;
-        order: 2;
 
         li {
             text-align: center;
@@ -254,7 +253,6 @@ nav {
         box-sizing: border-box;
         border-top: solid 1px $primaryColor;
         cursor: pointer;
-        order: 3;
 
         img {
             width: 30px;
@@ -276,8 +274,7 @@ nav {
     border: none;
     cursor: pointer;
     margin-bottom: 20px;
-    align-self: right;
-    order: 1;
+    align-self: center;
 
     div {
         width: 25px;
@@ -338,17 +335,22 @@ nav.closed {
 .amoeba {
     position: absolute;
     top: -100px;
-    right: -4vw;
+    // right: -4vw;
     width: 96vw;
     height: 100%;
     background: url('../../assets/images/index_banner.jpg') center/cover no-repeat;
-    animation: morph 5s ease-in-out infinite alternate, change 30s linear infinite alternate;
+    // -webkit-mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
+    // mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
+    // -webkit-mask-size: cover;
+    // mask-size: cover;
+    // animation: morph 5s ease-in-out infinite alternate, change 30s linear infinite alternate;
+    animation: morph 8s ease-in-out infinite both alternate;
     box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
 }
 
 .slogan {
     font-size: 1.9rem;
-    letter-spacing: 1.25vw;
+    letter-spacing: 16px;
     position: absolute;
     top: 40%;
     left: 20%;
@@ -356,29 +358,29 @@ nav.closed {
     background: rgba(246, 245, 241, 0.6);
     padding: 14px 20px;
     border-radius: 10px;
-    text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
+    // z-index: 1;
 }
 
 .togo-large-text {
     position: absolute;
-    top: 55%;
+    bottom: 10%;
     right: 20%;
     transform: translate(10%, -10%);
     font-size: 10rem;
     color: $primaryColor;
-    letter-spacing: 4vw;
+    letter-spacing: 50px;
     z-index: 1;
     text-align: center;
-    text-shadow: 1px 2px 1px rgba(69, 69, 69, 0.5);
 }
 
 @keyframes morph {
     0% {
-        border-radius: 33% 67% 70% 30%;
+        border-radius: 14% 0% 23% 42% / 82% 48% 47% 55% ;
+        
     }
 
     100% {
-        border-radius: 40% 60% 42% 58%;
+        border-radius: 40% 60% ;
     }
 }
 
@@ -403,18 +405,6 @@ nav.closed {
         left: 0;
         right: 0;
         z-index: 1000;
-
-        .bottom-section {
-            order: 1;
-        }
-
-        .menu-button {
-            order: 3;
-        }
-
-        ul {
-            order: 2;
-        }
     }
 
     nav.closed {
@@ -459,11 +449,12 @@ nav.closed {
 .content {
     position: relative;
     width: 100%;
-    height: 1300px;
+    height: 1000px;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    /* 防止溢出 */
 }
 
 .center-background {
@@ -477,30 +468,22 @@ nav.closed {
 
 .content-item {
     position: absolute;
-    width: fit-content;
+    width: 20%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     text-align: center;
     flex-direction: column;
     box-sizing: border-box;
-    padding: 10px 0;
 }
 
 
 .text {
     color: $black;
     font-size: 1rem;
-    line-height: 1.6rem;
     text-align: center;
     padding: 10px;
     border-radius: 5px;
-}
-
-.pic {
-    width: 40vw;
-    max-width: 400px;
-    aspect-ratio: 1/1;
 }
 
 .content-item-1 {
@@ -508,75 +491,81 @@ nav.closed {
     left: 10%;
 
     .pic {
+        width: 300px;
+        height: 300px;
         background: url('../../assets/images/index_amoeba1.jpg') center/cover no-repeat;
-        -webkit-mask: url('../../assets/images/amoeba/NO1.svg') center/contain no-repeat;
-        mask: url('../../assets/images/amoeba/NO1.svg') center/contain no-repeat;
-        -webkit-mask-size: contain;
-        mask-size: contain;
-        // animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+        -webkit-mask: url('../../assets/images/amoeba/NO1.svg') center/cover no-repeat;
+        mask: url('../../assets/images/amoeba/NO1.svg') center/cover no-repeat;
+        -webkit-mask-size: cover;
+        mask-size: cover;
+        animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
     }
 
     .text {
         font-size: 1.2rem;
-        margin: 10px 0;
     }
 }
 
 .content-item-2 {
-    top: 15%;
-    right: 14%;
+    top: 10%;
+    right: 20%;
 
     .pic {
+        width: 300px;
+        height: 300px;
         background: url('../../assets/images/index_amoeba2.jpg') center/cover no-repeat;
         -webkit-mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
-        mask: url('../../assets/images/amoeba/NO2.svg') center/contain no-repeat;
-        -webkit-mask-size: contain;
-        mask-size: contain;
+        mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
+        -webkit-mask-size: cover;
+        mask-size: cover;
         animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
     }
+}
 
-    .text {
-        font-size: 1.2rem;
-    }
-
+.content-item-2 .text {
+    font-size: 1.2rem;
 }
 
 .content-item-3 {
-    bottom: 15%;
-    left: 15%;
+    bottom: 5%;
+    left: 20%;
 
-    .pic {
-        background: url('../../assets/images/index_amoeba3.jpg') center/cover no-repeat;
-        -webkit-mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
-        mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
-        -webkit-mask-size: contain;
-        mask-size: contain;
-        animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
-    }
+}
 
-    .text {
-        font-size: 1.2rem;
-    }
+.content-item-3 .pic {
+    width: 300px;
+    height: 300px;
+    background: url('../../assets/images/index_amoeba3.jpg') center/cover no-repeat;
+    -webkit-mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
+    mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+}
+
+.content-item-3 .text {
+    font-size: 1.2rem;
 }
 
 .content-item-4 {
-    bottom: 5%;
+    bottom: 0%;
     right: 10%;
-
-    .pic {
-        background: url('../../assets/images/index_amoeba4.jpg') center/cover no-repeat;
-        -webkit-mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
-        mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
-        -webkit-mask-size: contain;
-        mask-size: contain;
-        animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
-    }
-
-    .text {
-        font-size: 1.2rem;
-    }
 }
 
+.content-item-4 .pic {
+    width: 300px;
+    height: 300px;
+    background: url('../../assets/images/index_amoeba4.jpg') center/cover no-repeat;
+    -webkit-mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
+    mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+}
+
+.content-item-4 .text {
+    font-size: 1.2rem;
+}
 
 .footer {
     width: 100%;
@@ -587,114 +576,62 @@ nav.closed {
 }
 
 @media (max-width: 768px) {
-    .content {
-        width: 100%;
-        height: 960px;
+    .content-item {
+        width: 40%;
+    }
 
-        .content-item {
-            width: fit-content;
-        }
-
-        .text {
-            font-size: 1rem;
-            line-height: 1.2rem;
-        }
+    .text {
+        font-size: 0.8rem;
     }
 
     .content-item-1 {
-        top: 5%;
-        left: 5%;
+        top: 15%;
+        left: 10%;
     }
 
     .content-item-2 {
         top: 15%;
-        right: 5%;
+        right: 10%;
     }
 
     .content-item-3 {
-        bottom: 15%;
-        left: 5%;
+        bottom: 10%;
+        left: 10%;
     }
 
     .content-item-4 {
-        bottom: 5%;
-        right: 5%;
+        bottom: 10%;
+        right: 10%;
     }
 
     .center-background {
-        width: 80%;
-        height: 80%;
-        top: 10%;
-    }
-
-    nav {
-        .bottom-section {
-            order: 1;
-        }
-
-        .menu-button {
-            order: 3;
-        }
-
-        ul {
-            order: 2;
-        }
-    }
-
-    .slogan {
-        font-size: 1.4rem;
-        letter-spacing: 1.25vw;
-        position: absolute;
-        top: 40%;
-        left: 20%;
-        color: $black;
-        background: rgba(246, 245, 241, 0.6);
-        padding: 14px 20px;
-        border-radius: 10px;
-        text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
-    }
-
-    .togo-large-text {
-        position: absolute;
-        top: 55%;
-        right: 20%;
-        transform: translate(10%, -10%);
-        font-size: 8rem;
-        color: $primaryColor;
-        letter-spacing: 4vw;
-        z-index: 1;
-        text-align: center;
-        text-shadow: 1px 2px 1px rgba(69, 69, 69, 0.5);
+        width: 100%;
+        height: 100%;
+        top: 20%;
     }
 }
 
 @media (max-width: 480px) {
-    .content {
-        width: 100%;
-        height: 700px;
+    .content-item {
+        width: 60%;
+    }
 
-        .content-item {
-            width: fit-content;
-        }
-
-        .text {
-            font-size: 0.875rem;
-            line-height: 1rem;
-        }
+    .text {
+        font-size: 0.6rem;
     }
 
     .content-item-1 {
-        top: 5%;
+        top: 20%;
         left: 5%;
     }
 
     .content-item-2 {
-        top: 15%;
+        top: 20%;
         right: 5%;
     }
 
     .content-item-3 {
-        bottom: 15%;
+        bottom: 5%;
         left: 5%;
     }
 
@@ -704,55 +641,9 @@ nav.closed {
     }
 
     .center-background {
-        width: 90%;
-        height: 90%;
+        width: 110%;
+        height: 110%;
         top: 25%;
-    }
-
-    nav {
-        .bottom-section {
-            order: 1;
-        }
-
-        .menu-button {
-            order: 3;
-        }
-
-        ul {
-            order: 2;
-        }
-    }
-
-    .amoeba {
-        position: absolute;
-        top: -16%;
-        right: -4vw;
-    }
-
-    .slogan {
-        font-size: 1.2rem;
-        letter-spacing: .5vw;
-        position: absolute;
-        top: 45%;
-        left: 8%;
-        color: $black;
-        background: rgba(246, 245, 241, 0.6);
-        padding: 7px 10px;
-        border-radius: 10px;
-        text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
-    }
-
-    .togo-large-text {
-        position: absolute;
-        top: 65%;
-        right: 20%;
-        transform: translate(10%, -10%);
-        font-size: 4rem;
-        color: $primaryColor;
-        letter-spacing: 4vw;
-        z-index: 1;
-        text-align: center;
-        text-shadow: 1px 2px 1px rgba(69, 69, 69, 0.5);
     }
 }
 </style>
