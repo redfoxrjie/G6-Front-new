@@ -77,6 +77,14 @@
         </div>
       </div>
     </div>
+     <!-- 0627新增：筆記彈出層組件 -->
+     <NotePopup
+      :isOpen="isNotePopupOpen"
+      :initialTitle="noteTitle"
+      :initialContent="noteContent"
+      @close="closeNotePopup"
+      @save="saveNote"
+    />
   </main>
 </template>
 
@@ -87,6 +95,7 @@ import 'leaflet-control-geocoder'; // 引入地理編碼器
 import { debounce } from 'lodash'; // 引入lodash的去抖動函數
 import Fuse from 'fuse.js'; // 引入Fuse.js
 import IconStarRating from '@/components/icons/IconStarRating.vue';
+import NotePopup from '@/components/map/NotePopup.vue';// 新增：導入 NotePopup 組件
 
 export default {
   data() {
@@ -105,11 +114,16 @@ export default {
       selectedDay: 1,
       isMapVisible: true, 
       switchBtnText: '返回行程',
-      defaultMarkerIcon: null //保存自定義marker icon
+      defaultMarkerIcon: null, //保存自定義marker icon
+      // 新增：筆記相關的數據
+      isNotePopupOpen: false,
+      noteTitle: '',
+      noteContent: '',
     };
   },
   components: {
-    IconStarRating //評星小功能
+    IconStarRating, //評星小功能
+    NotePopup, // 新增：註冊 NotePopup 組件
   },
   computed: {
     filteredSearchResults() {
@@ -219,7 +233,7 @@ export default {
 
       // 在地圖上添加搜索结果的marker
       const marker = L.marker([latlng.lat, latlng.lng], { icon: this.defaultMarkerIcon }).addTo(this.map)
-      .bindPopup(this.createPopupContent(result));
+      .bindPopup(this.createMarkerPopupContent(result));
         
       // 儲存標記
       this.markers.push({ location: result, marker: marker });
@@ -400,7 +414,56 @@ export default {
     mbMapToggle(){
       this.isMapVisible = !this.isMapVisible;
       this.switchBtnText = this.isMapVisible ? '返回行程' : '顯示地圖';
-    }
+    },
+    // 新增：打開筆記彈出層
+    openNotePopup(location) {
+      this.noteTitle = location.name || '';
+      this.noteContent = location.full_address || '';
+      this.isNotePopupOpen = true;
+    },
+
+    // 新增：關閉筆記彈出層
+    closeNotePopup() {
+      this.isNotePopupOpen = false;
+    },
+
+    // 新增：保存筆記
+    saveNote(note) {
+      console.log('保存的筆記:', note);
+      // 這裡可以添加保存筆記到行程或其他邏輯
+      this.closeNotePopup();
+    },
+    // 修改：創建 popup 內容，添加新的「添加筆記」按鈕
+    createMarkerPopupContent(result) {
+      const container = document.createElement('div');
+      container.innerHTML = `
+        <div style='font-size: 16px; font-weight: bold;'>${result.name}</div>
+        <div style='color: #888'>${result.full_address}</div>
+      `;
+      
+      const addToPlanButton = document.createElement('button');
+      addToPlanButton.textContent = '加入行程';
+      addToPlanButton.style.color = '#4F82D4';
+      addToPlanButton.style.cursor = 'pointer';
+      addToPlanButton.addEventListener('click', () => {
+        this.addToPlan(result);
+      });
+      
+      // 新增：添加筆記按鈕
+      const addNoteButton = document.createElement('button');
+      addNoteButton.textContent = '添加筆記';
+      addNoteButton.style.color = '#4F82D4';
+      addNoteButton.style.cursor = 'pointer';
+      addNoteButton.style.marginLeft = '10px';
+      addNoteButton.addEventListener('click', () => {
+        this.openNotePopup(result);
+      });
+      
+      container.appendChild(addToPlanButton);
+      container.appendChild(addNoteButton);
+      return container;
+    },
+
   },
   mounted() {
     this.initializeMap(); // 初始化地圖
