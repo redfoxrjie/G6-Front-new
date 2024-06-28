@@ -47,6 +47,9 @@
                 <div class="amoeba"></div>
                 <div class="slogan">土狗陪您 TOGO 展開新的旅程</div>
                 <div class="togo-large-text">TOGO</div>
+                <!-- <div class="dog-pic">
+                    <img src="@/assets/images/global/dog-1.png" alt="狗狗看地圖">
+                </div> -->
             </div>
             <RouterLink to="/" class="logo">
                 <img src="@/assets/images/global/logo/logo.png" alt="Logo">
