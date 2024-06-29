@@ -33,3 +33,6 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# testing files
+白板.txt

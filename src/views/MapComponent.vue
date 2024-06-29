@@ -7,9 +7,13 @@
               <img src="@/assets/images/japan_yufuin-kinrinko.jpg">
             </div>
             <div class="cover-text">
-              <div class="plan-region">日本</div>
-              <h4 class="plan-title">北九州五天四夜雙人行</h4>
-              <div class="plan-dates font-time">2024/05/19－2024/05/23</div>
+              <div class="plan-region">{{ tripData.selectedArea }}</div>
+              <h4 class="plan-title">{{ tripData.tripName }}</h4>
+              <div class="plan-dates font-time">
+                <span id="trpSdate">{{ tripData.startDate }}</span>
+                －
+                <span class="trpEdate">{{ tripData.endDate }}</span>
+              </div>
             </div>
             <div class="functions">
               <div class="option-btn">
@@ -20,7 +24,7 @@
               </div>
             </div>
         </div>
-        <div class="days-tabs">
+        <div v-if="daysCount" class="days-tabs">
           <div
           v-for="day in daysCount" :key="day"
           :class="['tabs', {selected: day === selectedDay}]"
@@ -29,18 +33,19 @@
             第{{ day }}天
           </div>
         </div>
-        <div class="day-settings">
-          <div class="departure-time">
-            出發時間：
-            <span class="edit-time">04:10</span>
-          </div>
-          <div class="day-info">2024/05/19 (日)</div>
-        </div>
-        <!-- <ul v-if="selectedDay !== null" class="day-plan-list"> -->
         <ul
           v-for="day in daysCount" :key="day"
           v-show="selectedDay === day"
           class="day-plan-list">
+          <div v-if="daysCount" class="day-settings">
+            <div class="departure-time">
+              出發時間：
+              <span class="edit-time" @click="onEditTimeClick">{{ departureTime }}</span>
+            </div>
+            <div class="day-info">
+              {{ calculateDate(day) }} ({{ getWeekday(day) }})
+            </div>
+          </div>
           <li v-for="location in getItineraryForDay(day)" :key="location.place_id || location.osm_id"
             draggable="true"
             @dragstart="dragStart(location, $event)"
@@ -89,6 +94,20 @@ import Fuse from 'fuse.js'; // 引入Fuse.js
 import IconStarRating from '@/components/icons/IconStarRating.vue';
 
 export default {
+  props: {
+    tripData: {
+      type: Object,
+      required: true,
+    },
+    onEditTimeClick: {
+      type: Function,
+      required: true,
+    },
+    departureTime: {
+      type: String,
+      required: true
+    },
+  },
   data() {
     return {
       map: null, // 儲存地圖實例
@@ -101,15 +120,17 @@ export default {
       overItem: null, //儲存被觸發dragover的實例
       search: "",
       plan: null,
-      daysCount: null, // 儲存計算後的天數
+      daysCount: 0, // 初始化 daysCount 為 0
       selectedDay: 1,
+      startDateObj: null, // 新增開始日期的 Date 物件
+      weekdays: ['日', '一', '二', '三', '四', '五', '六'], // 儲存星期幾的名稱
       isMapVisible: true, 
       switchBtnText: '返回行程',
       defaultMarkerIcon: null //保存自定義marker icon
     };
   },
   components: {
-    IconStarRating //評星小功能
+    IconStarRating, //評星小功能
   },
   computed: {
     filteredSearchResults() {
@@ -122,6 +143,18 @@ export default {
       // Filter itinerary based on selectedDay (this function now is unfunctional)
       return this.itinerary.filter(item => item.day === this.selectedDay);
     }
+  },
+  watch: {
+    tripData: {
+      handler(newValue, oldValue) {
+        if (newValue.startDate && newValue.endDate) {
+          this.startDateObj = new Date(newValue.startDate); // 更新開始日期的 Date 物件
+          this.calcDaysDiff(); // 重新計算天數
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   methods: {
     // 初始化地圖
@@ -381,10 +414,22 @@ export default {
                     // console.log(`Error: ${error}`);
                 });
         },
-    //-------計算行程天數----------
-    calcDaysDiff(sdate, edate) {
-      const start = new Date(sdate);
-      const end = new Date(edate);
+    //-----------------------------------計算行程天數
+    // 根據開始日期計算第 day 天的日期
+    calculateDate(day) {
+      const date = new Date(this.startDateObj);
+      date.setDate(date.getDate() + (day - 1));
+      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+    },
+    // 根據開始日期計算第 day 天是星期幾
+    getWeekday(day) {
+      const date = new Date(this.startDateObj);
+      date.setDate(date.getDate() + (day - 1));
+      return this.weekdays[date.getDay()];
+    },
+    calcDaysDiff() {
+      const start = new Date(this.tripData.startDate);
+      const end = new Date(this.tripData.endDate);
       const timeDiff = end - start; //結束日期 減 開始日期，得到毫秒差
       const daysDiff = timeDiff / (1000 * 60 * 60 * 24); //將毫秒數轉換為"天數"
       this.daysCount = daysDiff + 1; //包含開始和結束日期的總天數
@@ -410,10 +455,9 @@ export default {
       alert('您的瀏覽器或裝置不支援GPS定位功能');
     }
     this.loadJsonData();
-    this.calcDaysDiff('2024/05/19', '2024/05/23');
+    this.calcDaysDiff();
   },
 };
-
 </script>
 
 
@@ -422,7 +466,12 @@ export default {
 @import '../assets/styles/base/color';
 @import '../assets/styles/base/font';
 
+.hidden {
+  display: none;
+}
 .section-full-width{
+  width: 100%;
+  position: relative;
   margin-top: 54px;
   margin-bottom: 0;
 }
@@ -477,20 +526,7 @@ li.dragging{
       }
     }
   }
-  //出發時間日期樣式
-  .day-settings{
-    display: flex;
-    justify-content: space-between;
-    box-sizing: border-box;
-    padding: 12px 12px;
-    font-size: 0.8rem;
-    .departure-time {
-      .edit-time {
-        text-decoration: underline;
-        cursor: pointer;
-      }
-    }
-  }
+  
   //行程景點清單
   .day-plan-list{
     box-sizing: border-box;
@@ -554,6 +590,20 @@ li.dragging{
       position: absolute;
       bottom: -5px;
       left: 0;
+    }
+    //出發時間日期樣式
+    .day-settings{
+      display: flex;
+      justify-content: space-between;
+      box-sizing: border-box;
+      padding: 12px 6px;
+      font-size: 0.8rem;
+      .departure-time {
+        .edit-time {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
     }
   }
   .days-tabs {
