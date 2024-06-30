@@ -47,9 +47,18 @@
                 <div class="amoeba"></div>
                 <div class="slogan">土狗陪您 TOGO 展開新的旅程</div>
                 <div class="togo-large-text">TOGO</div>
-                <!-- <div class="dog-pic">
-                    <img src="@/assets/images/global/dog-1.png" alt="狗狗看地圖">
-                </div> -->
+                <div class="dog-pic dog-0">
+                    <img src="@/assets/images/airplane-dog.png" alt="飛機狗">
+                </div>
+                <div class="dog-pic dog-1">
+                    <img src="@/assets/images/dog-1.png" alt="地圖狗">
+                </div>
+                <div class="dog-pic dog-2">
+                    <img src="@/assets/images/dog-2.png" alt="行李狗">
+                </div>
+                <div class="dog-pic dog-3">
+                    <img src="@/assets/images/dog-3.png" alt="購物狗">
+                </div>
             </div>
             <RouterLink to="/" class="logo">
                 <img src="@/assets/images/global/logo/logo.png" alt="Logo">
@@ -320,7 +329,7 @@ nav.closed {
     left: 20px;
     width: 60px;
     height: 60px;
-
+    z-index: 2000;
     img {
         width: 100%;
     }
@@ -334,6 +343,78 @@ nav.closed {
     height: fit-content;
     overflow: hidden;
 }
+
+.dog-pic {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2; // 設定一個較大的 z-index 值
+    img {
+        width: 5vw;
+    }
+    
+}
+//地圖狗
+.dog-1 {
+    position: relative;
+    left: 70vw;  // 將此值調整為所需的水平偏移量
+    animation: move1 1.5s infinite linear;
+}
+@keyframes move1 {
+        0% {
+            transform: translate3d(0, 0%, 0);
+        }
+        25% {
+            transform: translate3d(0, 5%, 0);
+        }
+        75% {
+            transform: translate3d(0, -5%, 0);
+        }
+        100% {
+            transform: translate3d(0, 0%, 0);
+        }
+    }
+//行李狗
+.dog-2 {
+    position: relative;
+    top:5vh;
+    animation: move2 1s infinite linear;
+}
+@keyframes move2 {
+        0% {
+            transform: translate3d(0, 0%, 0);
+        }
+        25% {
+            transform: translate3d(0, 5%, 0);
+        }
+        75% {
+            transform: translate3d(0, -5%, 0);
+        }
+        100% {
+            transform: translate3d(0, 0%, 0);
+        }
+    }
+//購物狗
+.dog-3 {
+    position: relative;
+    left: 80vw;  // 將此值調整為所需的水平偏移量
+    top:20vh;
+    animation: move3 2s infinite linear;
+}
+@keyframes move3 {
+        0% {
+            transform: translate3d(0, 0%, 0);
+        }
+        25% {
+            transform: translate3d(0, 5%, 0);
+        }
+        75% {
+            transform: translate3d(0, -5%, 0);
+        }
+        100% {
+            transform: translate3d(0, 0%, 0);
+        }
+    }
 
 .amoeba {
     position: absolute;
@@ -349,6 +430,7 @@ nav.closed {
     // animation: morph 5s ease-in-out infinite alternate, change 30s linear infinite alternate;
     animation: morph 8s ease-in-out infinite both alternate;
     box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
+    z-index: 1; // 確保 amoeba 的 z-index 小於 dog-pic
 }
 
 .slogan {
@@ -361,7 +443,7 @@ nav.closed {
     background: rgba(246, 245, 241, 0.6);
     padding: 14px 20px;
     border-radius: 10px;
-    // z-index: 1;
+    z-index: 1; // 確保 slogan 的 z-index 小於 dog-pic
 }
 
 .togo-large-text {
@@ -372,7 +454,7 @@ nav.closed {
     font-size: 10rem;
     color: $primaryColor;
     letter-spacing: 50px;
-    z-index: 1;
+    z-index: 1; // 確保 togo-large-text 的 z-index 小於 dog-pic
     text-align: center;
 }
 
