@@ -1,10 +1,14 @@
 // js入口執行檔案(盡量不要動main.js)
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+
 
 import App from './App.vue'
 import router from './router/index.js'
+// 引入 userStore
+import { useUserStore } from '@/stores/userStore'; 
 
 // 引入全局 SCSS 檔案
 import '@/assets/styles/style.scss'
@@ -22,6 +26,10 @@ import Swal from 'sweetalert2';
 
 // import './fixLeafletIcons.js'  // 導入 Leaflet 圖標路徑的文件
 
+// 創建 Pinia 實例
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
+
 const app = createApp(App)
 import GCompUserAccount from './components/global/GCompUserAcoount.vue'
 import GCompTripCard from './components/global/GCompTripCard.vue'
@@ -33,6 +41,13 @@ app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.config.globalProperties.$swal = Swal;
 
+app.use(pinia)
 app.use(createPinia())
 app.use(router)
 app.mount('#app')
+
+
+// 在 setup 方法中初始化用户状态
+// 初始化用户状态
+const userStore = useUserStore(pinia);
+userStore.initializeStore();
