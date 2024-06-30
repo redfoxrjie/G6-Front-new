@@ -26,11 +26,13 @@
                     <RouterLink to="/contact">聯絡我們</RouterLink>
                 </li>
                 <!-- <li><RouterLink to="/trips">暫時的地圖編輯位置等到學會怎麼在icon切換頁面</RouterLink></li> -->
-                <li v-if="user">
-                    <router-link to="/EditMemberMain">
-                        <img :src="user.u_avatar" style="width: 50px; height: 50px;"><br>
-                        <span>{{ user.u_nickname }}</span>
-                    </router-link>
+                <li v-if="isLoggedIn">
+                    <router-link to="/member">
+                        <img :src="userInfo.u_avatar"
+                            style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid;"><br>
+                        <span>{{ userInfo.u_nickname }}</span>
+                    </router-link><br>
+                    <button @click="logout" class="logout">登出</button>
                 </li>
                 <li v-else>
                     <button class="openLoginModal" @click="openLoginModal">會員登入</button>
@@ -83,6 +85,8 @@
 
 <script>
 import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import { storeToRefs } from 'pinia';
 import { RouterLink, RouterView, useRouter } from 'vue-router';
 import LoginRegisterModal from '../layout/LoginRegisterBox.vue';
 
@@ -93,11 +97,15 @@ export default defineComponent({
         LoginRegisterModal
     },
     setup() {
+
+        const userStore = useUserStore();
+        const { isLoggedIn, userInfo } = storeToRefs(userStore);
+
         const isMenuClosed = ref(false);
         const menu = ref(null);
         const isLoginMode = ref(true);
         const isLoginModalVisible = ref(false);
-        const user = ref(null);
+        // const user = ref(null);
 
         const toggleMenu = () => {
             isMenuClosed.value = !isMenuClosed.value;
@@ -114,6 +122,7 @@ export default defineComponent({
         onBeforeUnmount(() => {
             menu.value.removeEventListener('click', toggleMenu);
         });
+
         // 頁面切換
         const router = useRouter();
         const goToPage = (toLink) => {
@@ -127,34 +136,39 @@ export default defineComponent({
         };
 
         // 將登錄成功後傳送會員資料及關閉lightbox
-        const closeLoginModal = (data) => {
+        const closeLoginModal = () => {
             isLoginModalVisible.value = false;
-            if (data && data.status === 'login-success') {
-                loginSuccessHandler(data.user);
-            }
         };
 
         // 登入成功後更新用戶資料
         const loginSuccessHandler = (userData) => {
-            console.log("登入成功：", userData);
-            user.value = userData;  // 更新用戶數據
-            closeLoginModal();      // 關閉登入彈窗
-        }
+            userStore.setUser(userData);
+            closeLoginModal();
+        };
+
+        const logout = () => {
+            userStore.logout();
+            router.push('/'); // 重定向到首頁或其他頁面
+            openLoginModal(); // 登出後重新打開登錄彈窗
+        };
 
         const switchMode = (mode) => {
             isLoginMode.value = mode;
         };
+
         return {
             isMenuClosed,
             toggleMenu,
             menu,
-            user,
+            isLoggedIn,
+            userInfo,
             isLoginModalVisible,
             openLoginModal,
             closeLoginModal,
             loginSuccessHandler,
             switchMode,
-            goToPage
+            goToPage,
+            logout,
         };
     },
 });
@@ -241,6 +255,28 @@ nav {
             &:hover {
                 color: $accentColor-2;
             }
+        }
+
+    }
+
+    .logout {
+        position: relative;
+        margin-top: 20px;
+        color: $primaryColor;
+
+        &::after {
+            content: " ";
+            position: absolute;
+            right: 50%;
+            left: 50%;
+            bottom: -4px;
+            border-bottom: 4px solid $accentColor-1;
+            transition: .3s;
+        }
+
+        &:hover::after {
+            right: 0%;
+            left: 0%;
         }
 
     }
