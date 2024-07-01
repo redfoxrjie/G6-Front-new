@@ -51,6 +51,9 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 @import '@/assets/styles/base/color';
+.hot-trips{
+    background-color: #EDEAE1;
+}
 
 .card-container {
     box-sizing: border-box;
