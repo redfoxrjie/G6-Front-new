@@ -722,13 +722,14 @@ nav.closed {
         font-family: "Noto Sans TC", sans-serif;
         font-size: 13vw;
         font-weight: 700;
-        letter-spacing: 20vw;
+        letter-spacing: 3vw; /* 調整字母間距 */
         position: absolute;
         top: 50%;
-        left: 60.25%;
-        transform: translate(-50%, 23%);
+        left: 50%;
+        transform: translate(-50%, -50%) translateY(135px); /* 向下移動10px */
         text-align: center; /* 文字置中 */
-    }
+        white-space: nowrap; /* 防止文字換行 */
+        }
 }
 
 //海洋波浪遮罩
@@ -760,8 +761,6 @@ nav.closed {
             bottom: 0;
             z-index: 10;
         }
-
-        
 
 @keyframes oceanwave-animation {
     0% {
