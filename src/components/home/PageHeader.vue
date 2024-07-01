@@ -593,7 +593,7 @@ nav.closed {
 .content {
     position: relative;
     width: 100%;
-    height: 1000px;
+    height: 1250px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -628,51 +628,112 @@ nav.closed {
     text-align: center;
     padding: 10px;
     border-radius: 5px;
+    position: absolute;
 }
 
 .content-item-1 {
-    top: 5%;
-    left: 10%;
+    top: 3%;
+    left: 25%;
 
     .pic {
         width: 300px;
         height: 300px;
         background: url('../../assets/images/index_amoeba1.jpg') center/cover no-repeat;
-        -webkit-mask: url('../../assets/images/amoeba/NO1.svg') center/cover no-repeat;
-        mask: url('../../assets/images/amoeba/NO1.svg') center/cover no-repeat;
-        -webkit-mask-size: cover;
-        mask-size: cover;
-        animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+        // -webkit-mask: url('../../assets/images/amoeba/NO1.svg') center/cover no-repeat;
+        // mask: url('../../assets/images/amoeba/NO1.svg') center/cover no-repeat;
+        // -webkit-mask-size: cover;
+        animation: morph1 10s ease-in-out infinite alternate,
+		change1 20s linear infinite alternate;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
+        z-index: 1; // 確保 amoeba 的 z-index 小於 dog-pic  
+
     }
 
     .text {
         font-size: 1.2rem;
+        letter-spacing: 4px;
+        line-height:1.5;
+        top: 35%;
+        left: -80%;
+        z-index: 2;
     }
 }
 
+@keyframes morph1 {
+    0%,
+	100% {
+		border-radius: 68% 55% 80% 50% / 68% 60% 70% 55%;
+	}
+	20% {
+		border-radius: 37% 63% 51% 49% / 37% 65% 35% 63%;
+	}
+	40% {
+		border-radius: 36% 64% 64% 36% / 64% 48% 52% 36%;
+	}
+	60% {
+		border-radius: 37% 63% 51% 49% / 30% 30% 70% 70%;
+	}
+	80% {
+		border-radius: 40% 60% 42% 58% / 41% 51% 49% 59%;
+	}
+}
+@keyframes change1 {
+	100% {
+		background-position: 100% 50%;
+	}
+}
+
 .content-item-2 {
-    top: 10%;
-    right: 20%;
+    top: 30%;
+    right: 18%;
 
     .pic {
         width: 300px;
         height: 300px;
         background: url('../../assets/images/index_amoeba2.jpg') center/cover no-repeat;
-        -webkit-mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
-        mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
-        -webkit-mask-size: cover;
-        mask-size: cover;
-        animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+        // -webkit-mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
+        // mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
+        // -webkit-mask-size: cover;
+        animation: morph2 10s ease-in-out infinite alternate,
+		change1 20s linear infinite alternate;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
+        z-index: 1; // 確保 amoeba 的 z-index 小於 dog-pic  
+
     }
 }
+@keyframes morph2 {
+    0%,
+	100% {
+		border-radius: 41% 59% 70% 30% / 30% 68% 32% 70% ;
+	}
+	20% {
+		border-radius: 37% 63% 51% 49% / 37% 65% 35% 63%;
+	}
+	40% {
+		border-radius: 36% 64% 64% 36% / 64% 48% 52% 36%;
+	}
+	60% {
+		border-radius: 37% 63% 51% 49% / 30% 30% 70% 70%;
+	}
+	80% {
+		border-radius: 40% 60% 42% 58% / 41% 51% 49% 59%;
+	}
+}
+
 
 .content-item-2 .text {
     font-size: 1.2rem;
+    letter-spacing: 4px;
+    line-height:1.5;
+    white-space:pre;
+    bottom: -10%;
+    right: -45%;
+    z-index: 2;
 }
 
 .content-item-3 {
-    bottom: 5%;
-    left: 20%;
+    bottom: 28%;
+    left: 15%;
 
 }
 
@@ -680,36 +741,92 @@ nav.closed {
     width: 300px;
     height: 300px;
     background: url('../../assets/images/index_amoeba3.jpg') center/cover no-repeat;
-    -webkit-mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
-    mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
-    -webkit-mask-size: cover;
-    mask-size: cover;
-    animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+    // -webkit-mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
+    // mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
+    // -webkit-mask-size: cover;
+    animation: morph3 10s ease-in-out infinite alternate,
+	change1 20s linear infinite alternate;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
+    z-index: 1; // 確保 amoeba 的 z-index 小於 dog-pic  
+}
+@keyframes morph3 {
+    0%,
+	100% {
+		border-radius: 65% 35% 46% 54% / 56% 68% 32% 44% ;
+	}
+	20% {
+		border-radius: 37% 63% 51% 49% / 37% 65% 35% 63%;
+	}
+	40% {
+		border-radius: 36% 64% 64% 36% / 64% 48% 52% 36%;
+	}
+	60% {
+		border-radius: 37% 63% 51% 49% / 30% 30% 70% 70%;
+	}
+	80% {
+		border-radius: 40% 60% 42% 58% / 41% 51% 49% 59%;
+	}
 }
 
 .content-item-3 .text {
     font-size: 1.2rem;
+    letter-spacing: 4px;
+    line-height:1.5;
+    white-space:pre;
+    text-align:left;
+    bottom: 18%;
+    left: 109%;
+    z-index: 2;
 }
 
 .content-item-4 {
-    bottom: 0%;
-    right: 10%;
+    bottom: 1%;
+    right: 20%;
 }
 
 .content-item-4 .pic {
     width: 300px;
     height: 300px;
     background: url('../../assets/images/index_amoeba4.jpg') center/cover no-repeat;
-    -webkit-mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
-    mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
-    -webkit-mask-size: cover;
-    mask-size: cover;
-    animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+    // -webkit-mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
+    // mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
+    // -webkit-mask-size: cover;
+    animation: morph2 10s ease-in-out infinite alternate,
+	change1 20s linear infinite alternate;
+    // box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
+    z-index: 2; // 確保 amoeba 的 z-index 小於 dog-pic  
+}
+@keyframes morph4 {
+    0%,
+	100% {
+		border-radius: 82% 18% 73% 27% / 25% 22% 78% 75%  ;
+	}
+	20% {
+		border-radius: 37% 63% 51% 49% / 37% 65% 35% 63%;
+	}
+	40% {
+		border-radius: 36% 64% 64% 36% / 64% 48% 52% 36%;
+	}
+	60% {
+		border-radius: 37% 63% 51% 49% / 30% 30% 70% 70%;
+	}
+	80% {
+		border-radius: 40% 60% 42% 58% / 41% 51% 49% 59%;
+	}
 }
 
 .content-item-4 .text {
     font-size: 1.2rem;
+    letter-spacing: 4px;
+    line-height:1.5;
+    white-space:pre;
+    text-align:left;
+    bottom: 20%;
+    right: 100%;
+    z-index: 2;
 }
+
+
 
 //海洋圖片
 .ocean-img {
