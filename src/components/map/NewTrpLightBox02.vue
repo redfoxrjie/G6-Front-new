@@ -1,70 +1,60 @@
 <template>
-    <div class="light-box">
-      <div class="light-box-container">
-        <div class="header-block">
-          <div class="title">
-            <h3>建立新行程</h3>
-            <p>為你的行程命名並設定日期</p>
+  <div class="light-box">
+    <div class="light-box-container">
+      <div class="header-block">
+        <div class="title">
+          <h3>建立新行程</h3>
+          <p>為你的行程命名並設定日期</p>
+        </div>
+        <div class="selections">
+          <div class="drop-down-box" @click.stop="toggleDropdown('area')">
+            <div id="trp_area">{{ selectedArea }}</div>
+            <font-awesome-icon :icon="['fas', 'chevron-down']" />
           </div>
-          <div class="selections">
-            <div class="drop-down-box" @click.stop="toggleDropdown('area')">
-              <div id="trp_area">{{ selectedArea }}</div>
-              <font-awesome-icon :icon="['fas', 'chevron-down']" />
-            </div>
-            <ul v-if="showAreaDropdown" class="drop-down-list">
-              <li v-for="(area, index) in areas" :key="index" @click="selectArea(area)">
-                {{ area }}
-              </li>
-            </ul>
-          </div>
-          <div class="input-name">
-            <label for="trpName">
-              <h5>行程名稱</h5>
+          <ul v-if="showAreaDropdown" class="drop-down-list">
+            <li v-for="(area, index) in areas" :key="index" @click="selectArea(area)">
+              {{ area }}
+            </li>
+          </ul>
+        </div>
+        <div class="input-name">
+          <label for="trpName">
+            <h5>行程名稱</h5>
+          </label>
+          <input type="text" id="trpName" name="trp_name" maxlength="14" v-model="tripName" required>
+        </div>
+        <div class="set-date">
+          <div class="date-select">
+            <label for="sdate">
+              <h5>開始日期</h5>
             </label>
-            <input type="text" id="trpName" name="trp_name" maxlength="14" v-model="tripName" required>
+            <input type="date" id="sdate" name="trp_sdate" v-model="startDate" @input="updateEndDateMin">
           </div>
-          <div class="set-date">
-            <div class="date-select">
-              <label for="sdate">
-                <h5>開始日期</h5>
-              </label>
-              <input type="date" id="sdate" name="trp_sdate" v-model="startDate" @input="updateEndDateMin">
-            </div>
-            <div class="date-select">
-              <label for="edate">
-                <h5>結束日期</h5>
-              </label>
-              <input type="date" id="edate" name="trp_edate" v-model="endDate" :min="endDateMin">
-            </div>
-          </div>
-          <div class="setting">
-            <div class="radio-wrapper">
-              <span class="radio">
-                <input type="radio" id="myTrp" name="setting" value="my-trip" checked>
-                <label for="myTrp">我的行程</label>
-              </span>
-              <span class="radio">
-                <input type="radio" id="teamTrp" name="setting" value="team-trip">
-                <label for="teamTrp">團隊行程</label>
-              </span>
-            </div>
-            <div class="ispublic" @click="handlePublicClick">
-              <div class="lock-icon" :class="{ 'right-icon': isPublic }">
-                <font-awesome-icon :icon="isPublic ? 'lock-open' : 'lock'" size="sm"/>
-              </div>
-              <span class="text">{{ isPublic ? '公開' : '私人' }}</span>
-            </div>
+          <div class="date-select">
+            <label for="edate">
+              <h5>結束日期</h5>
+            </label>
+            <input type="date" id="edate" name="trp_edate" v-model="endDate" :min="endDateMin">
           </div>
         </div>
-        <div class="footer-block">
-          <div class="btn-wrapper">
-            <button class="btn cancel" @click="goBack">取消</button>
-            <button class="btn confirm" @click="submitForm">建立</button>
+        <div class="setting">
+          <div class="ispublic" @click="handlePublicClick">
+            <div class="lock-icon" :class="{ 'right-icon': isPublic }">
+              <font-awesome-icon :icon="isPublic ? 'lock-open' : 'lock'" size="sm"/>
+            </div>
+            <span class="text">{{ isPublic ? '公開' : '私人' }}</span>
           </div>
         </div>
       </div>
+      <div class="footer-block">
+        <div class="btn-wrapper">
+          <button class="btn cancel" @click="goBack">取消</button>
+          <button class="btn confirm" @click="submitForm">建立</button>
+        </div>
+      </div>
     </div>
-  </template>
+  </div>
+</template>
   
   <script>
   import Swal from 'sweetalert2';
@@ -111,6 +101,7 @@
           icon: "warning",
           showCancelButton: true,
           confirmButtonText: "確認",
+          confirmButtonColor: '#4F82D4',
           cancelButtonText: "取消"
         }).then((result) => {
           if (result.isConfirmed) {
@@ -144,6 +135,7 @@
             icon: 'warning',
             title: '部分資料未填寫',
             text: '請確認所有欄位均填寫完畢',
+            confirmButtonColor: '#4F82D4'
           });
         } else {
           const tripData = {
@@ -193,7 +185,7 @@
   }
   .light-box {
     position: absolute;
-    top: 2%;
+    top: 1%;
     left: 47.5vw;
     transform: translateX(-47.5%);
     z-index: 401;
@@ -201,7 +193,7 @@
     min-width: 300px;
     max-width: 330px;
     background-color: #fff;
-    padding: 38px 35px;
+    padding: 32px 26px;
     box-sizing: border-box;
     border-radius: 20px;
     .light-box-container {
@@ -302,15 +294,15 @@
         }
         .selections {
           position: relative;
-
           .drop-down-box {
             font-family: 'HunInn';
+            font-size: 0.875rem;
             width: 100%;
             display: block;
             box-sizing: border-box;
             padding: 8px 18px;
             margin: 12px 0;
-            border: 1px solid $black;
+            border: 2px solid $secondColor-1;
             border-radius: 8px;
             cursor: pointer;
             display: flex;
@@ -347,12 +339,12 @@
       }
   
       .footer-block {
+        margin-top: 20px;
         .btn-wrapper {
           width: 100%;
           display: flex;
           justify-content: center;
           gap: 12px;
-          margin-top: 40px;
           .btn {
             flex-grow: 1;
             border-radius: 22px;

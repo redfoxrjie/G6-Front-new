@@ -115,6 +115,12 @@ export default defineComponent({
 <style lang="scss">
 @import '@/assets/styles/style.scss';
 
+/* 全域 ::selection 樣式 */
+::selection {
+  background: $secondColor-2; /* 背景顏色 */
+  color: #fff; /* 文字顏色 */
+}
+
 header {
     // opacity: .3;
     position: relative;
