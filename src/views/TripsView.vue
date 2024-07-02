@@ -4,8 +4,9 @@
     <!-- 傳遞 departureTime 給 MapComponent -->
     <Mapcomponent
       :trip-data="tripData"
-      :departure-time="departureTime"
+      :departure-times="departureTimes"
       @edit-time-click="handleEditTimeClick"
+      @edit-plan-setting="showTripSetting"
     />
     <NewTrpLightBox02 :class="{ hidden: !showNewTrpLightBox02 }" @submit-trip="handleTripSubmit" />
     <BlackLayout :class="{ hidden: !showBlackLayout }" />
@@ -15,6 +16,11 @@
       :currentWeekday="selectedWeekday"
       @time-saved="handleTimeSaved"
       @close="closeEditDepartureTime"
+    />
+    <TripSetting 
+      v-if="displayTripSetting" 
+      @close-trip-setting="closeTripSetting"
+      @submit-trip="handleTripSubmit"
     />
   </main>
 </template>
@@ -26,6 +32,7 @@ import Mapcomponent from './MapComponent.vue';
 import NewTrpLightBox02 from '@/components/map/NewTrpLightBox02.vue';
 import BlackLayout from '@/components/layout/BlackLayout.vue';
 import EditDepartureTime from '@/components/map/EditDepartureTime.vue';
+import TripSetting from '@/components/map/TripSetting.vue'; 
 
 // 使用 ref 定義 reactive 變量來控制顯示狀態
 const showNewTrpLightBox02 = ref(false);
@@ -39,13 +46,32 @@ const tripData = ref({
 const showEditDepartureTime = ref(false);
 const selectedDate = ref('');
 const selectedWeekday = ref('');
-const departureTime = ref('07:00'); //初始值設為07:00
+const departureTimes = ref({}); // 維護每一天的出發時間
+const displayTripSetting = ref(false); // 控制 TripSetting 顯示狀態
+
+// // 處理行程提交
+// const handleTripSubmit = (data) => {
+//   tripData.value = data;
+
+//   showNewTrpLightBox02.value = false;
+//   showBlackLayout.value = false;
+//   displayTripSetting.value = false;
+// };
 
 // 處理行程提交
 const handleTripSubmit = (data) => {
-  tripData.value = data;
+  tripData.value = { 
+    ...tripData.value, 
+    ...Object.keys(data).reduce((acc, key) => {
+      if (data[key] !== '') {
+        acc[key] = data[key];
+      }
+      return acc;
+    }, {})
+  };
   showNewTrpLightBox02.value = false;
   showBlackLayout.value = false;
+  displayTripSetting.value = false;
 };
 
 // 顯示/隱藏 EditDepartureTime
@@ -57,6 +83,7 @@ const openEditDepartureTime = (date, weekday) => {
 
 const closeEditDepartureTime = () => {
   showEditDepartureTime.value = false;
+  showBlackLayout.value = false; // 關閉 BlackLayout
 };
 
 const toggleEditDepartureTime = () => {
@@ -68,14 +95,28 @@ const handleEditTimeClick = ({ date, weekday }) => {
   selectedDate.value = date;
   selectedWeekday.value = weekday;
   showEditDepartureTime.value = true;
+  showBlackLayout.value = true;
 };
 
 // 處理時間保存
 const handleTimeSaved = (time) => {
   // 確認有順利接收到來自EditDepartureTime.vue的資料
-  console.log('接收到的時間：', time); 
-  departureTime.value = time;
+  console.log('接收到的時間：', time);
+  // 更新對應日期的出發時間
+  departureTimes.value[selectedDate.value] = time; 
   showEditDepartureTime.value = false;
+  showBlackLayout.value = false;
+};
+
+// 顯示 TripSetting
+const showTripSetting = () => {
+  displayTripSetting.value = true;
+  showBlackLayout.value = true;
+};
+// 關閉 TripSetting
+const closeTripSetting = () => {
+  displayTripSetting.value = false;
+  showBlackLayout.value = false;
 };
 
 // 在組件載入後顯示 MapGuide、NewTrpLightBox01 及 BlackLayout
