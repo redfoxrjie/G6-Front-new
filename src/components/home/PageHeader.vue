@@ -71,20 +71,29 @@
             <div class="center-background"></div>
             <div class="content-item content-item-1">
                 <div class="pic"></div>
+                <div class="icon icon-item-1">
+                    <img src="@/assets/images/icon-map.png" alt="icon-map">
+                </div>
                 <div class="text">行程共享群組化<br>多團規劃不緊張</div>
             </div>
             <div class="content-item content-item-2">
-                <div class="pic">
+                <div class="pic"></div>
+                <div class="icon icon-item-2">
+                    <img src="@/assets/images/icon-ticket.png" alt="icon-ticket">
                 </div>
                 <div class="text">票券，行程一站搞定<br>自由行也能從容優雅</div>
             </div>
             <div class="content-item content-item-3">
-                <div class="pic">
+                <div class="pic"></div>
+                <div class="icon icon-item-3">
+                    <img src="@/assets/images/icon-pin.png" alt="icon-pin">
                 </div>
                 <div class="text">精選目的地<br>享受無盡無礙的旅行</div>
             </div>
             <div class="content-item content-item-4">
-                <div class="pic">
+                <div class="pic"></div>
+                <div class="icon icon-item-4">
+                    <img src="@/assets/images/icon-airplane.png" alt="icon-airplane">
                 </div>
                 <div class="text">世界各地美景<br>隨時隨地<br>輕鬆計劃您的下一次冒險</div>
             </div>
@@ -111,7 +120,7 @@
             <div class="ocean-pic">
                 <img src="@/assets/images/ocean-img.jpg" alt="海洋圖片">
             </div>
-            <div class="text">TOGO</div>
+            <div class="text">TOGOTRAVEL</div>
             <div class="oceanwave-container-down">
             <svg class="oceanwave" viewBox="0 0 1800 50" preserveAspectRatio="none">
                 <path d="M -150 25 Q -125 12.5, -100 25 T -50 25 T 0 25 T 50 25 T 100 25 T 150 25 
@@ -626,6 +635,7 @@ nav.closed {
     }
 }
 
+//四張小圖
 .content {
     position: relative;
     width: 100%;
@@ -862,6 +872,48 @@ nav.closed {
     z-index: 2;
 }
 
+.icon {
+    position: absolute;
+    width: 20%;
+    display: flex;
+    img{
+        width: 5vw;
+        animation: icon-swing 3s infinite;
+        // -webkit-animation: custom-swing 3s;
+        // animation-iteration-count: infinite;
+        // -webkit-animation-iteration-count: infinite;
+    }
+}
+@keyframes icon-swing {
+   8% { transform: rotate3d(0, 0, 1, 20deg); }
+  16% { transform: rotate3d(0, 0, 1, -15deg); }
+  24% { transform: rotate3d(0, 0, 1, 10deg); }
+  32% { transform: rotate3d(0, 0, 1, -5deg); }
+  40% { transform: rotate3d(0, 0, 1, 0deg); }
+}
+//icon-map
+.icon-item-1{
+    top: -12%;
+    left: -50%;
+}
+//icon-ticket
+.icon-item-2{
+    top: 10%;
+    right: -30%;
+}
+//icon-pin
+.icon-item-3{
+    top: 10%;
+    left: -30%;
+    img{
+        width: 2vw;
+    }
+}
+//icon-airplane
+.icon-item-4{
+    top: 10%;
+    right: -35%;
+}
 
 
 //海洋圖片
@@ -875,7 +927,7 @@ nav.closed {
         font-family: "Noto Sans TC", sans-serif;
         font-size: 13vw;
         font-weight: 700;
-        letter-spacing: 3vw; /* 調整字母間距 */
+        letter-spacing: 1vw; /* 調整字母間距 */
         position: absolute;
         top: 50%;
         left: 50%;
