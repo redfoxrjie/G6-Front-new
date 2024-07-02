@@ -520,6 +520,8 @@ nav.closed {
     right: 20%;
     transform: translate(10%, -10%);
     font-size: 10rem;
+    font-family: "Noto Sans TC", sans-serif;
+    font-weight: 700;
     color: $primaryColor;
     letter-spacing: 50px;
     z-index: 1; // 確保 togo-large-text 的 z-index 小於 dog-pic
