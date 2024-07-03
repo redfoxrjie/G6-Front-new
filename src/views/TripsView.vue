@@ -1,12 +1,13 @@
 <template>
   <main>
     <MapGuide />
-    <!-- 傳遞 departureTime 給 MapComponent -->
     <Mapcomponent
       :trip-data="tripData"
       :departure-times="departureTimes"
       @edit-time-click="handleEditTimeClick"
       @edit-plan-setting="showTripSetting"
+      @show-edit-stay-time="showEditStayTimeHandler"
+      @save-stay-time="saveStayTimeHandler"
     />
     <NewTrpLightBox02 :class="{ hidden: !showNewTrpLightBox02 }" @submit-trip="handleTripSubmit" />
     <BlackLayout :class="{ hidden: !showBlackLayout }" />
@@ -22,6 +23,12 @@
       @close-trip-setting="closeTripSetting"
       @submit-trip="handleTripSubmit"
     />
+    <EditStayTime 
+      v-if="isEditStayTimeVisible"
+      :location="selectedLocation"
+      @save-stay-time="saveStayTimeHandler"
+      @close="closeEditStayTime"
+    />
   </main>
 </template>
 
@@ -32,7 +39,8 @@ import Mapcomponent from './MapComponent.vue';
 import NewTrpLightBox02 from '@/components/map/NewTrpLightBox02.vue';
 import BlackLayout from '@/components/layout/BlackLayout.vue';
 import EditDepartureTime from '@/components/map/EditDepartureTime.vue';
-import TripSetting from '@/components/map/TripSetting.vue'; 
+import TripSetting from '@/components/map/TripSetting.vue';
+import EditStayTime from '@/components/map/EditStayTime.vue';
 
 // 使用 ref 定義 reactive 變量來控制顯示狀態
 const showNewTrpLightBox02 = ref(false);
@@ -48,15 +56,9 @@ const selectedDate = ref('');
 const selectedWeekday = ref('');
 const departureTimes = ref({}); // 維護每一天的出發時間
 const displayTripSetting = ref(false); // 控制 TripSetting 顯示狀態
-
-// // 處理行程提交
-// const handleTripSubmit = (data) => {
-//   tripData.value = data;
-
-//   showNewTrpLightBox02.value = false;
-//   showBlackLayout.value = false;
-//   displayTripSetting.value = false;
-// };
+const isEditStayTimeVisible = ref(false); //「編輯停留時間」欄位預設不顯示
+// let selectedLocation = ref(null);
+const selectedLocation = ref(null); // 你的選定地點
 
 // 處理行程提交
 const handleTripSubmit = (data) => {
@@ -119,11 +121,35 @@ const closeTripSetting = () => {
   showBlackLayout.value = false;
 };
 
+/*----------編輯景點停留時間-----------------*/ 
+// 顯示 EditStayTime
+const showEditStayTimeHandler = (location) => {
+  selectedLocation.value = location;
+  isEditStayTimeVisible.value = true;
+};
+
+// 關閉 EditStayTime
+const closeEditStayTime = () => {
+  isEditStayTimeVisible.value = false;
+};
+
+// 儲存停留時間
+const saveStayTimeHandler = (formattedTime) => {
+  // 更新對應日期的停留時間
+  console.log('變更的停留時間：', formattedTime);
+
+  // 傳遞時間到 MapComponent.vue 中的 receivedStayTime
+  selectedLocation.value.receivedStayTime = formattedTime;
+
+  closeEditStayTime(); // 儲存完畢後關閉 EditStayTime 組件
+};
+
 // 在組件載入後顯示 MapGuide、NewTrpLightBox01 及 BlackLayout
 onMounted(() => {
   showNewTrpLightBox02.value = true;
   showBlackLayout.value = true;
 });
+
 </script>
 
 <style lang="scss" scoped>
