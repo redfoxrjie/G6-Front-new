@@ -1,51 +1,70 @@
 <script setup>
 const props = defineProps({
-    uName:{
-        type:String,
-        default:'Josh'
+    uName: {
+        type: String,
+        default: 'Josh'
     },
+    uImg: {
+        type: String,
+        default: 'public/default-userBg.png'
+    },
+    uSize: {
+        type: Number,
+        default: 30
+    }
 
 })
+const parseUserImg = (imgURL) => {
+    // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+    if(imgURL) return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+    return 'public/default-userBg.png'
+}
+
 </script>
 <template>
     <div class="user-account-wrapper">
         <div class="ua-img">
-            <img src="https://fakeimg.pl/300x200/200">
+            <img :src= parseUserImg(uImg)>
         </div>
-        <div class="ua-name"><p>{{ uName }}</p></div>
+        <div class="ua-name">
+            <p>{{ uName }}</p>
+        </div>
     </div>
 </template>
 <style lang="scss" scoped>
 @import '../../assets/styles/base/font';
 
-    $compSize:30px;
-    .user-account-wrapper{
-        width: fit-content;
-        height: $compSize;
-        padding: 2px 0px;
-        display: flex; 
-        align-items: center;
-        .ua-name{
-            height: fit-content;
-            margin-left: 5px;
-            // line-height: $compSize;
-        }   
+$compSize: 30px;
 
-        .ua-img{
+// $compSize:10;
+.user-account-wrapper {
+    width: fit-content;
+    height: $compSize;
+    // height: $compSize  +'px';
+    padding: 2px 0px;
+    display: flex;
+    align-items: center;
+
+    .ua-name {
+        height: fit-content;
+        margin-left: 5px;
+        // line-height: $compSize;
+    }
+
+    .ua-img {
         // height: 100%;
-        width: $compSize * .8;
+        // width: calc($compSize*.8)   +'px';
+        width: calc($compSize*.8);
         aspect-ratio: 1;
         border-radius: 50%;
         overflow: hidden;
-            img{
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
     }
-    }
-    
-
-
+}
 </style>

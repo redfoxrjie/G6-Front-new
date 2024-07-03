@@ -33,7 +33,7 @@ const router = createRouter({
       component: () => import('../views/BlogView.vue')
     },
     {
-      path: '/blog/:b_id',
+      path: '/blog/:query',
       name: 'blogPage',
       component: () => import('../views/BlogPageView.vue')
     },
@@ -78,7 +78,7 @@ const router = createRouter({
       component: () => import('../views/EditMemberMainView.vue')
     },
     {
-      path: '/tripsSearchResult',
+      path: '/tripsSearchResult/:query',
       name: 'tripsSearchResult',
       component: () => import('../views/TripsSearchResultView.vue')
     },
@@ -98,9 +98,10 @@ const router = createRouter({
       component: () => import('../views/ContactView.vue')
     },
     {
-      path: '/blogSearchResult',
-      name: 'blogSearchResult',
-      component: () => import('../views/BlogSearchResultView.vue')
+      path: '/blogsSearchResult/:query',
+      name: 'blogsSearchResult',
+      component: () => import('../views/BlogsSearchResultView.vue'),
+      
     },
     // {
     //   path: '/blogPage',
@@ -118,6 +119,11 @@ const router = createRouter({
       name: 'NotFound',
       component: () => import('../views/NotFoundView.vue') 
     },
+    {
+      path: '/test',
+      name: 'testpage',
+      component: () => import('../views/TestPageView.vue') 
+    }
     // {
     //   path: '/PageFooter',
     //   name: 'PageFooter',

@@ -7,21 +7,26 @@
                 </div>
                 <span>返回</span>
             </div>
-            <div class="journey-banner"
-                :style="{ backgroundImage:'url(' + parseServerImg(item.b_img) + ')' }"
-            >
+            <p style="color: orange;">資料傳回確認(done)</p>
+            {{ blogpost }}
+            <hr>
+            <p style="color: orange;">留言資料傳回確認(done)</p>
+            {{ blogrp }}
+            <hr>
+            <div class="journey-banner" :style="{ backgroundImage: 'url(' + parseServerImg(blogpost.trp_img) + ')' }">
                 <div class="journey-data">
-                    <div class="publish-date font-time">{{ item.b_date }} </div>
-                    <div class="journey-title">{{ item.b_title }}</div>
+                    <div class="publish-date font-time">{{ blogpost.b_date }} </div>
+                    <div class="journey-title">{{ blogpost.b_title }}</div>
                 </div>
                 <div class="like-count" @click="toggleLikes">
-                    <font-awesome-icon :icon="['fas', 'bone']" class="like_icon" /> {{ item.b_likes }} 個讚</div>
+                    <font-awesome-icon :icon="['fas', 'bone']" class="like_icon" /> {{ blogpost.b_likes }} 個讚
+                </div>
             </div>
             <div class="journey-main row">
                 <div class="journey-content col-12 col-md-9">
                     <div class="journey-info">
                         <div class="member">
-                            <div class="mem-data">
+                            <!-- <div class="mem-data">
                                 <div class="mem-headshot">
                                     <img src="https://picsum.photos/300/200/?random=10">
                                 </div>
@@ -29,47 +34,35 @@
                                     <div class="mem-name">Nabi</div>
                                     <div class="mem-slogan">一台相機，一只皮箱，一趟說走就走的旅行</div>
                                 </div>
-                            </div>
-                            <button class="report-btn">檢舉文章</button>
-                        </div>
-                        <div class="journey-intro">
-                            這次旅行從一開始就打算走一個不趕場，不血拚的深度旅遊。也因為靜下心來、放慢腳步在眼前的街道與景點，才能夠品嚐到許多讓人驚豔的在地美食和Nabi我最愛的日系雜貨小店，尤其登上皿倉山展望台欣賞的夜景，在寒風中品味專屬於冬夜的寂靜，讓人著實著迷。詳細的行程和店家介紹，還請見下方介紹囉！
+                            </div> -->
+                            <!-- <button class="report-btn">檢舉文章</button> -->
                         </div>
                     </div>
                     <div class="journey-column">
                         <div class="journey-block">
-                            <h4 class="block-title">博多一番街</h4>
                             <div class="block-img">
                                 <img src="https://picsum.photos/300/200/?random=9">
                             </div>
                             <div class="paragraph">
-                                第一天抵達JR博多站時已經是上午11點多，飢腸轆轆的我當然要來朝聖當地上班族常來的「博多一番街」啦！不論是下班後喝杯啤酒吃吃串烤慰勞一下辛苦工作的自己，或是在下午茶時間來品嘗精緻的手作甜點，因為餐館、咖啡館等種類多且豐富，提供各種地道的日本料理和特色商品讓這裡從早到晚都有絡繹不絕的旅客拜訪。重點是店家營業的時間也相對較晚，也歡迎外國旅客。下次來到福岡博多，不妨走下通往地下的小樓梯，來趟品味福岡美食的探險之旅吧！
-                            </div>
-                        </div>
-                        <div class="journey-block">
-                            <h4 class="block-title">博多一番街</h4>
-                            <div class="block-img">
-                                <img src="https://picsum.photos/300/200/?random=9">
-                            </div>
-                            <div class="paragraph">
-                                第一天抵達JR博多站時已經是上午11點多，飢腸轆轆的我當然要來朝聖當地上班族常來的「博多一番街」啦！不論是下班後喝杯啤酒吃吃串烤慰勞一下辛苦工作的自己，或是在下午茶時間來品嘗精緻的手作甜點，因為餐館、咖啡館等種類多且豐富，提供各種地道的日本料理和特色商品讓這裡從早到晚都有絡繹不絕的旅客拜訪。重點是店家營業的時間也相對較晚，也歡迎外國旅客。下次來到福岡博多，不妨走下通往地下的小樓梯，來趟品味福岡美食的探險之旅吧！
+                                <p v-html="formattedContent(blogpost.b_content)"></p>
                             </div>
                         </div>
                     </div>
                     <div class="comment-section">
-                        <div class="comment-count">留言(1)</div>
+                        <div class="comment-count">留言({{ blogrp.length }})</div>
                         <div class="comment-list">
-                            <div class="comment-item">
+                            <div class="comment-item" v-for="rp in blogrp">
                                 <div class="comment-head">
                                     <div class="comment-mem">
                                         <div class="mem-headshot">
-                                            <img src="https://picsum.photos/300/200/?random=10">
+                                            <img :src=parseUserImg(rp.u_avatar)>
                                         </div>
-                                        <div class="mem-name">jenny</div>
+                                        <div class="mem-name">{{ rp.u_nickname }}</div>
                                     </div>
-                                    <div class="timediff">1 天前</div>
+                                    <div class="timediff">{{ rp.rp_date }}</div>
                                 </div>
-                                <div class="comment-text">我也超喜歡門司港的バナナカステラ~香蕉的味道很濃厚，而且底層砂糖顆粒脆脆的嚼感很讚~ 可惜當時買太少了，分給家裡弟弟妹妹之後就沒剩幾塊，下次去一定要買多一點。</div>
+                                <div class="comment-text">{{ rp.rp_content }}
+                                </div>
                             </div>
                         </div>
                         <div class="comment-input">
@@ -77,9 +70,9 @@
                                 <div class="comment-head">
                                     <div class="comment-mem">
                                         <div class="mem-headshot">
-                                            <img src="https://picsum.photos/300/200/?random=8">
+                                            <img src="/public/default-userImg.png">
                                         </div>
-                                        <div class="mem-name">nabi</div>
+                                        <div class="mem-name">訪客</div>
                                     </div>
                                 </div>
                                 <form class="comment-text">
@@ -114,7 +107,7 @@
                         </div>
                         <button class="show-plan-btn">查看行程</button>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -122,11 +115,15 @@
 </template>
 
 <script>
+import GCompUserAcoount from '@/components/global/GCompUserAcoount.vue';
+
 export default {
     data() {
         return {
             item: [],
-            liked: false
+            liked: false,
+            blogpost: {},
+            blogrp: {}
         }
     },
     methods: {
@@ -135,7 +132,7 @@ export default {
             try {
                 const response = await fetch(`${import.meta.env.BASE_URL}json/data.json`);
                 const data = await response.json();
-                
+
                 // 確認 data 中的 blog 是一個陣列
                 if (data.blog && Array.isArray(data.blog)) {
                     this.item = data.blog.find(blog => blog.b_id == blogId);
@@ -147,13 +144,34 @@ export default {
                 console.error('Error loading JSON data:', error);
             }
         },
+        async fetchData() {
+            try {
+
+                let path = `${import.meta.env.VITE_API_URL}/front`;
+                let url = path + `/blogPostView.php?keyword=` + this.$route.params.query;
+
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log('http://localhost/g6-php-main/front/blogPageView.php')
+                console.log('url:', url)
+                console.log(data)
+
+                // 存取資料到陣列中
+                this.blogpost = data.blogpost;
+                this.blogrp = data.blog_rp;
+                // blogsCount.value = data.blogs.length; //計算blog總數
+            } catch (error) {
+                console.log('erro link at', `${import.meta.env.VITE_API_URL}/front/blog...View.php`)
+                console.error('Error fetching data:', error);
+            }
+        },
         toggleLikes() {
             if (this.item.liked) {
                 this.item.b_likes -= 1;
             } else {
                 this.item.b_likes += 1;
             }
-        this.item.liked = !this.item.liked;
+            this.item.liked = !this.item.liked;
         },
         parseImg(imgURL) {
             // 將相對路徑解析成正確的 URL
@@ -163,13 +181,25 @@ export default {
             // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
             return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
         },
+        parseUserImg(imgURL) {
+            // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+            if (imgURL) return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+            return '/public/default-userBg.png'
+        },
         goBack() {
             window.history.back(); // 返回前一頁
+        },
+        formattedContent(raw) {
+            if (raw) {
+                return raw.replace(/\\n/g, '<br>');
+            } else { return '' }
+
         }
     },
     mounted() {
-        this.loadJsonData(); // 在組件mounted之後載入data
-    },
+        // this.loadJsonData(); // 在組件mounted之後載入data
+        this.fetchData();
+    }
 };
 </script>
 
@@ -177,8 +207,13 @@ export default {
 @import '../assets/styles/base/color';
 @import '../assets/styles/base/font';
 
+.whitespace {
+    white-space: pre-line;
+}
+
 article {
     margin-top: 120px;
+
     .container {
         .goback-wrapper {
             margin: 12px 0 16px;
@@ -186,6 +221,7 @@ article {
             align-items: center;
             cursor: pointer;
             width: fit-content;
+
             .prev-arrow {
                 border: 1px solid $black;
                 width: fit-content;
@@ -194,13 +230,16 @@ article {
                 border-radius: 50%;
                 cursor: pointer;
             }
-            &:hover{
+
+            &:hover {
                 color: $secondColor-2;
+
                 .prev-arrow {
                     border: 1px solid $secondColor-2;
                 }
             }
         }
+
         .journey-banner {
             width: 100%;
             aspect-ratio: 2.87/1;
@@ -211,10 +250,12 @@ article {
             align-items: flex-end;
             box-sizing: border-box;
             padding: 18px 20px;
+
             .journey-data {
                 .publish-date {
                     letter-spacing: $base-fontSize * 0.75 * 0.1;
                 }
+
                 .journey-title {
                     font-size: $base-fontSize * 1.375;
                     line-height: 140%;
@@ -222,8 +263,10 @@ article {
                     margin-top: 6px;
                 }
             }
+
             .like-count {
                 font-size: $base-fontSize * 0.75;
+
                 // &::before{
                 //     content: '';
                 //     width: 28px;
@@ -234,28 +277,34 @@ article {
                 //     vertical-align: middle;
                 //     cursor: pointer;
                 // }
-                .like_icon{
+                .like_icon {
                     font-size: 22px;
                     color: #ffffff;
                     cursor: pointer;
-                    &:hover{
+
+                    &:hover {
                         color: $accent-bgDrop;
                     }
                 }
             }
         }
+
         .journey-main {
             margin: 60px 0;
-            .journey-content{
+
+            .journey-content {
                 box-sizing: border-box;
                 padding: 0 24px;
+
                 .journey-info {
                     .member {
                         display: flex;
                         justify-content: space-between;
-                        .mem-data{
+
+                        .mem-data {
                             display: flex;
                             align-items: center;
+
                             .mem-headshot {
                                 width: 58px;
                                 aspect-ratio: 1/1;
@@ -263,30 +312,36 @@ article {
                                 border-radius: 50%;
                                 object-fit: cover;
                                 margin-right: 16px;
+
                                 img {
                                     width: 100%;
                                     height: 100%;
                                     display: inline-block;
+
                                 }
                             }
+
                             .title-wrapper {
                                 .mem-name {
                                     font-size: $base-fontSize * 1.375;
                                     margin: 6px 0;
                                 }
+
                                 .mem-slogan {
                                     font-size: $base-fontSize * 0.75;
                                     color: $gray;
                                 }
-                            } 
+                            }
                         }
-                        .report-btn{
+
+                        .report-btn {
                             align-self: flex-end;
                             font-size: $base-fontSize * 0.75;
                             border: 1px solid $gray;
                             color: $gray;
                             padding: 6px 12px;
                             cursor: pointer;
+
                             &::before {
                                 content: '';
                                 vertical-align: middle;
@@ -298,6 +353,7 @@ article {
                             }
                         }
                     }
+
                     .journey-intro {
                         font-size: $base-fontSize * 0.875;
                         line-height: 140%;
@@ -305,21 +361,26 @@ article {
                         margin-top: 14px;
                     }
                 }
+
                 .comment-section {
                     border: 1px solid $black;
                     background-color: $secondColor-1;
                     border-radius: 10px;
                     box-sizing: border-box;
-                    padding:  14px 22px 52px;
-                    .comment-count{
+                    padding: 14px 22px 52px;
+
+                    .comment-count {
                         font-size: $base-fontSize;
                         margin-bottom: 30px;
                     }
-                    .comment-list, .comment-input {
+
+                    .comment-list,
+                    .comment-input {
                         .comment-item {
                             border: 1px solid $black;
                             border-radius: 11px;
                             margin-bottom: 30px;
+
                             .comment-head {
                                 font-size: $base-fontSize * 0.875;
                                 background-color: $secondColor-2;
@@ -331,32 +392,42 @@ article {
                                 display: flex;
                                 justify-content: space-between;
                                 align-items: center;
-                                .comment-mem{
+
+                                .comment-mem {
                                     display: flex;
                                     align-items: center;
-                                    .mem-headshot{
+
+                                    .mem-headshot {
                                         width: 56px;
                                         aspect-ratio: 1/1;
                                         overflow: hidden;
                                         border-radius: 50%;
                                         margin-right: 18px;
+
+                                        img {
+                                            width: 100%;
+                                            height: 100%;
+                                        }
                                     }
                                 }
                             }
+
                             .comment-text {
                                 background-color: $primaryColor;
                                 font-size: $base-fontSize * 0.833;
-                                border-radius:  0 0 10px 10px;
+                                border-radius: 0 0 10px 10px;
                                 box-sizing: border-box;
                                 padding: 22px;
                                 line-height: 160%;
+
                                 textarea {
                                     width: 100%;
                                     min-height: 50px;
                                     background-color: $primaryColor;
                                     resize: none;
                                 }
-                                .submit-btn{
+
+                                .submit-btn {
                                     background-color: $accentColor-1;
                                     padding: 6px 26px;
                                     border-radius: 36px;
@@ -370,24 +441,30 @@ article {
                     }
                 }
             }
+
             .journey-column {
                 border-left: 1px solid $black;
                 box-sizing: border-box;
                 padding: 0 48px;
-                margin: 48px 0; 
+                margin: 48px 0;
+
                 .journey-block {
                     margin: 48px 0 86px;
-                    .block-title{
+
+                    .block-title {
                         margin: 24px 0;
                     }
-                    .block-img{
+
+                    .block-img {
                         width: 100%;
                         aspect-ratio: 2.43/1;
                         overflow: hidden;
+
                         img {
                             width: 100%;
                         }
                     }
+
                     .paragraph {
                         font-size: $base-fontSize * 0.875;
                         line-height: 180%;
@@ -395,22 +472,27 @@ article {
                     }
                 }
             }
+
             .trip-plan {
-                .day-trip-wrapper{
+                .day-trip-wrapper {
                     background-color: unset;
                     box-sizing: border-box;
                     padding: 24px 30px;
+
                     .day-trip {
                         display: none;
                         gap: 12px;
-                        .day-index{}
-                        .spot-list{
+
+                        .day-index {}
+
+                        .spot-list {
                             li {
                                 margin-bottom: 18px;
                                 font-size: $base-fontSize * 0.875;
                             }
                         }
                     }
+
                     .show-plan-btn {
                         margin: 16px auto;
                         padding: 10px 42px;
@@ -420,34 +502,41 @@ article {
                         font-size: $base-fontSize * 0.875;
                         display: block;
                         background-color: $accentColor-1;
-                    } 
+                    }
                 }
             }
         }
     }
 }
-@media screen and (min-width: 768px){
-        article {
+
+@media screen and (min-width: 768px) {
+    article {
         margin-top: 120px;
+
         .container {
             .journey-main {
                 margin: 60px 0;
+
                 .trip-plan {
-                    .day-trip-wrapper{
+                    .day-trip-wrapper {
                         background-color: $accentColor-1;
                         box-sizing: border-box;
                         padding: 24px 30px;
-                            .day-trip {
+
+                        .day-trip {
                             display: flex;
                             gap: 12px;
-                            .day-index{}
-                            .spot-list{
+
+                            .day-index {}
+
+                            .spot-list {
                                 li {
                                     margin-bottom: 18px;
                                     font-size: $base-fontSize * 0.875;
                                 }
                             }
                         }
+
                         .show-plan-btn {
                             margin: 16px auto;
                             padding: 10px 42px;
@@ -456,7 +545,7 @@ article {
                             cursor: pointer;
                             font-size: $base-fontSize * 0.875;
                             display: block;
-                        } 
+                        }
                     }
                 }
             }

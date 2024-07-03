@@ -4,6 +4,7 @@
             <font-awesome-icon icon="arrow-left" />
         </div>
         <h2>最新消息</h2>
+        
         <div class="news-content" v-if="item">
             <div class="news-info">
                 <div class="news-title">{{ item.title }}</div>
