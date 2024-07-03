@@ -37,38 +37,37 @@
         <div class="Order_Check frame">
           <h5>確認行程</h5>
           <div class="Check_Card">
-            <img :src="parseServerImg(formData.ticketImage)" :alt="formData.ticketName" />
+            <img :src="parseServerImg(ticket.image)" :alt="ticket.image" />
             <div class="Check_Txt">
-              {{ formData.ticketName }}
+              {{ ticket.name }}
               <p>{{ todayDate }}<br>無有效期限</p>
             </div>
           </div>
           <div class="Check_Note">
             <textarea placeholder="特殊需求備註"></textarea>
           </div>
-          <button class="btn-1">繼續</button>
         </div>
-        <div class="Order_Purchase frame">
+        <div class="Order_Purchase frame" ref="accountSection" >
           <h5>請確認付款資訊</h5>
           <div class="ECPay">
-            <input type="checkbox">
-            <label for="">綠界</label>
+            <input type="checkbox" v-model="formData.ecpay">
+            <label>綠界</label>
           </div>
           <div class="Account">
-            <input type="checkbox">
-            <label for="">轉帳</label>
+            <input type="checkbox" v-model="formData.transfer">
+            <label>轉帳</label>
             <table class="Account_Title">
               <tr class="Account_Price">
                 <td>轉出金額</td>
-                <td><input type="text"></td>
+                <td><input type="text" v-model="formData.transferAmount"></td>
               </tr>
               <tr class="Account_Number1">
                 <td>銀行代碼</td>
-                <td><input type="text"></td>
+                <td><input type="text" v-model="formData.bankCode"></td>
               </tr>
               <tr class="Account_Number1">
                 <td>轉出帳號</td>
-                <td><input type="text"></td>
+                <td><input type="text" v-model="formData.accountNumber"></td>
               </tr>
             </table>
           </div>
@@ -80,9 +79,9 @@
         <div class="Order">
           <div>
             <h4><font-awesome-icon :icon="['fas', 'paw']" style="color: #FFD43B;" /> 訂單總項目</h4>
-            <p>{{ formData.count }}項商品</p>
-            <p class="ticket_name">{{ formData.ticketName }}</p>
-            <p>支付總金額: TWD {{ formData.totalPrice }}</p>
+            <p>{{ ticket.count }}項商品</p>
+            <p class="ticket_name">{{ ticket.name }}</p>
+            <p>支付總金額: TWD {{ ticket.totalPrice }}</p>
           </div>    
           <button class="btn-1" @click="orderFinish">立即訂購</button>
         </div>
@@ -93,36 +92,105 @@
 
 <script>
 import Swal from 'sweetalert2';
-
+// console.log("test"+this.$route); 
 export default {
   name: "TicketOrder",
   data() {
-    // console.log("接回來的值");
-    // console.log("ticketId:"+ this.$route.query.ticketId);
-    // console.log("count:"+  parseInt(this.$route.query.count));
-    // console.log("totalPrice:"+ this.$route.query.totalPrice);
     return {
       formData: {
-        count: parseInt(this.$route.query.count) || 0,
-        ticketName: this.$route.query.ticketName || '',
-        ticketImage: this.$route.query.ticketImage || '',
-        totalPrice: parseFloat(this.$route.query.totalPrice) || 0
+        name: '',
+        birthdate: '',
+        country: '',
+        phone: '',
+        email: '',
+        ecpay: false,
+        transfer: false,
+        transferAmount: '',
+        bankCode: '',
+        accountNumber: '',
+        // count: parseInt(this.$route.query.count) || 0, //如果轉換後的count值是NaN（非數值）或未定義，則默認設置為0。
+        // ticketName: this.$route.query.ticketName || '',
+        // ticketImage: this.$route.query.ticketImage || '',
+        // totalPrice: parseFloat(this.$route.query.totalPrice) || 0
       },
-      todayDate: ''
+      ticket: {
+        id: '',
+        name: '',
+        image:'',
+        totalPrice: 0,
+        count :0
+      },
+      todayDate: '',
     };
+    
+  },
+  created() {
+    this.ticket.id = this.$route.query.id;
+    this.ticket.name = this.$route.query.name;
+    this.ticket.image = this.$route.query.image;
+    this.ticket.totalPrice = this.$route.query.totalPrice;
+    this.ticket.count = this.$route.query.count;
+  },
+  computed: {
+    isFormValid() { //確認框一是否都有填寫
+      return this.formData.name !== '' &&
+        this.formData.birthdate !== '' &&
+        this.formData.country !== '' &&
+        this.formData.phone !== '' &&
+        this.formData.email !== '';
+    },
+    isOrderValid() { //確認框一框二填寫
+      const isTransferValid = this.formData.transfer
+      ? (this.formData.transferAmount !== '' &&
+      this.formData.bankCode !== '' &&
+      this.formData.accountNumber !== '')
+      : true;
+      
+      return this.isFormValid && (this.formData.ecpay || (this.formData.transfer && isTransferValid));     
+    }
   },
   methods:{
-    getTodayDate(){
+    // async loadJsonData(){
+    //     try {
+    //         const response = await fetch('http://localhost/phpG6/back/getTicketOrder.php', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             // 如果有需要傳遞的資料，可以透過 body 屬性傳遞
+    //             body: JSON.stringify({
+    //                 // 可以放你要傳遞的資料的物件
+    //                 t_id: this.$route.params.id 
+    //             })
+    //         });
+
+    //         // const data = await response.json();
+    //         // console.log('Ticket Data:'+ data);
+
+    //         const responseData = await response.json();
+    //         console.log('Response:', responseData);
+    //         // 將後端返回的票券資料存入 tickets 中
+    //         this.tickets = responseData.tickets[0];
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //     }
+    // },
+
+    getTodayDate(){ //抓訂購當天日期
       const today = new Date();
       const year = today.getFullYear();
       const month = String(today.getMonth()+1).padStart(2,'0');
       const day = String(today.getDate()).padStart(2,'0');
       return `${year}-${month}-${day}`;
     },
-    orderFinish(){
-      this.showSuccessAlert();
+    orderFinish(){ //條件完全符合or不符合
+      if (this.isOrderValid){
+        this.showSuccessAlert();
+      }else{
+        this.showErrorAlert();
+      }
     },
-    showSuccessAlert(){
+    showSuccessAlert(){ //成功彈窗
       Swal.fire({
         title: '已完成訂單',
         text: '請到gmail信箱領取您的QRcode票券',
@@ -132,7 +200,15 @@ export default {
         confirmButtonColor: '#4F82D4'
       })
     },
-    showSplit(e){
+    showErrorAlert(){ //失敗彈窗
+      Swal.fire({
+        title: '尚未填寫完成無法訂購',
+        text: '請完整填寫所有必填項目',
+        icon: 'warning',
+        confirmButtonText: '確定',
+      })
+    },
+    showSplit(e){ //分票彈窗
       if(e.target.checked){
         Swal.fire({
           title: '受票者資訊',
@@ -159,7 +235,7 @@ export default {
             console.log('User details:', result.value);
             Swal.fire('Submitted!', 'Your details have been submitted.', 'success');
           } else {
-            e.target.checked = false; // Uncheck the checkbox if user cancels
+            e.target.checked = false;
           }
         });
       }
@@ -171,6 +247,17 @@ export default {
     parseServerImg(imgURL) {
           // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
                 return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
+    },
+    submitForm() {
+      if (this.isFormValid) {
+        this.scrollnext(); 
+      } else {
+        alert('請填入完整資訊');
+      }
+    },
+    scrollnext(){
+      // 使用$refs 獲取accountSection元素，進行scroll
+      this.$refs.accountSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   },
   mounted(){

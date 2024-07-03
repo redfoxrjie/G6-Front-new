@@ -3,43 +3,60 @@
     <div class="section-full-width row">
       <div id="itinerary" class="col col-12 col-md-4 col-lg-3">
         <div class="sidebar-header">
-            <div class="cover-img">
-              <img src="@/assets/images/japan_yufuin-kinrinko.jpg">
+            <div class="cover-img" v-if="coverImageUrl">
+              <img :src="coverImageUrl" alt="Cover Image" />
             </div>
             <div class="cover-text">
-              <div class="plan-region">日本</div>
-              <h4 class="plan-title">北九州五天四夜雙人行</h4>
-              <div class="plan-dates font-time">2024/05/19－2024/05/23</div>
+              <div class="plan-region">
+                <font-awesome-icon icon="location-dot" />
+                {{ tripData.selectedArea }}
+              </div>
+              <h4 class="plan-title">{{ tripData.tripName }}</h4>
+              <div class="plan-dates font-time">
+                <span id="trpSdate">{{ tripData.startDate }}</span>
+                －
+                <span class="trpEdate">{{ tripData.endDate }}</span>
+              </div>
             </div>
             <div class="functions">
-              <div class="option-btn">
+              <div class="option-btn" @click="showFunctionList = !showFunctionList">
                 <font-awesome-icon icon="ellipsis" size="lg" />
               </div>
+              <FunctionList 
+                v-if="showFunctionList" 
+                @coverImageUploaded="handleCoverImageUploaded" 
+                @edit-plan-setting="handleEditPlanSetting"
+              />
               <div class="star-rate">
                 <IconStarRating />
               </div>
             </div>
         </div>
-        <div class="days-tabs">
+        <div v-if="daysCount" class="days-tabs">
           <div
           v-for="day in daysCount" :key="day"
-          class="tabs" 
+          :class="['tabs', {selected: day === selectedDay}]"
           @click="selectDay(day)"
           >
             第{{ day }}天
           </div>
         </div>
-        <div class="day-settings">
-          <div class="departure-time">
-            出發時間：
-            <span class="edit-time">04:10</span>
+        <ul
+          v-for="day in daysCount" :key="day"
+          v-show="selectedDay === day"
+          class="day-plan-list">
+          <div v-if="daysCount" class="day-settings">
+            <div class="departure-time">
+              出發時間：
+              <span class="edit-time" @click="handleEditTimeClick(day)">{{ departureTimes[calculateDate(day)] || '07:00' }}</span>
+            </div>
+            <div class="day-info">
+              {{ calculateDate(day) }} ({{ getWeekday(day) }})
+            </div>
           </div>
-          <div class="day-info">2024/05/19 (日)</div>
-        </div>
-        <ul v-if="selectedDay !== null" class="day-plan-list">
-          <li v-for="location in itinerary" :key="location.place_id || location.osm_id"
+          <li v-for="location in getItineraryForDay(day)" :key="location.place_id || location.osm_id"
             draggable="true"
-            @dragstart="dragStart(location)"
+            @dragstart="dragStart(location, $event)"
             @dragend="dragEnd"
             @dragover="dragOver"
             @drop="drop">
@@ -73,8 +90,17 @@
         </div>
       </div>
     </div>
+     <!-- 0627新增：筆記彈出層組件 -->
+     <NotePopup
+      :isOpen="isNotePopupOpen"
+      :initialTitle="noteTitle"
+      :initialContent="noteContent"
+      @close="closeNotePopup"
+      @save="saveNote"
+    />
   </main>
 </template>
+
 <script>
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';  // 引入leaflet的CSS
@@ -82,8 +108,24 @@ import 'leaflet-control-geocoder'; // 引入地理編碼器
 import { debounce } from 'lodash'; // 引入lodash的去抖動函數
 import Fuse from 'fuse.js'; // 引入Fuse.js
 import IconStarRating from '@/components/icons/IconStarRating.vue';
+import NotePopup from '@/components/map/NotePopup.vue';// 新增：導入 NotePopup 組件
+import FunctionList from '@/components/map/FunctionList.vue';
 
 export default {
+  props: {
+    tripData: {
+      type: Object,
+      required: true,
+    },
+    onEditTimeClick: {
+      type: Function,
+      required: true,
+    },
+    departureTimes: {
+      type: Object,
+      required: true
+    },
+  },
   data() {
     return {
       map: null, // 儲存地圖實例
@@ -96,15 +138,25 @@ export default {
       overItem: null, //儲存被觸發dragover的實例
       search: "",
       plan: null,
-      daysCount: null, // 儲存計算後的天數
+      daysCount: 0, // 初始化 daysCount 為 0
       selectedDay: 1,
+      startDateObj: null, // 新增開始日期的 Date 物件
+      weekdays: ['日', '一', '二', '三', '四', '五', '六'], // 儲存星期幾的名稱
       isMapVisible: true, 
       switchBtnText: '返回行程',
-      defaultMarkerIcon: null //保存自定義marker icon
+      defaultMarkerIcon: null, //保存自定義marker icon
+      // 新增：筆記相關的數據
+      isNotePopupOpen: false,
+      noteTitle: '',
+      noteContent: '',
+      coverImageUrl: sessionStorage.getItem('coverImage') || 'src/assets/images/default-userBg.png',
+      showFunctionList: false, // 預設隱藏 FunctionList
     };
   },
   components: {
-    IconStarRating //評星小功能
+    IconStarRating, //評星小功能
+    NotePopup, // 新增：註冊 NotePopup 組件
+    FunctionList,
   },
   computed: {
     filteredSearchResults() {
@@ -118,10 +170,24 @@ export default {
       return this.itinerary.filter(item => item.day === this.selectedDay);
     }
   },
+  watch: {
+    tripData: {
+      handler(newValue, oldValue) {
+        if (newValue.startDate && newValue.endDate) {
+          this.startDateObj = new Date(newValue.startDate); // 更新開始日期的 Date 物件
+          this.calcDaysDiff(); // 重新計算天數
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   methods: {
     // 初始化地圖
     initializeMap() {
-      this.map = L.map('map-container').setView([24.958277478835058, 121.22528019206256], 13);
+      // 台灣的setView
+      // this.map = L.map('map-container').setView([24.958277478835058, 121.22528019206256], 13);
+      this.map = L.map('map-container').setView([35.682203, 139.7617181], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(this.map);
@@ -141,9 +207,16 @@ export default {
       // 初始化地理編碼器
       this.geocoder = L.Control.Geocoder.nominatim({
         geocodingQueryParams: {
+          //---------------------------------台灣
+          // limit: 50, // 增加返回结果的數量上限
+          // countrycodes: 'tw', // 限制结果在台灣
+          // viewbox: '120.8,25.3,122.1,21.8', // 限制在台灣範圍
+          // bounded: 1 // 使視圖框架生效
+
+          //-----------------------------------日本
           limit: 50, // 增加返回结果的數量上限
-          countrycodes: 'tw', // 限制结果在台灣
-          viewbox: '120.8,25.3,122.1,21.8', // 限制在台灣範圍
+          countrycodes: 'jp', // 限制结果在日本
+          viewbox: '122.56,20.25,153.59,45.33', // 限制在日本範圍
           bounded: 1 // 使視圖框架生效
         }
       });
@@ -164,8 +237,11 @@ export default {
         this.searchResults = [];
         return;
       }
+      //台灣區域的資料fetch
+      // fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(this.searchQuery)}&format=json&addressdetails=1&limit=50&countrycodes=tw`)
 
-      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(this.searchQuery)}&format=json&addressdetails=1&limit=50&countrycodes=tw`)
+      //日本區域的資料fetch
+      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(this.searchQuery)}&format=json&addressdetails=1&limit=50&countrycodes=jp`)
         .then(response => response.json())
         .then(results => {
           this.searchResults = results.map(result => ({
@@ -181,7 +257,7 @@ export default {
             class: result.class,
             type: result.type,
             importance: result.importance,
-            full_address: `${result.address?.postcode || ''}${result.address?.country || ''}${result.address?.city || ''} ${result.address?.town || ''} ${result.address?.road|| ''}`
+            full_address: `${result.address?.postcode || ''}${result.address?.country || ''}${result.address?.province || ''}${result.address?.city || ''} ${result.address?.town || ''} ${result.address?.quarter || ''}${result.address?.road|| ''}`
           }));
 
           // 創建或更新 Fuse.js 實例
@@ -202,7 +278,7 @@ export default {
 
       // 在地圖上添加搜索结果的marker
       const marker = L.marker([latlng.lat, latlng.lng], { icon: this.defaultMarkerIcon }).addTo(this.map)
-      .bindPopup(this.createPopupContent(result));
+      .bindPopup(this.createMarkerPopupContent(result));
         
       // 儲存標記
       this.markers.push({ location: result, marker: marker });
@@ -231,13 +307,22 @@ export default {
     },
 
     // 加入行程
+    // addToPlan(location) {
+    //   if (!this.itinerary.some(item => item.place_id === location.place_id)) {
+    //     this.itinerary.push(location);
+    //   }
+    // },
     addToPlan(location) {
       if (!this.itinerary.some(item => item.place_id === location.place_id)) {
+        location.day = this.selectedDay; // 將行程分配到選中的天數
         this.itinerary.push(location);
       }
     },
-
-    // 删除行程中的地點
+    // --------------- 返回對應天數的行程 ------------------------------------
+    getItineraryForDay(day) {
+      return this.itinerary.filter(item => item.day === day);
+    },
+    // -----------------删除行程中的地點-----------------------------------
     removeLocation(location) {
       // 找到對應的標記
       const markerObj = this.markers.find(marker => marker.location === location);
@@ -254,17 +339,9 @@ export default {
       this.itinerary = this.itinerary.filter(item => item !== location);
     },
     // -------------------------Darg and Drop--------------------------------
-    dragStart(location) {
+    dragStart(location, event) {
       this.source = location;
-    },
-    dragEnd(){
-      this.source = null;
-    },
-    clearOverItem() {
-      if (!this.overItem) return;
-      this.overItem.classList.remove('before');
-      this.overItem.classList.remove('after');
-      this.overItem = null;
+      event.target.classList.add('dragging'); // drag開始時添加dragging類別
     },
     dragOver(event) {
       this.clearOverItem();
@@ -280,29 +357,50 @@ export default {
       }
       event.preventDefault();
     },
-
+    dragEnd(event){
+      if (event && event.target) {
+        event.target.classList.remove('dragging'); // drag結束時移除dragging
+      }
+      this.source = null;
+      
+    },
+    clearOverItem() {
+      if (!this.overItem) return;
+      this.overItem.classList.remove('before');
+      this.overItem.classList.remove('after');
+      this.overItem = null;
+    },
     drop(event) {
       if (!this.source) return;
 
+      // 確認正確的ul列表
+      const dayPlanList = event.target.closest('ul.day-plan-list');
+        
+      if (!dayPlanList) return; // 如果找不到對應的ul，則返回
+        
+      // 確認 overItem 的位置
+      const listItems = Array.from(dayPlanList.children);
+      let overIndex = listItems.indexOf(this.overItem);
+      
       // 清除原本位置的 this.source
       const sourceIndex = this.itinerary.indexOf(this.source);
       this.itinerary.splice(sourceIndex, 1);
 
-      // 確認 overItem 的位置，並將 this.source 插入正確的位置
+      // 檢查 overItem 的位置和 class
+      if (this.overItem && this.overItem.classList.contains('after')) {
+        overIndex++;
+      }
+    
+      // 如果 `sourceIndex` 在 `overIndex` 之前，則 `overIndex` 需要減少1
+      if (sourceIndex < overIndex) {
+        overIndex--;
+      }
+    
+      // 將 this.source 插入正確的位置
       if (this.overItem) {
-        const list = this.$el.querySelector('.day-plan-list');
-        let overIndex = Array.from(list.children).indexOf(this.overItem);
-      
-        // 檢查 overItem 的位置和 class
-        if (this.overItem.classList.contains('after')) {
-          overIndex++;
-        } else if (this.overItem.classList.contains('before') && overIndex > 0) {
-          overIndex--;
-        }
-      
         this.itinerary.splice(overIndex, 0, this.source);
       } else {
-        // 如果没有 overItem，默認将 this.source 插入到列表末尾
+        // 如果没有 overItem，默認將 this.source 插入到列表末尾
         this.itinerary.push(this.source);
       }
     
@@ -310,9 +408,21 @@ export default {
       this.clearOverItem();
       this.source = null;
     
-      // console.log出 行程列表 中每個<li>的index值與對應的location.name，藉此檢查是否換位正確
-      this.itinerary.forEach((location, index) => {
+      // 打印當下天數的行程列表
+      console.log(`Current day (${this.selectedDay}) itinerary:`);
+      this.getItineraryForDay(this.selectedDay).forEach((location, index) => {
         console.log(`Index: ${index}, Name: ${location.name}`);
+      });
+       // 打印所有天數的行程列表
+      this.printItineraryForAllDays();
+    },
+    printItineraryForAllDays() {
+      const days = new Set(this.itinerary.map(item => item.day));
+      days.forEach(day => {
+        console.log(`Day ${day} itinerary:`);
+        this.getItineraryForDay(day).forEach((location, index) => {
+          console.log(`Index: ${index}, Name: ${location.name}`);
+        });
       });
     },
     //----------------行程資料帶入-----------------
@@ -330,10 +440,22 @@ export default {
                     // console.log(`Error: ${error}`);
                 });
         },
-    //-------計算行程天數----------
-    calcDaysDiff(sdate, edate) {
-      const start = new Date(sdate);
-      const end = new Date(edate);
+    //-----------------------------------計算行程天數
+    // 根據開始日期計算第 day 天的日期
+    calculateDate(day) {
+      const date = new Date(this.startDateObj);
+      date.setDate(date.getDate() + (day - 1));
+      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+    },
+    // 根據開始日期計算第 day 天是星期幾
+    getWeekday(day) {
+      const date = new Date(this.startDateObj);
+      date.setDate(date.getDate() + (day - 1));
+      return this.weekdays[date.getDay()];
+    },
+    calcDaysDiff() {
+      const start = new Date(this.tripData.startDate);
+      const end = new Date(this.tripData.endDate);
       const timeDiff = end - start; //結束日期 減 開始日期，得到毫秒差
       const daysDiff = timeDiff / (1000 * 60 * 60 * 24); //將毫秒數轉換為"天數"
       this.daysCount = daysDiff + 1; //包含開始和結束日期的總天數
@@ -342,26 +464,109 @@ export default {
     //----------選擇第N天的行程表--------
     selectDay(day) {
       this.selectedDay = day;
-      console.log(this.selectedDay); //檢查點擊的天數
+      this.printItineraryForAllDays(); // 打印所有天數的行程列表以檢查獨立性
+      console.log(`Selected day: ${this.selectedDay}`); // 檢查點擊的天數
     },
-    //----------手機版地圖開關---------
+    handleEditTimeClick(day) {
+      this.$emit('edit-time-click', { date: this.calculateDate(day), weekday: this.getWeekday(day) });
+    },
+    //----------手機版地圖與行程列表顯示切換---------
     mbMapToggle(){
       this.isMapVisible = !this.isMapVisible;
       this.switchBtnText = this.isMapVisible ? '返回行程' : '顯示地圖';
+    },
+    // 新增：打開筆記彈出層
+    openNotePopup(location) {
+      this.noteTitle = location.name || '';
+      this.noteContent = location.full_address || '';
+      this.isNotePopupOpen = true;
+    },
+
+    // 新增：關閉筆記彈出層
+    closeNotePopup() {
+      this.isNotePopupOpen = false;
+    },
+
+    // 新增：保存筆記
+    saveNote(note) {
+      console.log('保存的筆記:', note);
+      // 這裡可以添加保存筆記到行程或其他邏輯
+      this.closeNotePopup();
+    },
+    // 修改：創建 popup 內容，添加新的「添加筆記」按鈕
+    createMarkerPopupContent(result) {
+      const container = document.createElement('div');
+      container.innerHTML = `
+        <div style='font-size: 16px; font-weight: bold;'>${result.name}</div>
+        <div style='color: #888'>${result.full_address}</div>
+      `;
+      
+      const addToPlanButton = document.createElement('button');
+      addToPlanButton.textContent = '加入行程';
+      addToPlanButton.style.color = '#4F82D4';
+      addToPlanButton.style.cursor = 'pointer';
+      addToPlanButton.addEventListener('click', () => {
+        this.addToPlan(result);
+      });
+      
+      // 新增：添加筆記按鈕
+      const addNoteButton = document.createElement('button');
+      addNoteButton.textContent = '添加筆記';
+      addNoteButton.style.color = '#4F82D4';
+      addNoteButton.style.cursor = 'pointer';
+      addNoteButton.style.marginLeft = '10px';
+      addNoteButton.addEventListener('click', () => {
+        this.openNotePopup(result);
+      });
+      
+      container.appendChild(addToPlanButton);
+      container.appendChild(addNoteButton);
+      return container;
+    },
+    /*--------------------行程封面照片-----------------------*/
+    // 處理來自FunctionList.vue的圖片資料暫存於sessionStorage
+    handleCoverImageUploaded(imageUrl) {
+      this.coverImageUrl = imageUrl;
+      sessionStorage.setItem('coverImage', imageUrl);
+      this.showFunctionList = false;
+    },
+    clearCoverImage() {
+      // 清除 sessionStorage 中的 coverImage 資料
+      sessionStorage.removeItem('coverImage');
+      console.log('coverImage 已清除');
+    },
+    /*------------------Function List----------------------*/
+    toggleFunctionList() {
+      this.showFunctionList = !this.showFunctionList;
+    },
+    closeFunctionList() {
+      this.showFunctionList = false;
+    },
+    // 處理並傳送點擊EditPlanSetting觸發的事件到父組件
+    handleEditPlanSetting() {
+      this.$emit('edit-plan-setting');
+      this.showFunctionList = false;
     }
+
   },
   mounted() {
     this.initializeMap(); // 初始化地圖
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this.setCurrentLocation, this.showError); // 獲取目前的地理位置
     } else {
-      alert('您的浏览器不支持地理定位功能');
+      alert('您的瀏覽器或裝置不支援GPS定位功能');
     }
     this.loadJsonData();
-    this.calcDaysDiff('2024/05/19', '2024/05/23');
+    this.calcDaysDiff();
+
+    // 監聽 beforeunload 事件，以在掛載時先清除儲存於session storage的行程封面
+    window.addEventListener('beforeunload', this.clearCoverImage);
+  },
+  beforeUnmount() {
+    // 移除 beforeunload 事件監聽
+    window.removeEventListener('beforeunload', this.clearCoverImage);
   },
 };
-
 </script>
 
 
@@ -370,12 +575,20 @@ export default {
 @import '../assets/styles/base/color';
 @import '../assets/styles/base/font';
 
+.hidden {
+  display: none;
+}
 .section-full-width{
+  width: 100%;
+  position: relative;
   margin-top: 54px;
   margin-bottom: 0;
 }
 
 /* 行程列表樣式 */
+li.dragging{
+      opacity: 1 !important;
+    }
 #itinerary {
   display: flex;
   flex-direction: column;
@@ -390,6 +603,7 @@ export default {
       img { 
         width: 100%;
         height: 100%;
+        object-fit: cover;
         display: inline-block;
         filter: brightness(75%);
       }
@@ -399,12 +613,13 @@ export default {
       bottom: 12px;
       left: 12px;
       color: $primaryColor;
+      text-shadow: 1px 1px 3px rgba(0,0,0,.4);
       .plan-region{
         font-size: $base-fontSize * 0.875;
       }
       .plan-title {
-        margin: 6px 0;
-        width: 70%;
+        margin: 8px 0;
+        width: 100%;
       }
     }
     .functions {
@@ -422,21 +637,7 @@ export default {
       }
     }
   }
-  //出發時間日期樣式
-  .day-settings{
-    display: flex;
-    justify-content: space-between;
-    box-sizing: border-box;
-    padding: 12px 12px;
-    font-size: 0.8rem;
-    .departure-time {
-      .edit-time {
-        text-decoration: underline;
-        cursor: pointer;
-      }
-    }
-    .day-info {}
-  }
+  
   //行程景點清單
   .day-plan-list{
     box-sizing: border-box;
@@ -446,7 +647,6 @@ export default {
     li{
       position: relative;
       width: 100%;
-      
       cursor: grab;
       margin: 12px 0;
       background-color: #fff;
@@ -502,6 +702,20 @@ export default {
       bottom: -5px;
       left: 0;
     }
+    //出發時間日期樣式
+    .day-settings{
+      display: flex;
+      justify-content: space-between;
+      box-sizing: border-box;
+      padding: 12px 6px;
+      font-size: 0.8rem;
+      .departure-time {
+        .edit-time {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+    }
   }
   .days-tabs {
     display: flex;
@@ -516,6 +730,9 @@ export default {
       text-align: center;
       color: $black;
       flex-grow: 1;
+      &.selected {
+        border-bottom: 2px solid $secondColor-2;
+      }
     }
   }
   .mb-btn-fixed {

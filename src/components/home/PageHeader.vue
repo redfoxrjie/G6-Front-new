@@ -26,11 +26,13 @@
                     <RouterLink to="/contact">聯絡我們</RouterLink>
                 </li>
                 <!-- <li><RouterLink to="/trips">暫時的地圖編輯位置等到學會怎麼在icon切換頁面</RouterLink></li> -->
-                <li v-if="user">
-                    <router-link to="/EditMemberMain">
-                        <img :src="user.u_avatar" style="width: 50px; height: 50px;"><br>
-                        <span>{{ user.u_nickname }}</span>
-                    </router-link>
+                <li v-if="isLoggedIn">
+                    <router-link to="/member">
+                        <img :src="userInfo.u_avatar"
+                            style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid;"><br>
+                        <span>{{ userInfo.u_nickname }}</span>
+                    </router-link><br>
+                    <button @click="logout" class="logout">登出</button>
                 </li>
                 <li v-else>
                     <button class="openLoginModal" @click="openLoginModal">會員登入</button>
@@ -47,6 +49,18 @@
                 <div class="amoeba"></div>
                 <div class="slogan">土狗陪您 TOGO 展開新的旅程</div>
                 <div class="togo-large-text">TOGO</div>
+                <div class="dog-pic dog-0">
+                    <img src="@/assets/images/airplane-dog.png" alt="飛機狗">
+                </div>
+                <div class="dog-pic dog-1">
+                    <img src="@/assets/images/dog-1.png" alt="地圖狗">
+                </div>
+                <div class="dog-pic dog-2">
+                    <img src="@/assets/images/dog-2.png" alt="行李狗">
+                </div>
+                <div class="dog-pic dog-3">
+                    <img src="@/assets/images/dog-3.png" alt="購物狗">
+                </div>
             </div>
             <RouterLink to="/" class="logo">
                 <img src="@/assets/images/global/logo/logo.png" alt="Logo">
@@ -57,23 +71,74 @@
             <div class="center-background"></div>
             <div class="content-item content-item-1">
                 <div class="pic"></div>
+                <div class="icon icon-item-1">
+                    <img src="@/assets/images/icon-map.png" alt="icon-map">
+                </div>
                 <div class="text">行程共享群組化<br>多團規劃不緊張</div>
             </div>
             <div class="content-item content-item-2">
-                <div class="pic">
+                <div class="pic"></div>
+                <div class="icon icon-item-2">
+                    <img src="@/assets/images/icon-ticket.png" alt="icon-ticket">
                 </div>
                 <div class="text">票券，行程一站搞定<br>自由行也能從容優雅</div>
             </div>
             <div class="content-item content-item-3">
-                <div class="pic">
+                <div class="pic"></div>
+                <div class="icon icon-item-3">
+                    <img src="@/assets/images/icon-pin.png" alt="icon-pin">
                 </div>
                 <div class="text">精選目的地<br>享受無盡無礙的旅行</div>
             </div>
             <div class="content-item content-item-4">
-                <div class="pic">
+                <div class="pic"></div>
+                <div class="icon icon-item-4">
+                    <img src="@/assets/images/icon-airplane.png" alt="icon-airplane">
                 </div>
-                <div class="text">隨時隨地<br>輕鬆計劃您的下一次冒險</div>
+                <div class="text">世界各地美景<br>隨時隨地<br>輕鬆計劃您的下一次冒險</div>
             </div>
+        </section>
+        <section class="ocean-img">
+            <!-- 海洋波浪遮罩 -->
+            <div class="oceanwave-container-up">
+                <svg class="oceanwave" viewBox="0 0 1800 100" preserveAspectRatio="none">
+                    <path d="M -150 25 Q -125 12.5, -100 25 T -50 25 T 0 25 T 50 25 T 100 25 T 150 25 
+                   T 200 25 T 250 25 T 300 25 T 350 25 T 400 25 T 450 25 T 500 25 
+                   T 550 25 T 600 25 T 650 25 T 700 25 T 750 25 T 800 25 T 850 25 
+                   T 900 25 T 950 25 T 1000 25 T 1050 25 T 1100 25 T 1150 25
+                   T 1200 25 T 1250 25 T 1300 25 T 1350 25 T 1400 25 T 1450 25 T 1500 25 
+                   T 1550 25 T 1600 25 T 1650 25 T 1700 25 T 1750 25 T 1800 25 V 0 H -150 Z" fill="#F6F5F1" />
+                    <path d="M -150 25 Q -125 12.5, -100 25 T -50 25 T 0 25 T 50 25 T 100 25 T 150 25 
+                   T 200 25 T 250 25 T 300 25 T 350 25 T 400 25 T 450 25 T 500 25 
+                   T 550 25 T 600 25 T 650 25 T 700 25 T 750 25 T 800 25 T 850 25 
+                   T 900 25 T 950 25 T 1000 25 T 1050 25 T 1100 25 T 1150 25
+                   T 1200 25 T 1250 25 T 1300 25 T 1350 25 T 1400 25 T 1450 25 T 1500 25 
+                   T 1550 25 T 1600 25 T 1650 25 T 1700 25 T 1750 25 T 1800 25" stroke="#F6F5F1" stroke-width="3"
+                        fill="none" />
+                </svg>
+            </div>
+            <div class="ocean-pic">
+                <img src="@/assets/images/ocean-img.jpg" alt="海洋圖片">
+            </div>
+            <div class="text">TOGOTRAVEL</div>
+            <div class="oceanwave-container-down">
+            <svg class="oceanwave" viewBox="0 0 1800 50" preserveAspectRatio="none">
+                <path d="M -150 25 Q -125 12.5, -100 25 T -50 25 T 0 25 T 50 25 T 100 25 T 150 25 
+                   T 200 25 T 250 25 T 300 25 T 350 25 T 400 25 T 450 25 T 500 25 
+                   T 550 25 T 600 25 T 650 25 T 700 25 T 750 25 T 800 25 T 850 25 
+                   T 900 25 T 950 25 T 1000 25 T 1050 25 T 1100 25 T 1150 25
+                   T 1200 25 T 1250 25 T 1300 25 T 1350 25 T 1400 25 T 1450 25 T 1500 25 
+                   T 1550 25 T 1600 25 T 1650 25 T 1700 25 T 1750 25 T 1800 25 V 100 H -150 Z"
+                    fill="#EDEAE1" />
+                <path d="M -150 25 Q -125 12.5, -100 25 T -50 25 T 0 25 T 50 25 T 100 25 T 150 25 
+                   T 200 25 T 250 25 T 300 25 T 350 25 T 400 25 T 450 25 T 500 25 
+                   T 550 25 T 600 25 T 650 25 T 700 25 T 750 25 T 800 25 T 850 25 
+                   T 900 25 T 950 25 T 1000 25 T 1050 25 T 1100 25 T 1150 25
+                   T 1200 25 T 1250 25 T 1300 25 T 1350 25 T 1400 25 T 1450 25 T 1500 25 
+                   T 1550 25 T 1600 25 T 1650 25 T 1700 25 T 1750 25 T 1800 25" stroke="#EDEAE1"
+                    stroke-width="3" fill="none" />
+            </svg>
+        </div>
         </section>
         <!-- 會員登入彈窗 -->
         <LoginRegisterModal :isVisible="isLoginModalVisible" @close="closeLoginModal"
@@ -84,6 +149,8 @@
 
 <script>
 import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import { storeToRefs } from 'pinia';
 import { RouterLink, RouterView, useRouter } from 'vue-router';
 import LoginRegisterModal from '../layout/LoginRegisterBox.vue';
 
@@ -94,11 +161,15 @@ export default defineComponent({
         LoginRegisterModal
     },
     setup() {
+
+        const userStore = useUserStore();
+        const { isLoggedIn, userInfo } = storeToRefs(userStore);
+
         const isMenuClosed = ref(false);
         const menu = ref(null);
         const isLoginMode = ref(true);
         const isLoginModalVisible = ref(false);
-        const user = ref(null);
+        // const user = ref(null);
 
         const toggleMenu = () => {
             isMenuClosed.value = !isMenuClosed.value;
@@ -115,6 +186,7 @@ export default defineComponent({
         onBeforeUnmount(() => {
             menu.value.removeEventListener('click', toggleMenu);
         });
+
         // 頁面切換
         const router = useRouter();
         const goToPage = (toLink) => {
@@ -128,34 +200,39 @@ export default defineComponent({
         };
 
         // 將登錄成功後傳送會員資料及關閉lightbox
-        const closeLoginModal = (data) => {
+        const closeLoginModal = () => {
             isLoginModalVisible.value = false;
-            if (data && data.status === 'login-success') {
-                loginSuccessHandler(data.user);
-            }
         };
 
         // 登入成功後更新用戶資料
         const loginSuccessHandler = (userData) => {
-            console.log("登入成功：", userData);
-            user.value = userData;  // 更新用戶數據
-            closeLoginModal();      // 關閉登入彈窗
-        }
+            userStore.setUser(userData);
+            closeLoginModal();
+        };
+
+        const logout = () => {
+            userStore.logout();
+            router.push('/'); // 重定向到首頁或其他頁面
+            openLoginModal(); // 登出後重新打開登錄彈窗
+        };
 
         const switchMode = (mode) => {
             isLoginMode.value = mode;
         };
+
         return {
             isMenuClosed,
             toggleMenu,
             menu,
-            user,
+            isLoggedIn,
+            userInfo,
             isLoginModalVisible,
             openLoginModal,
             closeLoginModal,
             loginSuccessHandler,
             switchMode,
-            goToPage
+            goToPage,
+            logout,
         };
     },
 });
@@ -173,10 +250,21 @@ body {
 
 header {
     position: relative;
-    padding-bottom: 20px;
 }
 
 nav {
+    .menu-button div:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .menu-button div:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-button div:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
     background-color: $secondColor-2;
     color: $accentColor-2;
     width: 200px;
@@ -192,9 +280,6 @@ nav {
     right: 0;
     transition: height 0.3s ease-in-out;
     z-index: 100;
-    .menu-button div:nth-child(1) {transform: translateY(8px) rotate(45deg);}
-    .menu-button div:nth-child(2) {opacity: 0;}
-    .menu-button div:nth-child(3) {transform: translateY(-8px) rotate(-45deg);}
 
     ul {
         list-style: none;
@@ -207,7 +292,6 @@ nav {
         flex-grow: 1;
         height: fit-content;
         transition: height 0.3s ease-in-out;
-        order: 2;
 
         li {
             text-align: center;
@@ -237,6 +321,28 @@ nav {
 
     }
 
+    .logout {
+        position: relative;
+        margin-top: 20px;
+        color: $primaryColor;
+
+        &::after {
+            content: " ";
+            position: absolute;
+            right: 50%;
+            left: 50%;
+            bottom: -4px;
+            border-bottom: 4px solid $accentColor-1;
+            transition: .3s;
+        }
+
+        &:hover::after {
+            right: 0%;
+            left: 0%;
+        }
+
+    }
+
     .bottom-section {
         display: flex;
         flex-direction: column;
@@ -246,7 +352,6 @@ nav {
         box-sizing: border-box;
         border-top: solid 1px $primaryColor;
         cursor: pointer;
-        order: 3;
 
         img {
             width: 30px;
@@ -268,8 +373,8 @@ nav {
     border: none;
     cursor: pointer;
     margin-bottom: 20px;
-    align-self: right;
-    order: 1;
+    align-self: center;
+
     div {
         width: 25px;
         height: 3px;
@@ -311,6 +416,7 @@ nav.closed {
     left: 20px;
     width: 60px;
     height: 60px;
+    z-index: 2000;
 
     img {
         width: 100%;
@@ -326,20 +432,114 @@ nav.closed {
     overflow: hidden;
 }
 
+.dog-pic {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2; // 設定一個較大的 z-index 值
+
+    img {
+        width: 5vw;
+    }
+
+}
+
+//地圖狗
+.dog-1 {
+    position: relative;
+    left: 70vw; // 將此值調整為所需的水平偏移量
+    animation: move1 1.5s infinite linear;
+}
+
+@keyframes move1 {
+    0% {
+        transform: translate3d(0, 0%, 0);
+    }
+
+    25% {
+        transform: translate3d(0, 5%, 0);
+    }
+
+    75% {
+        transform: translate3d(0, -5%, 0);
+    }
+
+    100% {
+        transform: translate3d(0, 0%, 0);
+    }
+}
+
+//行李狗
+.dog-2 {
+    position: relative;
+    top: 5vh;
+    animation: move2 1s infinite linear;
+}
+
+@keyframes move2 {
+    0% {
+        transform: translate3d(0, 0%, 0);
+    }
+
+    25% {
+        transform: translate3d(0, 5%, 0);
+    }
+
+    75% {
+        transform: translate3d(0, -5%, 0);
+    }
+
+    100% {
+        transform: translate3d(0, 0%, 0);
+    }
+}
+
+//購物狗
+.dog-3 {
+    position: relative;
+    left: 80vw; // 將此值調整為所需的水平偏移量
+    top: 20vh;
+    animation: move3 2s infinite linear;
+}
+
+@keyframes move3 {
+    0% {
+        transform: translate3d(0, 0%, 0);
+    }
+
+    25% {
+        transform: translate3d(0, 5%, 0);
+    }
+
+    75% {
+        transform: translate3d(0, -5%, 0);
+    }
+
+    100% {
+        transform: translate3d(0, 0%, 0);
+    }
+}
+
 .amoeba {
     position: absolute;
     top: -100px;
-    right: -4vw;
+    // right: -4vw;
     width: 96vw;
     height: 100%;
     background: url('../../assets/images/index_banner.jpg') center/cover no-repeat;
-    animation: morph 5s ease-in-out infinite alternate, change 30s linear infinite alternate;
+    // -webkit-mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
+    // mask: url('../../assets/images/amoeba/banner_amoeba.svg') center/cover no-repeat;
+    // -webkit-mask-size: cover;
+    // mask-size: cover;
+    // animation: morph 5s ease-in-out infinite alternate, change 30s linear infinite alternate;
+    animation: morph 8s ease-in-out infinite both alternate;
     box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
+    z-index: 1; // 確保 amoeba 的 z-index 小於 dog-pic
 }
 
 .slogan {
     font-size: 1.9rem;
-    letter-spacing: 1.25vw;
+    letter-spacing: 16px;
     position: absolute;
     top: 40%;
     left: 20%;
@@ -347,29 +547,29 @@ nav.closed {
     background: rgba(246, 245, 241, 0.6);
     padding: 14px 20px;
     border-radius: 10px;
-    text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
+    z-index: 1; // 確保 slogan 的 z-index 小於 dog-pic
 }
 
 .togo-large-text {
     position: absolute;
-    top: 55%;
+    bottom: 10%;
     right: 20%;
     transform: translate(10%, -10%);
     font-size: 10rem;
     color: $primaryColor;
-    letter-spacing: 4vw;
-    z-index: 1;
+    letter-spacing: 50px;
+    z-index: 1; // 確保 togo-large-text 的 z-index 小於 dog-pic
     text-align: center;
-    text-shadow: 1px 2px 1px rgba(69, 69, 69, 0.5);
 }
 
 @keyframes morph {
     0% {
-        border-radius: 33% 67% 70% 30%;
+        border-radius: 14% 0% 23% 42% / 82% 48% 47% 55%;
+
     }
 
     100% {
-        border-radius: 40% 60% 42% 58%;
+        border-radius: 40% 60%;
     }
 }
 
@@ -394,9 +594,6 @@ nav.closed {
         left: 0;
         right: 0;
         z-index: 1000;
-        .bottom-section {order: 1;}
-        .menu-button {order: 3;}
-        ul {order: 2;}
     }
 
     nav.closed {
@@ -438,14 +635,16 @@ nav.closed {
     }
 }
 
+//四張小圖
 .content {
     position: relative;
     width: 100%;
-    height: 1300px;
+    height: 1250px;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    /* 防止溢出 */
 }
 
 .center-background {
@@ -459,102 +658,324 @@ nav.closed {
 
 .content-item {
     position: absolute;
-    width: fit-content;
+    width: 20%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     text-align: center;
     flex-direction: column;
     box-sizing: border-box;
-    padding: 10px 0;
 }
 
 
 .text {
     color: $black;
     font-size: 1rem;
-    line-height: 1.6rem;
     text-align: center;
     padding: 10px;
     border-radius: 5px;
+    position: absolute;
 }
-.pic {
-    width: 40vw;
-    max-width: 400px;
-    aspect-ratio: 1/1;
-}
+
 .content-item-1 {
-    top: 5%;
-    left: 10%;
+    top: 3%;
+    left: 25%;
 
     .pic {
+        width: 300px;
+        height: 300px;
         background: url('../../assets/images/index_amoeba1.jpg') center/cover no-repeat;
-        -webkit-mask: url('../../assets/images/amoeba/NO1.svg') center/contain no-repeat;
-        mask: url('../../assets/images/amoeba/NO1.svg') center/contain no-repeat;
-        -webkit-mask-size: contain;
-        mask-size: contain;
-        // animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
+        // -webkit-mask: url('../../assets/images/amoeba/NO1.svg') center/cover no-repeat;
+        // mask: url('../../assets/images/amoeba/NO1.svg') center/cover no-repeat;
+        // -webkit-mask-size: cover;
+        animation: morph1 10s ease-in-out infinite alternate,
+		change1 20s linear infinite alternate;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
+        z-index: 1; // 確保 amoeba 的 z-index 小於 dog-pic  
+
     }
 
     .text {
         font-size: 1.2rem;
-        margin: 10px 0;
+        letter-spacing: 4px;
+        line-height:1.5;
+        top: 35%;
+        left: -80%;
+        z-index: 2;
     }
+}
+
+@keyframes morph1 {
+    0%,
+	100% {
+		border-radius: 68% 55% 80% 50% / 68% 60% 70% 55%;
+	}
+	20% {
+		border-radius: 37% 63% 51% 49% / 37% 65% 35% 63%;
+	}
+	40% {
+		border-radius: 36% 64% 64% 36% / 64% 48% 52% 36%;
+	}
+	60% {
+		border-radius: 37% 63% 51% 49% / 30% 30% 70% 70%;
+	}
+	80% {
+		border-radius: 40% 60% 42% 58% / 41% 51% 49% 59%;
+	}
+}
+@keyframes change1 {
+	100% {
+		background-position: 100% 50%;
+	}
 }
 
 .content-item-2 {
-    top: 15%;
-    right: 14%;
+    top: 30%;
+    right: 18%;
 
     .pic {
+        width: 300px;
+        height: 300px;
         background: url('../../assets/images/index_amoeba2.jpg') center/cover no-repeat;
-        -webkit-mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
-        mask: url('../../assets/images/amoeba/NO2.svg') center/contain no-repeat;
-        -webkit-mask-size: contain;
-        mask-size: contain;
-        animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
-    }
+        // -webkit-mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
+        // mask: url('../../assets/images/amoeba/NO2.svg') center/cover no-repeat;
+        // -webkit-mask-size: cover;
+        animation: morph2 10s ease-in-out infinite alternate,
+		change1 20s linear infinite alternate;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
+        z-index: 1; // 確保 amoeba 的 z-index 小於 dog-pic  
 
-    .text {
-        font-size: 1.2rem;
     }
+}
+@keyframes morph2 {
+    0%,
+	100% {
+		border-radius: 41% 59% 70% 30% / 30% 68% 32% 70% ;
+	}
+	20% {
+		border-radius: 37% 63% 51% 49% / 37% 65% 35% 63%;
+	}
+	40% {
+		border-radius: 36% 64% 64% 36% / 64% 48% 52% 36%;
+	}
+	60% {
+		border-radius: 37% 63% 51% 49% / 30% 30% 70% 70%;
+	}
+	80% {
+		border-radius: 40% 60% 42% 58% / 41% 51% 49% 59%;
+	}
+}
 
+
+.content-item-2 .text {
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    line-height:1.5;
+    white-space:pre;
+    bottom: -10%;
+    right: -45%;
+    z-index: 2;
 }
 
 .content-item-3 {
-    bottom: 15%;
+    bottom: 28%;
     left: 15%;
 
-    .pic {
-        background: url('../../assets/images/index_amoeba3.jpg') center/cover no-repeat;
-        -webkit-mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
-        mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
-        -webkit-mask-size: contain;
-        mask-size: contain;
-        animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
-    }
+}
 
-    .text {
-        font-size: 1.2rem;
-    }
+.content-item-3 .pic {
+    width: 300px;
+    height: 300px;
+    background: url('../../assets/images/index_amoeba3.jpg') center/cover no-repeat;
+    // -webkit-mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
+    // mask: url('../../assets/images/amoeba/NO3.svg') center/cover no-repeat;
+    // -webkit-mask-size: cover;
+    animation: morph3 10s ease-in-out infinite alternate,
+	change1 20s linear infinite alternate;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
+    z-index: 1; // 確保 amoeba 的 z-index 小於 dog-pic  
+}
+@keyframes morph3 {
+    0%,
+	100% {
+		border-radius: 65% 35% 46% 54% / 56% 68% 32% 44% ;
+	}
+	20% {
+		border-radius: 37% 63% 51% 49% / 37% 65% 35% 63%;
+	}
+	40% {
+		border-radius: 36% 64% 64% 36% / 64% 48% 52% 36%;
+	}
+	60% {
+		border-radius: 37% 63% 51% 49% / 30% 30% 70% 70%;
+	}
+	80% {
+		border-radius: 40% 60% 42% 58% / 41% 51% 49% 59%;
+	}
+}
+
+.content-item-3 .text {
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    line-height:1.5;
+    white-space:pre;
+    text-align:left;
+    bottom: 18%;
+    left: 109%;
+    z-index: 2;
 }
 
 .content-item-4 {
-    bottom: 5%;
-    right: 10%;
-    .pic {
-        background: url('../../assets/images/index_amoeba4.jpg') center/cover no-repeat;
-        -webkit-mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
-        mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
-        -webkit-mask-size: contain;
-        mask-size: contain;
-        animation: morph 30s ease-in-out infinite alternate, change 60s linear infinite alternate;
-    }
-    .text {
-        font-size: 1.2rem;
-    }
+    bottom: 1%;
+    right: 20%;
 }
 
+.content-item-4 .pic {
+    width: 300px;
+    height: 300px;
+    background: url('../../assets/images/index_amoeba4.jpg') center/cover no-repeat;
+    // -webkit-mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
+    // mask: url('../../assets/images/amoeba/NO4.svg') center/cover no-repeat;
+    // -webkit-mask-size: cover;
+    animation: morph2 10s ease-in-out infinite alternate,
+	change1 20s linear infinite alternate;
+    // box-shadow: 0 4px 30px rgba(0, 0, 0, .2);
+    z-index: 2; // 確保 amoeba 的 z-index 小於 dog-pic  
+}
+@keyframes morph4 {
+    0%,
+	100% {
+		border-radius: 82% 18% 73% 27% / 25% 22% 78% 75%  ;
+	}
+	20% {
+		border-radius: 37% 63% 51% 49% / 37% 65% 35% 63%;
+	}
+	40% {
+		border-radius: 36% 64% 64% 36% / 64% 48% 52% 36%;
+	}
+	60% {
+		border-radius: 37% 63% 51% 49% / 30% 30% 70% 70%;
+	}
+	80% {
+		border-radius: 40% 60% 42% 58% / 41% 51% 49% 59%;
+	}
+}
+
+.content-item-4 .text {
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    line-height:1.5;
+    white-space:pre;
+    text-align:left;
+    bottom: 20%;
+    right: 100%;
+    z-index: 2;
+}
+
+.icon {
+    position: absolute;
+    width: 20%;
+    display: flex;
+    img{
+        width: 5vw;
+        animation: icon-swing 3s infinite;
+        // -webkit-animation: custom-swing 3s;
+        // animation-iteration-count: infinite;
+        // -webkit-animation-iteration-count: infinite;
+    }
+}
+@keyframes icon-swing {
+   8% { transform: rotate3d(0, 0, 1, 20deg); }
+  16% { transform: rotate3d(0, 0, 1, -15deg); }
+  24% { transform: rotate3d(0, 0, 1, 10deg); }
+  32% { transform: rotate3d(0, 0, 1, -5deg); }
+  40% { transform: rotate3d(0, 0, 1, 0deg); }
+}
+//icon-map
+.icon-item-1{
+    top: -12%;
+    left: -50%;
+}
+//icon-ticket
+.icon-item-2{
+    top: 10%;
+    right: -30%;
+}
+//icon-pin
+.icon-item-3{
+    top: 10%;
+    left: -30%;
+    img{
+        width: 2vw;
+    }
+}
+//icon-airplane
+.icon-item-4{
+    top: 10%;
+    right: -35%;
+}
+
+
+//海洋圖片
+.ocean-img {
+    position: relative;
+    img {
+        width: 100%;
+    }
+    .text{
+        color: #FFF;
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 13vw;
+        font-weight: 700;
+        letter-spacing: 1vw; /* 調整字母間距 */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) translateY(135px); /* 向下移動10px */
+        text-align: center; /* 文字置中 */
+        white-space: nowrap; /* 防止文字換行 */
+        }
+}
+
+//海洋波浪遮罩
+.oceanwave-container-up {
+    width: 100%;
+    height: 100px;
+    /* 增加波浪容器的高度以顯示填充色塊 */
+    overflow: hidden;
+    position: absolute;
+    top: 0; /* 確保波浪遮罩在最上方 */
+    z-index: 10; /* 確保波浪遮罩在圖片之上 */
+}
+
+.oceanwave {
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    background-repeat: repeat-x;
+    background-position: 0 center;
+    background-size: 50% 100%;
+    animation: oceanwave-animation 12s linear infinite;
+}
+
+.oceanwave-container-down {
+            width: 100%;
+            height: 50px;
+            overflow: hidden;
+            position: absolute;
+            bottom: 0;
+            z-index: 10;
+        }
+
+@keyframes oceanwave-animation {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
 
 .footer {
     width: 100%;
@@ -565,141 +986,74 @@ nav.closed {
 }
 
 @media (max-width: 768px) {
-    .content {
-        width: 100%;
-        height: 960px;
-        .content-item {
-            width: fit-content;
-        }
-        .text {
-            font-size: 1rem;
-            line-height: 1.2rem;
-        }
+    .content-item {
+        width: 40%;
     }
-    
+
+    .text {
+        font-size: 0.8rem;
+    }
+
     .content-item-1 {
-        top: 5%;
-        left: 5%;
+        top: 15%;
+        left: 10%;
     }
 
     .content-item-2 {
         top: 15%;
-        right: 5%;
+        right: 10%;
     }
 
     .content-item-3 {
-        bottom: 15%;
-        left: 5%;
+        bottom: 10%;
+        left: 10%;
     }
 
     .content-item-4 {
-        bottom: 5%;
-        right: 5%;
+        bottom: 10%;
+        right: 10%;
     }
 
     .center-background {
-        width: 80%;
-        height: 80%;
-        top: 10%;
-    }
-    nav {
-        .bottom-section {order: 1;}
-        .menu-button {order: 3;}
-        ul {order: 2;}
-    }
-    .slogan {
-        font-size: 1.4rem;
-        letter-spacing: 1.25vw;
-        position: absolute;
-        top: 40%;
-        left: 20%;
-        color: $black;
-        background: rgba(246, 245, 241, 0.6);
-        padding: 14px 20px;
-        border-radius: 10px;
-        text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
-    }
-    .togo-large-text {
-        position: absolute;
-        top: 55%;
-        right: 20%;
-        transform: translate(10%, -10%);
-        font-size: 8rem;
-        color: $primaryColor;
-        letter-spacing: 4vw;
-        z-index: 1;
-        text-align: center;
-        text-shadow: 1px 2px 1px rgba(69, 69, 69, 0.5);
+        width: 100%;
+        height: 100%;
+        top: 20%;
     }
 }
 
 @media (max-width: 480px) {
-    .content {
-        width: 100%;
-        height: 700px;
-        .content-item {
-            width: fit-content;
-        }
-        .text {
-            font-size: 0.875rem;
-            line-height: 1rem;
-        }
+    .content-item {
+        width: 60%;
     }
+
+    .text {
+        font-size: 0.6rem;
+    }
+
     .content-item-1 {
-        top: 5%;
+        top: 20%;
         left: 5%;
     }
+
     .content-item-2 {
-        top: 15%;
+        top: 20%;
         right: 5%;
     }
+
     .content-item-3 {
-        bottom: 15%;
+        bottom: 5%;
         left: 5%;
     }
+
     .content-item-4 {
         bottom: 5%;
         right: 5%;
     }
 
     .center-background {
-        width: 90%;
-        height: 90%;
+        width: 110%;
+        height: 110%;
         top: 25%;
-    }
-    nav {
-        .bottom-section {order: 1;}
-        .menu-button {order: 3;}
-        ul {order: 2;}
-    }
-    .amoeba {
-        position: absolute;
-        top: -16%;
-        right: -4vw;
-    }
-    .slogan {
-    font-size: 1.2rem;
-    letter-spacing: .5vw;
-    position: absolute;
-    top: 45%;
-    left: 8%;
-    color: $black;
-    background: rgba(246, 245, 241, 0.6);
-    padding: 7px 10px;
-    border-radius: 10px;
-    text-shadow: 1px 1px 1px rgba(244, 244, 244, 0.329);
-    }
-    .togo-large-text {
-        position: absolute;
-        top: 65%;
-        right: 20%;
-        transform: translate(10%, -10%);
-        font-size: 4rem;
-        color: $primaryColor;
-        letter-spacing: 4vw;
-        z-index: 1;
-        text-align: center;
-        text-shadow: 1px 2px 1px rgba(69, 69, 69, 0.5);
     }
 }
 </style>

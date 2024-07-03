@@ -6,56 +6,65 @@
             <img class="leftHand" src="../assets/images/contactusDog_03.png" alt="">
             <img class="rightHand" src="../assets/images/contactusDog_02.png" alt="">
         </div>
-        <div id="contactus">
+        <div id="contactus"  @submit.prevent="contactFinish">
             <div class="form_frame">
                 <table>
                     <tbody>
                             <tr class="form_group form_name">  
                                 <!-- <td>姓名</td> -->
-                                <td><input type="text" id="name" placeholder="請輸入姓名"></td>
+                                <td><input type="text" id="name" v-model="formData.name" placeholder="請輸入姓名" required></td>
                             </tr>
                             <tr class="form_group form_phone">
                                 <!-- <td>聯絡電話</td> -->
-                                <td><input type="tel" id="tel" placeholder="請輸入電話"></td>
+                                <td><input type="tel" id="tel" v-model="formData.tel" placeholder="請輸入電話" required></td>
                             </tr>
                             <tr class="form_group form_email">
                                 <!-- <td>E-mail</td> -->
-                                <td><input for="email" id="email" placeholder="請輸入e-mail"></td>
+                                <td><input for="email" id="email" v-model="formData.email" placeholder="請輸入e-mail" required></td>
                             </tr>
                     </tbody>
                     <div class="form_group form_choice">
                         <p>想詢問項目</p>
                         {{ checkbox }}<br />
                         <label >
-                        <input type="checkbox">介面操作
+                        <input type="checkbox" v-model="formData.about1">介面操作
                         <!-- <span class="coverStyle"></span> -->
                         </label>
                         <label >
-                        <input type="checkbox">已購入票券
+                        <input type="checkbox" v-model="formData.about2">已購入票券
                         </label>
                         <label >
-                        <input type="checkbox">其他
+                        <input type="checkbox" v-model="formData.about3">其他
                         </label>
                     </div>
                     <div class="form_group">
                         <label for="message"></label>
-                        <textarea id="message" placeholder="想詢問什麼呢"></textarea>
+                        <textarea id="message" v-model="formData.message" placeholder="想詢問什麼呢" required></textarea>
                     </div>
                 </table>
             </div>
-        </div>
-        <div class="btn">
-            <button class="btn-1" @click="contactFinish">確認送出</button>
+            <div class="btn">
+                <button type="submit" class="btn-1">確認送出</button>
+            </div>
         </div>
     </section>
 </template>
 
 <script>
 import Swal from 'sweetalert2';
+// import axios from 'axios';
 export default {
     data() {
         return {
-        
+            formData: {
+                name: '',
+                tel: '',
+                email: '',
+                inquiryInterface: false,
+                inquiryTickets: false,
+                inquiryOther: false,
+                message: ''
+            }
         }
     },
     methods:{
@@ -71,8 +80,25 @@ export default {
                 confirmButtonText: '確定',
                 confirmButtonColor: '#4F82D4'
             })
+        },
+        async contactFinish() {
+            try {
+                // 发送邮件的请求
+                await axios.post('/send-email.php', this.formData); // 或者其他适合你的后端发送邮件的方法和路径
+                alert('Email sent successfully!');
+                this.formData.name = '';
+                this.formData.tel = '';
+                this.formData.email = '';
+                this.formData.inquiryInterface = false;
+                this.formData.inquiryTickets = false;
+                this.formData.inquiryOther = false;
+                this.formData.message = '';
+            } catch (error) {
+                console.error('Failed to send email:', error);
+                alert('Failed to send email. Please try again later.');
+            }
         }
-    }
+    },
 }
 </script>
 
@@ -188,7 +214,7 @@ export default {
         }
         .form_group textarea{
             padding: 10px;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
             height: 200px;
             width: 100%;
             // box-sizing: border-box;
@@ -210,7 +236,7 @@ export default {
     }
     .btn{
         text-align: center;
-        margin: 20px 0px;
+        margin-bottom: 30px;
     }
 </style>
     

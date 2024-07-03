@@ -34,28 +34,24 @@ const parseUserImg = (imgURL) => {
 <style lang="scss" scoped>
 @import '../../assets/styles/base/font';
 
-$compSize: 30px;
+    $compSize:30px;
+    .user-account-wrapper{
+        width: fit-content;
+        height: $compSize;
+        padding: 2px 0px;
+        display: flex; 
+        align-items: center;
+        .ua-name{
+            height: fit-content;
+            margin-left: 5px;
+            font-size: $compSize * .43;
+        }   
 
-// $compSize:10;
-.user-account-wrapper {
-    width: fit-content;
-    height: $compSize;
-    // height: $compSize  +'px';
-    padding: 2px 0px;
-    display: flex;
-    align-items: center;
-
-    .ua-name {
-        height: fit-content;
-        margin-left: 5px;
-        // line-height: $compSize;
-    }
-
-    .ua-img {
+        .ua-img{
         // height: 100%;
-        // width: calc($compSize*.8)   +'px';
-        width: calc($compSize*.8);
-        aspect-ratio: 1;
+        width: $compSize * .6;
+        aspect-ratio: 1/1;
+
         border-radius: 50%;
         overflow: hidden;
 

@@ -40,11 +40,15 @@ const props = defineProps({
 @import '../../assets/styles/base/color';
 
 .trip-card-wrapper {
-    // background-color: #8b3535;
+    max-width: 400px;
     box-sizing: border-box;
     padding: 5px;
+
     // max-width: 400px;
 
+
+
+    cursor: pointer;
 
 }
 
@@ -52,7 +56,6 @@ const props = defineProps({
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
-
     .tc-img {
         width: 100%;
         aspect-ratio: 456/200;

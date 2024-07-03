@@ -5,25 +5,24 @@
                 <div class="register-box" ref="registerBox" :class="{ hidden: !switchLogin }">
                     <h1>register</h1>
                     <!-- Input fields -->
-                    <div class="form-input"><input type="text" placeholder="用戶名稱">
+                    <div class="form-input"><input type="text" placeholder="用戶名稱" v-model="registerUsername">
                         <font-awesome-icon :icon="['fas', 'user']" class="input-icon" />
                     </div>
-                    <div class="form-input"><input type="email" placeholder="Email">
-                        <font-awesome-icon :icon="['fas', 'envelope']" class="input-icon" />
+                    <div class="form-input"><input type="text" placeholder="帳號" v-model="registerAccount">
+                        <font-awesome-icon :icon="['fas', 'user']" class="input-icon" />
                     </div>
-                    <div class="form-input"><input v-model="registerPassword" :type="registerPasswordType"
-                            placeholder="設定密碼">
+                    <div class="form-input"><input v-model="registerPws" :type="registerPwsType" placeholder="設定密碼">
                         <font-awesome-icon
-                            :icon="registerPasswordType === 'password' ? ['fas', 'eye-slash'] : ['fas', 'eye']"
+                            :icon="registerPwsType === 'password' ? ['fas', 'eye-slash'] : ['fas', 'eye']"
                             class="input-icon" @click="togglePasswordVisibility('register')" />
                     </div>
-                    <div class="form-input"><input v-model="registerPasswordConfirm" :type="registerPasswordConfirmType"
+                    <div class="form-input"><input v-model="registerPwsConfirm" :type="registerPwsConfirmType"
                             placeholder="再次確認密碼">
                         <font-awesome-icon
-                            :icon="registerPasswordConfirmType === 'password' ? ['fas', 'eye-slash'] : ['fas', 'eye']"
+                            :icon="registerPwsConfirmType === 'password' ? ['fas', 'eye-slash'] : ['fas', 'eye']"
                             class="input-icon" @click="togglePasswordVisibility('registerConfirm')" />
                     </div>
-                    <button class="register-btn" @click="register" type="submit">註冊</button>
+                    <button class="register-btn" @click="handleRegistration" type="submit">註冊</button>
                     <button class="else-way">
                         <img src="/src/assets/images/global/icons/google.png" alt="">使用google帳號註冊
                     </button>
@@ -36,8 +35,8 @@
                     <h1>login</h1>
                     <!-- Input fields -->
                     <div class="form-input">
-                        <input v-model="email" type="email" placeholder="Email">
-                        <font-awesome-icon :icon="['fas', 'envelope']" class="input-icon" />
+                        <input type="text" v-model="account" placeholder="輸入帳號">
+                        <font-awesome-icon :icon="['fas', 'user']" class="input-icon" />
                     </div>
                     <div class="form-input"><input v-model="password" :type="loginPasswordType" placeholder="輸入密碼">
                         <font-awesome-icon
@@ -81,9 +80,16 @@
 </template>
 
 <script setup>
+import apiInstance from '@/plugins/api';
+import { useUserStore } from '@/stores/userStore';
+import { storeToRefs } from 'pinia';
+import { onMounted, watch } from 'vue';
 import { ref, defineProps, defineEmits } from 'vue';
 import Swal from 'sweetalert2';
-import { isValidEmail, isValidPassword } from '@/components/layout/validation';
+import { isValidPassword } from '@/components/layout/validation';
+
+const userStore = useUserStore();
+const { isLoggedIn, userInfo } = storeToRefs(userStore);
 
 const props = defineProps({
     isVisible: Boolean
@@ -97,49 +103,56 @@ const registerBox = ref(null);
 const loginBox = ref(null);
 
 // 登入表單的輸入綁定
-const email = ref('');
+const account = ref('');
 const password = ref('');
 const loginPasswordType = ref('password');
 
 // 註冊表單的輸入綁定
-// const registerEmail = ref('');
-// const registerUsername = ref('');
-// const registerPassword = ref('');
-// const registerPasswordConfirm = ref('');
-// const registerPasswordType = ref('password');
-// const registerPasswordConfirmType = ref('password');
+const registerUsername = ref('');
+const registerAccount = ref('');
+const registerPws = ref('');
+const registerPwsConfirm = ref('');
+const registerPwsType = ref('password');
+const registerPwsConfirmType = ref('password');
 
 // 切換密碼可見性
 const togglePasswordVisibility = (field) => {
     if (field === 'login') {
         loginPasswordType.value = loginPasswordType.value === 'password' ? 'text' : 'password';
     } else if (field === 'register') {
-        registerPasswordType.value = registerPasswordType.value === 'password' ? 'text' : 'password';
+        registerPwsType.value = registerPwsType.value === 'password' ? 'text' : 'password';
     } else if (field === 'registerConfirm') {
-        registerPasswordConfirmType.value = registerPasswordConfirmType.value === 'password' ? 'text' : 'password';
+        registerPwsConfirmType.value = registerPwsConfirmType.value === 'password' ? 'text' : 'password';
     }
 };
 
+watch(isLoggedIn, (newValue) => {
+    if (newValue) {
+        console.log('用戶已登入:', userInfo.value);
+        // 可以在這裡執行其他登入後的操作
+    }
+});
+
 // 登入事件
 const login = async () => {
-    if (!email.value && !password.value) {
+    if (!account.value && !password.value) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: '請輸入email及密碼'
+            text: '請輸入帳號及密碼'
         });
-    } else if (!email.value) {
+    } else if (!account.value) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: '請輸入有效email'
+            text: '請輸入有效帳號'
         });
-    } else if (!isValidEmail(email.value)) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Invalid Email',
-            text: 'email格式錯誤'
-        });
+        // } else if (!isValidEmail(account.value)) {
+        //     Swal.fire({
+        //         icon: 'error',
+        //         title: 'Invalid Email',
+        //         text: 'email格式錯誤'
+        //     });
     } else if (!password.value) {
         Swal.fire({
             icon: 'error',
@@ -150,123 +163,109 @@ const login = async () => {
         Swal.fire({
             icon: 'error',
             title: 'Invalid Password',
-            text: '(必須為8字元，且包含半形英文字母小寫及數字)',
+            text: '(必須為6字元，且包含半形英文字母小寫及數字)',
         });
-    } else {
-        try {
-            // 模擬API請求
-            const response = await fetch(`${import.meta.env.BASE_URL}json/users.json`);
-            const { users } = await response.json();
-            const user = users.find(user => user.u_account === email.value && user.u_psw === password.value);
+        return;
+    }
+    const formData = new FormData();
+    formData.append('u_account', account.value);
+    formData.append('u_psw', password.value);
 
-            if (user) {
-                emit('close', { status: 'login-success', user: user });
-                ;  //假設登入後關閉彈窗
-                Swal.fire({
-                    icon: 'success',
-                    title: '登入成功!',
-                    timer: 1500,
-                    showConfirmButton: false,
-                });
+    try {
+        const response = await apiInstance.post('http://localhost/phpG6/api/login.php', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
 
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Login Failed',
-                    text: '無法找到該用戶'
-                });
-            }
-        } catch (error) {
+        if (response.data.code === 1 && response.data.memInfo) {
+            console.log('登入成功，會員資料：', response.data.memInfo)
+
+            // 更新 Pinia store
+            userStore.setUser(response.data.memInfo)
+
+            // 驗證狀態是否正確更新
+            console.log('更新後的登入狀態：', userStore.isLoggedIn)
+            console.log('更新後的用戶信息：', userStore.userInfo)
+
+            emit('close', { status: 'login-success', user: response.data.memInfo });
+            ;  //假設登入後關閉彈窗
+            Swal.fire({
+                icon: 'success',
+                title: '登入成功!',
+                timer: 1500,
+                showConfirmButton: false,
+            });
+
+        } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Login Failed',
-                text: '查無此帳號存在'
+                text: '無法找到該用戶'
             });
-            console.error('Login error:', error);
         }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Login Failed',
+            text: '查無此帳號存在'
+        });
+        console.error('Login error:', error);
     }
 };
 
-// // 註冊事件
-// const register = async () => {
-//     if (!registerEmail.value && !registerUsername.value && !registerPassword.value && !registerPasswordConfirm.value) {
-//         Swal.fire({
-//             icon: 'error',
-//             title: 'Oops...',
-//             text: '請輸入所有必填字段'
-//         });
-//     } else if (!registerEmail.value) {
-//         Swal.fire({
-//             icon: 'error',
-//             title: 'Oops...',
-//             text: '請輸入有效email'
-//         });
-//     } else if (!isValidEmail(registerEmail.value)) {
-//         Swal.fire({
-//             icon: 'error',
-//             title: 'Invalid Email',
-//             text: 'email格式錯誤'
-//         });
-//     } else if (!registerUsername.value) {
-//         Swal.fire({
-//             icon: 'error',
-//             title: 'Oops...',
-//             text: '請輸入用戶名稱'
-//         });
-//     } else if (!registerPassword.value) {
-//         Swal.fire({
-//             icon: 'error',
-//             title: 'Oops...',
-//             text: '請輸入密碼'
-//         });
-//     } else if (!isValidPassword(registerPassword.value)) {
-//         Swal.fire({
-//             icon: 'error',
-//             title: 'Invalid Password',
-//             text: '(必須為8字元，且包含半形英文字母小寫及數字)',
-//         });
-//     } else if (registerPassword.value !== registerPasswordConfirm.value) {
-//         Swal.fire({
-//             icon: 'error',
-//             title: 'Oops...',
-//             text: '兩次密碼輸入不一致'
-//         });
-//     } else {
-//         try {
-//             // 模擬API請求
-//             const response = await fetch('/public/json/users.json');
-//             const data = await response.json();
-//             const user = data.users.find(u => u.email === registerEmail.value);
+// 在組件掛載時檢查並恢復登入狀態
+onMounted(() => {
+    const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
+    const storedUserInfo = localStorage.getItem('userInfo');
 
-//             if (!user) {
-//                 data.users.push({
-//                     email: registerEmail.value,
-//                     username: registerUsername.value,
-//                     password: registerPassword.value
-//                 });
-//                 Swal.fire({
-//                     icon: 'success',
-//                     title: '註冊成功!',
-//                     showConfirmButton: false,
-//                 });
-//                 emit('close');  //假設註冊後關閉彈窗
-//             } else {
-//                 Swal.fire({
-//                     icon: 'error',
-//                     title: 'Registration Failed',
-//                     text: '該email已存在'
-//                 });
-//             }
-//         } catch (error) {
-//             Swal.fire({
-//                 icon: 'error',
-//                 title: 'Registration Failed',
-//                 text: '註冊失敗'
-//             });
-//             console.error('Registration error:', error);
-//         }
-//     }
-// };
+    console.log('檢查本地存儲的登入狀態：', storedIsLoggedIn);
+    console.log('檢查本地存儲的用戶資訊：', storedUserInfo);
+
+    if (storedIsLoggedIn === 'true' && storedUserInfo) {
+        const parsedUserInfo = JSON.parse(storedUserInfo);
+        console.log('恢復用戶登入狀態：', parsedUserInfo);
+        userStore.setUser(parsedUserInfo);
+    }
+});
+
+// 註冊事件
+const handleRegistration = async () => {
+    if (!registerUsername.value || !registerAccount.value || !registerPws.value || !registerPwsConfirm.value) {
+        Swal.fire({ icon: 'error', title: '錯誤', text: '所有欄位都是必填的' });
+        return;
+    }
+    // if (!isValidEmail(registerAccount.value)) {
+    //     Swal.fire({ icon: 'error', title: '無效的Email', text: '請輸入有效的Email地址' });
+    //     return;
+    // }
+    if (!isValidPassword(registerPws.value)) {
+        Swal.fire({ icon: 'error', title: '無效的密碼', text: '密碼需要至少6個字符，並包含至少一個字母和一個數字' });
+        return;
+    }
+    if (registerPws.value !== registerPwsConfirm.value) {
+        Swal.fire({ icon: 'error', title: '密碼不匹配', text: '兩次輸入的密碼不一致' });
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('username', registerUsername.value);
+    formData.append('account', registerAccount.value);
+    formData.append('password', registerPws.value);
+    formData.append('nickname', registerUsername.value); // 將使用者名稱作為暱稱
+
+    try {
+        const response = await apiInstance.post('http://localhost/phpG6/front/register.php', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        if (response.data.code === 1) {
+            Swal.fire({ icon: 'success', title: '註冊成功', text: '您已成功註冊！' });
+        } else {
+            Swal.fire({ icon: 'error', title: '註冊失敗', text: response.data.msg });
+        }
+    } catch (error) {
+        Swal.fire({ icon: 'error', title: '註冊失敗', text: '網絡或服務器問題' });
+        console.error('Registration error:', error);
+    }
+};
 
 // 登入註冊切換
 const switchLoginEvent = () => {

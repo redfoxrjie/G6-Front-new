@@ -19,8 +19,10 @@
                     <div class="journey-title">{{ blogpost.b_title }}</div>
                 </div>
                 <div class="like-count" @click="toggleLikes">
+
                     <font-awesome-icon :icon="['fas', 'bone']" class="like_icon" /> {{ blogpost.b_likes }} 個讚
                 </div>
+
             </div>
             <div class="journey-main row">
                 <div class="journey-content col-12 col-md-9">
@@ -34,8 +36,10 @@
                                     <div class="mem-name">Nabi</div>
                                     <div class="mem-slogan">一台相機，一只皮箱，一趟說走就走的旅行</div>
                                 </div>
+
                             </div> -->
                             <!-- <button class="report-btn">檢舉文章</button> -->
+
                         </div>
                     </div>
                     <div class="journey-column">
@@ -122,8 +126,10 @@ export default {
         return {
             item: [],
             liked: false,
+
             blogpost: {},
             blogrp: {}
+
         }
     },
     methods: {
@@ -279,11 +285,13 @@ article {
                 // }
                 .like_icon {
                     font-size: 22px;
-                    color: #ffffff;
+                    // color: #ffffff;
                     cursor: pointer;
+
 
                     &:hover {
                         color: $accent-bgDrop;
+
                     }
                 }
             }
@@ -342,6 +350,7 @@ article {
                             padding: 6px 12px;
                             cursor: pointer;
 
+
                             &::before {
                                 content: '';
                                 vertical-align: middle;
@@ -350,7 +359,22 @@ article {
                                 height: 12px;
                                 background: no-repeat center/cover url(@/assets/images/report-icon.svg);
                                 margin-right: 4px;
+
                             }
+                            .report_icon{
+                                &:hover{
+                                    color: red;
+                                }
+                            }
+                            // &::before {
+                            //     content: '';
+                            //     vertical-align: middle;
+                            //     display: inline-block;
+                            //     width: 16px;
+                            //     height: 12px;
+                            //     background: no-repeat center/cover url(@/assets/images/report-icon.svg);
+                            //     margin-right: 4px;
+                            // }
                         }
                     }
 

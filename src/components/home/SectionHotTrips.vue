@@ -51,6 +51,9 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 @import '@/assets/styles/base/color';
+.hot-trips{
+    background-color: #EDEAE1;
+}
 
 .card-container {
     box-sizing: border-box;
@@ -94,7 +97,8 @@ const props = defineProps({
             flex-direction: column;
             flex-grow: 1;
             .card-title--myTrip {
-                font-size: 1rem;
+                font-size: 1.125rem;
+                letter-spacing: 0.1rem;
                 margin-bottom: 16px;
             }
             .member {

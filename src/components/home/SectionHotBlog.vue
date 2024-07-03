@@ -55,6 +55,7 @@ section {
   width: 100%;
   height: 400px;
   margin-bottom: 60px;
+  cursor: pointer;
 
   .hot-blog-card {
     flex-direction: column;

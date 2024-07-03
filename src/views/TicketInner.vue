@@ -3,15 +3,15 @@
         <div class="frame_change">
             <div class="Ordertest1">
                 <div class="Ticket_pic">
-                    <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
+                    <img :src="parseServerImg(tickets.t_image)" :alt="tickets.t_name" />
                     <div class="Ticket_pic_txt">
-                        <h4 class="Title_2" v-for="feature in ticket.features" :key="feature"><font-awesome-icon :icon="['fas', 'paw']" style="color: #FFD43B;" /> {{ feature }}</h4>
+                        <h4 class="Title_2" v-for="(feature, index) in [tickets.t_feature1, tickets.t_feature2, tickets.t_feature3]" :key="index"><font-awesome-icon :icon="['fas', 'paw']" style="color: #FFD43B;" /> {{ feature }}</h4>
                     </div>
                 </div>
                 <div class="Ticket_txt Title">
                     <h4 class="Title_2 Title_color">景點介紹</h4>
-                    <h5 class="Title_2"><font-awesome-icon :icon="['fas', 'paw']" style="color: #FFD43B;" /> {{ ticket.spot }}</h5>
-                    <p v-html="ticket.content"></p>
+                    <h5 class="Title_2"><font-awesome-icon :icon="['fas', 'paw']" style="color: #FFD43B;" /> {{ tickets.t_spot }}</h5>
+                    <p v-html="tickets.t_content"></p>
                 </div>
                 <div class="Purchase Title">
                     <h4 class="Title_2 Title_color">票券說明</h4>
@@ -26,20 +26,20 @@
             </div>
             <div class="Ordertest2">
                 <div class="Order Title">
-                    <h4>{{ ticket.name }}</h4>
+                    <h4>{{ tickets.t_name }}</h4>
                     <div class="Order_Count">
                         <h5 class="Title_2">選擇數量</h5>
                         <div class="Count_1">
-                            <p>TWD {{ ticket.price }} / 每人</p>
+                            <p>TWD {{ tickets.t_price }} / 每人</p>
                             <button @click ="minus"><font-awesome-icon :icon="['fas', 'minus']" /></button>
-                            <input type="number" v-model.number="ticket.count">
+                            <input type="number" v-model.number="ticketNum.count">
                             <button @click ="plus"><font-awesome-icon :icon="['fas', 'plus']" /></button>
                         </div>
                         <div class="Count_2">
                             <h4>總金額</h4>
                             <h4 class="totalPrice_color">TWD {{ totalPrice }}</h4>
                         </div>
-                        <button class="btn-1" type="button" @click = "goToOrderPage">立即訂購</button>
+                        <button class="btn-1" type="button" @click = "goToOrderPage(tickets)">立即訂購</button>
                     </div>
                 </div>
             </div>
@@ -48,76 +48,86 @@
 </template>
 
 <script>
-import ticketsData from '../../public/json/ticketinner.json';
 export default {
     name:'TicketInner',
     data() {
         return {
-            ticket: {
-                id: '',
-                name: '',
-                features: [],
-                spot: '',
-                content: '',
-                image: '',
-                price: 0,
-                count: 0
+            tickets:{
+                t_id: '',
+                t_name: '',
+                t_feature1:'',
+                t_feature2:'',
+                t_feature3:'',
+                t_spot: '',
+                t_content: '',
+                t_image: '',
+                t_price: 0,
+                count:1
+            },
+            ticketNum:{
+                count:1
             }
         };
     },
-    watch: {
-        '$route.params.id': 'fetchTicketData'
-        
-    },
     mounted() {
-        this.fetchTicketData();
-        },
+        this.loadJsonData();
+    },
     computed: {
         totalPrice(){
-            return this.ticket.price * this.ticket.count;
+            return this.tickets.t_price * this.ticketNum.count;
         }
     },
     methods: {
-        fetchTicketData() {
-            const id = this.$route.params.id;
-            const ticket = ticketsData.ticketinner.find(ticket => ticket.id === Number(id));
-            if (ticket) {
-                this.ticket = {
-                ...ticket,
-                features: [ticket.feature1, ticket.feature2, ticket.feature3],
-                price:parseFloat(ticket.price),
-                count: 1
-            };
-            } else {
-            console.error(`Ticket with id ${id} not found.`);
-            // 可以处理未找到票券的情况，例如跳转到错误页面或其他处理
+        async loadJsonData(){
+            try {
+                const response = await fetch('http://localhost/phpG6/back/getTicketInner.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    // 如果有需要傳遞的資料，可以透過 body 屬性傳遞
+                    body: JSON.stringify({
+                        // 可以放你要傳遞的資料的物件
+                        t_id: this.$route.params.id 
+                    })
+                });
+
+                // const data = await response.json();
+                // console.log('Ticket Data:'+ data);
+
+                const responseData = await response.json();
+                console.log('Response:', responseData);
+                // 將後端返回的票券資料存入 tickets 中
+                this.tickets = responseData.tickets[0];
+            } catch (error) {
+                console.error('Error:', error);
             }
+
         },
         plus(){
-            this.ticket.count += 1;
+            if (this.ticketNum.count < 10)
+            this.ticketNum.count += 1;
         },
         minus(){
-            if (this.ticket.count > 1) {
-                this.ticket.count -= 1;
+            if (this.ticketNum.count > 1) {
+                this.ticketNum.count -= 1;
             }
         },
-        goToOrderPage(){
-            // console.log("傳出去的值");
-            // console.log("ticketId:"+ this.ticket.id);
-            // console.log("count:"+ this.ticket.count);
-            // console.log("totalPrice:"+ this.totalPrice);
+        goToOrderPage(tickets){
+
             this.$router.push({
-                name:'TicketOrder',
-                query:{
-                    ticketImage: this.ticket.image,
-                    ticketName: this.ticket.name,
-                    count: this.ticket.count,
-                    totalPrice: this.totalPrice
+                name: 'TicketOrder',
+                query: {
+                    id: tickets.t_id,
+                    name: tickets.t_name,
+                    image: tickets.t_image,
+                    totalPrice: this.totalPrice,
+                    count: this.ticketNum.count
                 }
             });
         },
         parseImg(imgURL) {
-      // 將相對路徑解析成正確的 URL
+        // 將相對路徑解析成正確的 URL
             return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
         },
         parseServerImg(imgURL) {
@@ -153,7 +163,7 @@ export default {
     }
     .Ticket_pic img{
         margin-top: 5%;
-        width: 70%;
+        width: 85%;
         }
     @media (max-width: 768px) {
         .Ticket_pic img{
