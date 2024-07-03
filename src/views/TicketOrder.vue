@@ -37,9 +37,9 @@
         <div class="Order_Check frame">
           <h5>確認行程</h5>
           <div class="Check_Card">
-            <img :src="parseServerImg(formData.ticketImage)" :alt="formData.ticketName" />
+            <img :src="parseServerImg(ticket.image)" :alt="ticket.image" />
             <div class="Check_Txt">
-              {{ formData.ticketName }}
+              {{ ticket.name }}
               <p>{{ todayDate }}<br>無有效期限</p>
             </div>
           </div>
@@ -79,9 +79,9 @@
         <div class="Order">
           <div>
             <h4><font-awesome-icon :icon="['fas', 'paw']" style="color: #FFD43B;" /> 訂單總項目</h4>
-            <p>{{ formData.count }}項商品</p>
-            <p class="ticket_name">{{ formData.ticketName }}</p>
-            <p>支付總金額: TWD {{ formData.totalPrice }}</p>
+            <p>{{ ticket.count }}項商品</p>
+            <p class="ticket_name">{{ ticket.name }}</p>
+            <p>支付總金額: TWD {{ ticket.totalPrice }}</p>
           </div>    
           <button class="btn-1" @click="orderFinish">立即訂購</button>
         </div>
@@ -92,14 +92,10 @@
 
 <script>
 import Swal from 'sweetalert2';
-
+// console.log("test"+this.$route); 
 export default {
   name: "TicketOrder",
   data() {
-    // console.log("接回來的值");
-    // console.log("ticketId:"+ this.$route.query.ticketId);
-    // console.log("count:"+  parseInt(this.$route.query.count));
-    // console.log("totalPrice:"+ this.$route.query.totalPrice);
     return {
       formData: {
         name: '',
@@ -112,14 +108,28 @@ export default {
         transferAmount: '',
         bankCode: '',
         accountNumber: '',
-
-        count: parseInt(this.$route.query.count) || 0,
-        ticketName: this.$route.query.ticketName || '',
-        ticketImage: this.$route.query.ticketImage || '',
-        totalPrice: parseFloat(this.$route.query.totalPrice) || 0
+        // count: parseInt(this.$route.query.count) || 0, //如果轉換後的count值是NaN（非數值）或未定義，則默認設置為0。
+        // ticketName: this.$route.query.ticketName || '',
+        // ticketImage: this.$route.query.ticketImage || '',
+        // totalPrice: parseFloat(this.$route.query.totalPrice) || 0
+      },
+      ticket: {
+        id: '',
+        name: '',
+        image:'',
+        totalPrice: 0,
+        count :0
       },
       todayDate: '',
     };
+    
+  },
+  created() {
+    this.ticket.id = this.$route.query.id;
+    this.ticket.name = this.$route.query.name;
+    this.ticket.image = this.$route.query.image;
+    this.ticket.totalPrice = this.$route.query.totalPrice;
+    this.ticket.count = this.$route.query.count;
   },
   computed: {
     isFormValid() { //確認框一是否都有填寫
@@ -140,21 +150,47 @@ export default {
     }
   },
   methods:{
-    getTodayDate(){
+    // async loadJsonData(){
+    //     try {
+    //         const response = await fetch('http://localhost/phpG6/back/getTicketOrder.php', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             // 如果有需要傳遞的資料，可以透過 body 屬性傳遞
+    //             body: JSON.stringify({
+    //                 // 可以放你要傳遞的資料的物件
+    //                 t_id: this.$route.params.id 
+    //             })
+    //         });
+
+    //         // const data = await response.json();
+    //         // console.log('Ticket Data:'+ data);
+
+    //         const responseData = await response.json();
+    //         console.log('Response:', responseData);
+    //         // 將後端返回的票券資料存入 tickets 中
+    //         this.tickets = responseData.tickets[0];
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //     }
+    // },
+
+    getTodayDate(){ //抓訂購當天日期
       const today = new Date();
       const year = today.getFullYear();
       const month = String(today.getMonth()+1).padStart(2,'0');
       const day = String(today.getDate()).padStart(2,'0');
       return `${year}-${month}-${day}`;
     },
-    orderFinish(){
+    orderFinish(){ //條件完全符合or不符合
       if (this.isOrderValid){
         this.showSuccessAlert();
       }else{
         this.showErrorAlert();
       }
     },
-    showSuccessAlert(){
+    showSuccessAlert(){ //成功彈窗
       Swal.fire({
         title: '已完成訂單',
         text: '請到gmail信箱領取您的QRcode票券',
@@ -164,7 +200,7 @@ export default {
         confirmButtonColor: '#4F82D4'
       })
     },
-    showErrorAlert(){
+    showErrorAlert(){ //失敗彈窗
       Swal.fire({
         title: '尚未填寫完成無法訂購',
         text: '請完整填寫所有必填項目',
@@ -172,7 +208,7 @@ export default {
         confirmButtonText: '確定',
       })
     },
-    showSplit(e){
+    showSplit(e){ //分票彈窗
       if(e.target.checked){
         Swal.fire({
           title: '受票者資訊',
@@ -199,7 +235,7 @@ export default {
             console.log('User details:', result.value);
             Swal.fire('Submitted!', 'Your details have been submitted.', 'success');
           } else {
-            e.target.checked = false; // Uncheck the checkbox if user cancels
+            e.target.checked = false;
           }
         });
       }
@@ -213,16 +249,14 @@ export default {
                 return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
     },
     submitForm() {
-      // 在这里处理表单提交逻辑，例如发送邮件等操作
       if (this.isFormValid) {
         this.scrollnext(); 
       } else {
-        // 表单无效，提示用户填写完整信息
         alert('請填入完整資訊');
       }
     },
     scrollnext(){
-      // 使用 $refs 获取 accountSection 元素，并进行滚动操作
+      // 使用$refs 獲取accountSection元素，進行scroll
       this.$refs.accountSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   },

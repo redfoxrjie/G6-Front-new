@@ -7,7 +7,7 @@ export const isValidEmail = (email) => {
 };
 //密碼:密碼要8個字符。至少有一個數字。至少有一個英文字母。
 export const isValidPassword = (password) => {
-    const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
     return re.test(password);
 };
 

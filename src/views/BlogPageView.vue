@@ -15,7 +15,7 @@
                     <div class="journey-title">{{ item.b_title }}</div>
                 </div>
                 <div class="like-count" @click="toggleLikes">
-                    <font-awesome-icon :icon="['fas', 'bone']" class="like_icon" :style="{ color: islike? '#F4DA7B':'#ffffff'}" @click="toggleColor" /> {{ item.b_likes }} 個讚</div>
+                    <font-awesome-icon :icon="['fas', 'bone']" class="like_icon" @click="toggleColor" /> {{ item.b_likes }} 個讚</div>
             </div>
             <div class="journey-main row">
                 <div class="journey-content col-12 col-md-9">
@@ -30,7 +30,7 @@
                                     <div class="mem-slogan">一台相機，一只皮箱，一趟說走就走的旅行</div>
                                 </div>
                             </div>
-                            <button class="report-btn"><font-awesome-icon :icon="['fas', 'bell-slash']" class="report_icon" />檢舉文章</button>
+                            <button class="report-btn"><font-awesome-icon :icon="['fas', 'triangle-exclamation']" /> 檢舉文章</button>
                         </div>
                         <div class="journey-intro">
                             這次旅行從一開始就打算走一個不趕場，不血拚的深度旅遊。也因為靜下心來、放慢腳步在眼前的街道與景點，才能夠品嚐到許多讓人驚豔的在地美食和Nabi我最愛的日系雜貨小店，尤其登上皿倉山展望台欣賞的夜景，在寒風中品味專屬於冬夜的寂靜，讓人著實著迷。詳細的行程和店家介紹，還請見下方介紹囉！
@@ -156,9 +156,6 @@ export default {
             }
         this.item.liked = !this.item.liked;
         },
-        toggleColor(){
-            this.islike = ! this.islike;
-        },
         parseImg(imgURL) {
             // 將相對路徑解析成正確的 URL
             return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
@@ -242,6 +239,9 @@ article {
                     font-size: 22px;
                     // color: #ffffff;
                     cursor: pointer;
+                    &:hover{ 
+                        color: #F4DA7B;
+                    }
                 }
             }
         }

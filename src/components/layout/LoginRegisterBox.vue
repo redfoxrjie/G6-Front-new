@@ -8,8 +8,8 @@
                     <div class="form-input"><input type="text" placeholder="用戶名稱" v-model="registerUsername">
                         <font-awesome-icon :icon="['fas', 'user']" class="input-icon" />
                     </div>
-                    <div class="form-input"><input type="email" placeholder="Email" v-model="registerAccount">
-                        <font-awesome-icon :icon="['fas', 'envelope']" class="input-icon" />
+                    <div class="form-input"><input type="text" placeholder="帳號" v-model="registerAccount">
+                        <font-awesome-icon :icon="['fas', 'user']" class="input-icon" />
                     </div>
                     <div class="form-input"><input v-model="registerPws" :type="registerPwsType" placeholder="設定密碼">
                         <font-awesome-icon
@@ -35,9 +35,8 @@
                     <h1>login</h1>
                     <!-- Input fields -->
                     <div class="form-input">
-                        <input type="text" v-model="account" placeholder="輸入Email">
-                        <!-- <input v-model="email" type="email" placeholder="Email"> -->
-                        <font-awesome-icon :icon="['fas', 'envelope']" class="input-icon" />
+                        <input type="text" v-model="account" placeholder="輸入帳號">
+                        <font-awesome-icon :icon="['fas', 'user']" class="input-icon" />
                     </div>
                     <div class="form-input"><input v-model="password" :type="loginPasswordType" placeholder="輸入密碼">
                         <font-awesome-icon
@@ -82,10 +81,15 @@
 
 <script setup>
 import apiInstance from '@/plugins/api';
+import { useUserStore } from '@/stores/userStore';
+import { storeToRefs } from 'pinia';
+import { onMounted, watch } from 'vue';
 import { ref, defineProps, defineEmits } from 'vue';
 import Swal from 'sweetalert2';
-import { isValidEmail, isValidPassword } from '@/components/layout/validation';
+import { isValidPassword } from '@/components/layout/validation';
 
+const userStore = useUserStore();
+const { isLoggedIn, userInfo } = storeToRefs(userStore);
 
 const props = defineProps({
     isVisible: Boolean
@@ -122,26 +126,33 @@ const togglePasswordVisibility = (field) => {
     }
 };
 
+watch(isLoggedIn, (newValue) => {
+    if (newValue) {
+        console.log('用戶已登入:', userInfo.value);
+        // 可以在這裡執行其他登入後的操作
+    }
+});
+
 // 登入事件
 const login = async () => {
     if (!account.value && !password.value) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: '請輸入email及密碼'
+            text: '請輸入帳號及密碼'
         });
     } else if (!account.value) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: '請輸入有效email'
+            text: '請輸入有效帳號'
         });
-    } else if (!isValidEmail(account.value)) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Invalid Email',
-            text: 'email格式錯誤'
-        });
+        // } else if (!isValidEmail(account.value)) {
+        //     Swal.fire({
+        //         icon: 'error',
+        //         title: 'Invalid Email',
+        //         text: 'email格式錯誤'
+        //     });
     } else if (!password.value) {
         Swal.fire({
             icon: 'error',
@@ -152,7 +163,7 @@ const login = async () => {
         Swal.fire({
             icon: 'error',
             title: 'Invalid Password',
-            text: '(必須為8字元，且包含半形英文字母小寫及數字)',
+            text: '(必須為6字元，且包含半形英文字母小寫及數字)',
         });
         return;
     }
@@ -161,12 +172,20 @@ const login = async () => {
     formData.append('u_psw', password.value);
 
     try {
-        const response = await apiInstance.post('http://localhost/phpG6/front/login.php', formData, {
+        const response = await apiInstance.post('http://localhost/phpG6/api/login.php', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
 
+        if (response.data.code === 1 && response.data.memInfo) {
+            console.log('登入成功，會員資料：', response.data.memInfo)
 
-        if (response.data.code === 1) {
+            // 更新 Pinia store
+            userStore.setUser(response.data.memInfo)
+
+            // 驗證狀態是否正確更新
+            console.log('更新後的登入狀態：', userStore.isLoggedIn)
+            console.log('更新後的用戶信息：', userStore.userInfo)
+
             emit('close', { status: 'login-success', user: response.data.memInfo });
             ;  //假設登入後關閉彈窗
             Swal.fire({
@@ -193,18 +212,33 @@ const login = async () => {
     }
 };
 
+// 在組件掛載時檢查並恢復登入狀態
+onMounted(() => {
+    const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
+    const storedUserInfo = localStorage.getItem('userInfo');
+
+    console.log('檢查本地存儲的登入狀態：', storedIsLoggedIn);
+    console.log('檢查本地存儲的用戶資訊：', storedUserInfo);
+
+    if (storedIsLoggedIn === 'true' && storedUserInfo) {
+        const parsedUserInfo = JSON.parse(storedUserInfo);
+        console.log('恢復用戶登入狀態：', parsedUserInfo);
+        userStore.setUser(parsedUserInfo);
+    }
+});
+
 // 註冊事件
 const handleRegistration = async () => {
     if (!registerUsername.value || !registerAccount.value || !registerPws.value || !registerPwsConfirm.value) {
         Swal.fire({ icon: 'error', title: '錯誤', text: '所有欄位都是必填的' });
         return;
     }
-    if (!isValidEmail(registerAccount.value)) {
-        Swal.fire({ icon: 'error', title: '無效的Email', text: '請輸入有效的Email地址' });
-        return;
-    }
+    // if (!isValidEmail(registerAccount.value)) {
+    //     Swal.fire({ icon: 'error', title: '無效的Email', text: '請輸入有效的Email地址' });
+    //     return;
+    // }
     if (!isValidPassword(registerPws.value)) {
-        Swal.fire({ icon: 'error', title: '無效的密碼', text: '密碼需要至少8個字符，並包含至少一個字母和一個數字' });
+        Swal.fire({ icon: 'error', title: '無效的密碼', text: '密碼需要至少6個字符，並包含至少一個字母和一個數字' });
         return;
     }
     if (registerPws.value !== registerPwsConfirm.value) {
