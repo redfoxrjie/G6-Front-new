@@ -34,7 +34,7 @@ const parseUserImg = (imgURL) => {
 <style lang="scss" scoped>
 @import '../../assets/styles/base/font';
 
-    $compSize:30px;
+    $compSize:40px;
     .user-account-wrapper{
         width: fit-content;
         height: $compSize;

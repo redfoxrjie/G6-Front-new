@@ -40,16 +40,9 @@ const props = defineProps({
 @import '../../assets/styles/base/color';
 
 .trip-card-wrapper {
-    max-width: 400px;
     box-sizing: border-box;
     padding: 5px;
-
-    // max-width: 400px;
-
-
-
     cursor: pointer;
-
 }
 
 .trip-card {

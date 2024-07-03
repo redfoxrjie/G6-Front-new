@@ -38,7 +38,7 @@ export default {
     methods: {
         async fetchData() {
             try {
-                let path = `${import.meta.env.VITE_API_URL}/front`;
+                let path = `${import.meta.env.VITE_API_URL}/api`;
                 let url = path + `/blogSearch.php?keyword=` + this.$route.params.query;
                 console.log('url:' + import.meta.env.VITE_API_URL)
                 console.log('url:' + url)
