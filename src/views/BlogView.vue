@@ -36,7 +36,7 @@
     <div class="container">
       <div class="blogList-row row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4">
         <!-- 使用 BCBlogCard 元件來顯示每一篇筆記卡片 -->
-        <BCBlogCard v-for="(blog, index) in currentCardBlogs" :key="blog.b_id" :bcImg="parseServerImg(blog.b_img)"
+        <BCBlogCard v-for="(blog, index) in currentCardBlogs" :key="blog.b_id" :bcImg="parseBlogImg(blog.b_img)"
           :bcTitle="blog.b_title" :bcLikesCount="blog.b_likes" :bcViewsCount="blog.b_viewers" :bcDate="blog.b_date"
           @click="navigateToBlogPage(blog.b_id)" />
       </div>
@@ -97,12 +97,12 @@ const blogsCount = ref(0); // 先建立存取位置
 // 取得資料的方法
 const fetchData = async () => {
   try {
-    let path = `${import.meta.env.VITE_API_URL}/front`;
+    let path = `${import.meta.env.VITE_API_URL}/api`;
     let url = path + `/blogView.php`;
 
     const response = await fetch(url);
     const data = await response.json();
-    console.log('http://localhost/g6-php-main/front/blogView.php')
+    console.log('http://localhost/phpG6/api/blogView.php')
     console.log('url:',url)
     console.log(data)
 
@@ -110,7 +110,7 @@ const fetchData = async () => {
     blogs.value = data.blogs;
     blogsCount.value = data.blogs.length; //計算blog總數
   } catch (error) {
-    console.log('erro link at',`${import.meta.env.VITE_API_URL}/front/blogView.php`)
+    console.log('erro link at',`${import.meta.env.VITE_API_URL}/api/blogView.php`)
     console.error('Error fetching data:', error);
   }
 };  
@@ -159,6 +159,10 @@ const currentCardBlogs = computed(() => {
 // 解析伺服器上的圖片路徑
 const parseServerImg = (imgURL) => {
   return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+};
+const parseBlogImg = (imgURL) => {
+  if(imgURL)return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+  return '/public/default-userBg.png'
 };
 
 // 導航至BlogPage頁面

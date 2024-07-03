@@ -7,12 +7,13 @@
                 </div>
                 <span>返回</span>
             </div>
-            <p style="color: orange;">資料傳回確認(done)</p>
+            <!-- debug-check -->
+            <!-- <p style="color: orange;">資料傳回確認(done)</p>
             {{ blogpost }}
             <hr>
             <p style="color: orange;">留言資料傳回確認(done)</p>
             {{ blogrp }}
-            <hr>
+            <hr> -->
             <div class="journey-banner" :style="{ backgroundImage: 'url(' + parseServerImg(blogpost.trp_img) + ')' }">
                 <div class="journey-data">
                     <div class="publish-date font-time">{{ blogpost.b_date }} </div>
@@ -44,8 +45,8 @@
                     </div>
                     <div class="journey-column">
                         <div class="journey-block">
-                            <div class="block-img">
-                                <img src="https://picsum.photos/300/200/?random=9">
+                            <div class="block-img" v-if="blogpost.b_img">
+                                <img :src=parseServerImg(blogpost.b_img)>
                             </div>
                             <div class="paragraph">
                                 <p v-html="formattedContent(blogpost.b_content)"></p>
@@ -74,7 +75,7 @@
                                 <div class="comment-head">
                                     <div class="comment-mem">
                                         <div class="mem-headshot">
-                                            <img src="/public/default-userImg.png">
+                                            <img src="/default-userImg.png">
                                         </div>
                                         <div class="mem-name">訪客</div>
                                     </div>
@@ -133,27 +134,27 @@ export default {
         }
     },
     methods: {
-        async loadJsonData() {
-            const blogId = this.$route.params.b_id;
-            try {
-                const response = await fetch(`${import.meta.env.BASE_URL}json/data.json`);
-                const data = await response.json();
+        // async loadJsonData() {
+        //     const blogId = this.$route.params.b_id;
+        //     try {
+        //         const response = await fetch(`${import.meta.env.BASE_URL}json/data.json`);
+        //         const data = await response.json();
 
-                // 確認 data 中的 blog 是一個陣列
-                if (data.blog && Array.isArray(data.blog)) {
-                    this.item = data.blog.find(blog => blog.b_id == blogId);
-                    console.log('Loaded item:', this.item);
-                } else {
-                    throw new Error('Data format is incorrect');
-                }
-            } catch (error) {
-                console.error('Error loading JSON data:', error);
-            }
-        },
+        //         // 確認 data 中的 blog 是一個陣列
+        //         if (data.blog && Array.isArray(data.blog)) {
+        //             this.item = data.blog.find(blog => blog.b_id == blogId);
+        //             console.log('Loaded item:', this.item);
+        //         } else {
+        //             throw new Error('Data format is incorrect');
+        //         }
+        //     } catch (error) {
+        //         console.error('Error loading JSON data:', error);
+        //     }
+        // },
         async fetchData() {
             try {
 
-                let path = `${import.meta.env.VITE_API_URL}/front`;
+                let path = `${import.meta.env.VITE_API_URL}/api`;
                 let url = path + `/blogPostView.php?keyword=` + this.$route.params.query;
 
                 const response = await fetch(url);
@@ -190,7 +191,7 @@ export default {
         parseUserImg(imgURL) {
             // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
             if (imgURL) return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
-            return '/public/default-userBg.png'
+            return '/default-userBg.png'
         },
         goBack() {
             window.history.back(); // 返回前一頁
@@ -214,13 +215,14 @@ export default {
 @import '../assets/styles/base/font';
 
 .whitespace {
-    white-space: pre-line;
+    text-indent: 10px;
 }
 
 article {
     margin-top: 120px;
 
     .container {
+        width: 100%;
         .goback-wrapper {
             margin: 12px 0 16px;
             display: flex;
@@ -260,12 +262,17 @@ article {
             .journey-data {
                 .publish-date {
                     letter-spacing: $base-fontSize * 0.75 * 0.1;
+                    text-shadow: .5px 0px .6px $black;
+
                 }
 
                 .journey-title {
-                    font-size: $base-fontSize * 1.375;
+                    font-size: $base-fontSize * 1.8;
                     line-height: 140%;
                     letter-spacing: $base-fontSize * 1.375 * 0.1;
+                    text-shadow: 2p 2px .6px $black;
+                    background-color:$accentColor-1;
+                    color: $black;
                     margin-top: 6px;
                 }
             }
@@ -298,8 +305,8 @@ article {
         }
 
         .journey-main {
-            margin: 60px 0;
-
+            margin-bottom: 20px;
+            background-color: $subtle-bgDrop;
             .journey-content {
                 box-sizing: border-box;
                 padding: 0 24px;
@@ -387,21 +394,22 @@ article {
                 }
 
                 .comment-section {
-                    border: 1px solid $black;
+                    border: 1px solid rgba(6, 11, 54, 0.098);
                     background-color: $secondColor-1;
                     border-radius: 10px;
                     box-sizing: border-box;
                     padding: 14px 22px 52px;
 
                     .comment-count {
-                        font-size: $base-fontSize;
+                        font-size: $base-fontSize*1.4;
+                        color: $black;
                         margin-bottom: 30px;
                     }
 
                     .comment-list,
                     .comment-input {
                         .comment-item {
-                            border: 1px solid $black;
+                            border: 1px solid rgba(6, 11, 54, 0.098);
                             border-radius: 11px;
                             margin-bottom: 30px;
 
@@ -416,6 +424,7 @@ article {
                                 display: flex;
                                 justify-content: space-between;
                                 align-items: center;
+                                box-shadow: inset 2px -15px 13px rgba(80, 65, 94, 0.212);
 
                                 .comment-mem {
                                     display: flex;
@@ -443,7 +452,7 @@ article {
                                 box-sizing: border-box;
                                 padding: 22px;
                                 line-height: 160%;
-
+                                font-size: 16px;
                                 textarea {
                                     width: 100%;
                                     min-height: 50px;
@@ -481,18 +490,28 @@ article {
 
                     .block-img {
                         width: 100%;
-                        aspect-ratio: 2.43/1;
+                        aspect-ratio: 4/3;
+                        // aspect-ratio: 2/3.5;
                         overflow: hidden;
+                        margin: auto;
+
 
                         img {
                             width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            object-position: 50% 50%;;
                         }
                     }
 
                     .paragraph {
-                        font-size: $base-fontSize * 0.875;
-                        line-height: 180%;
+                        p{
+                        // font-size: $base-fontSize * 1.2;
+                        font-size: 16px;
+                        line-height: 150%;
                         margin-top: 24px;
+                        text-indent: $base-fontSize * 1.2 *2;
+                        }
                     }
                 }
             }
@@ -532,14 +551,17 @@ article {
         }
     }
 }
-
+// 以下是桌機size為主 設定
 @media screen and (min-width: 768px) {
+
     article {
         margin-top: 120px;
 
         .container {
+            width:75vw;
+
             .journey-main {
-                margin: 60px 0;
+                margin-bottom: 20px;
 
                 .trip-plan {
                     .day-trip-wrapper {
@@ -551,7 +573,7 @@ article {
                             display: flex;
                             gap: 12px;
 
-                            .day-index {}
+                            // .day-index {}
 
                             .spot-list {
                                 li {
@@ -571,6 +593,17 @@ article {
                             display: block;
                         }
                     }
+                }
+                .journey-column{
+                    .journey-block {
+                    .paragraph{
+                        p{
+                            // font-size: $base-fontSize * 1.2;
+                            font-size: 18px;
+                        }
+
+                    }
+                }
                 }
             }
         }
