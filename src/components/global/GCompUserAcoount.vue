@@ -1,18 +1,34 @@
 <script setup>
 const props = defineProps({
-    uName:{
-        type:String,
-        default:'Josh'
+    uName: {
+        type: String,
+        default: 'Josh'
     },
+    uImg: {
+        type: String,
+        default: 'public/default-userBg.png'
+    },
+    uSize: {
+        type: Number,
+        default: 30
+    }
 
 })
+const parseUserImg = (imgURL) => {
+    // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+    if(imgURL) return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+    return 'public/default-userBg.png'
+}
+
 </script>
 <template>
     <div class="user-account-wrapper">
         <div class="ua-img">
-            <img src="https://fakeimg.pl/300x200/200">
+            <img :src= parseUserImg(uImg)>
         </div>
-        <div class="ua-name"><p>{{ uName }}</p></div>
+        <div class="ua-name">
+            <p>{{ uName }}</p>
+        </div>
     </div>
 </template>
 <style lang="scss" scoped>
@@ -35,17 +51,16 @@ const props = defineProps({
         // height: 100%;
         width: $compSize * .6;
         aspect-ratio: 1/1;
+
         border-radius: 50%;
         overflow: hidden;
-            img{
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
     }
-    }
-    
-
-
+}
 </style>

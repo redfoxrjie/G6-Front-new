@@ -15,14 +15,14 @@
                 <h4 class="bc-c-title">{{ bcTitle }}</h4>
                 <div class="bc-c-data">
                     <p class="bc-c-date">{{ bcDate }}</p>
-                    <div class="bc-c-viewsWrap">
+                    <!-- <div class="bc-c-viewsWrap">
                         <div class="bc-c-v-icon">
                             <img src="@/assets/images/global/icons/views-xs-svg.svg" alt="">
                         </div>
                         <p class="bc-c-v-count">
                             {{ bcViewsCount }} 次觀看
                         </p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -142,12 +142,12 @@ const goToPage = (toLink) => {
                 width: 100%;
                 height: 100%;
                 display: flex;
-                justify-content: space-between;
+                justify-content: flex-end;
                 font-size: 0.875rem;
                 .bc-c-date { 
                     color: $grey;
                     margin-top: auto;
-                    display: inline-block;
+                    // display: inline-block;
                     letter-spacing: unset;
                 }
                 .bc-c-viewsWrap{
