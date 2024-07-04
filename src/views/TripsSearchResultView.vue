@@ -2,7 +2,9 @@
     <section class="section-resultHeader">
         <div class="container">
             <h2>搜尋結果</h2>
-            <h3>找到 2 筆 符合的行程</h3>
+            <h3>找到 {{ tripsResultLength }} 符合的行程</h3>
+            <h4>這是目前搜尋關鍵字（路由參數query: {{ $route.params.query }}</h4>
+
         </div>
     </section>
     <div class="section-resultDisplay">
@@ -21,7 +23,59 @@
     </div>
 
 </template>
-<script setup>
+
+<script>
+import GCompTripCard from '@/components/global/GCompTripCard.vue';
+
+export default{
+    data(){
+        return{
+            tripsResultData: [],
+            tripsResultLength: 0,
+        }
+    },
+    methods: {
+        async fetchData() {
+            try {
+                let path = `${import.meta.env.VITE_API_URL}/api`;
+                let url = path + `/tripSearch.php?keyword=` + this.$route.params.query;
+                console.log('url:' + import.meta.env.VITE_API_URL)
+                console.log('url:' + url)
+
+                const response = await fetch(url);
+
+                const data = await response.json();
+                if (data.trips) {
+                    this.tripsResultData = data.trips;
+                    this.tripsResultLength = data.trips.length;
+
+                }
+                console.log(data);
+                console.log(this.tripsResultData);
+            } catch (error) {
+
+                console.log('url error:' + import.meta.env.VITE_API_URL + `/tripSearch.php?keyword=` + this.$route.params.query)
+                console.log('fetch error:', error);
+            }
+        },
+
+        goToPage(toLink) {
+            this.$router.push(toLink);
+        }
+    },
+    components: {
+        'GCompTripCard': GCompTripCard
+    }
+    , mounted() {
+        this.fetchData();
+    },
+    computed() {
+    }
+
+    
+}
+</script>
+<!-- <script setup>
 import GCompTripCard from '@/components/global/GCompTripCard.vue';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
@@ -46,7 +100,7 @@ const fetchData = async () => {
 
 
 fetchData();
-</script>
+</script> -->
 <style lang="scss" scoped>
 @import '../assets/styles/base/color';
 @import '../assets/styles/base/font';

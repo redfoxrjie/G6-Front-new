@@ -17,9 +17,13 @@
         </div>
         <!-- 搜尋欄位 -->
         <div class="comp-searchBar col-md-4 col-6">
-          <input class='' type="text" placeholder="搜尋筆記">
           <!-- 搜尋按鈕 -->
-          <div class="icon-wrap" @click="goToPage('/blogSearchResult')">
+          <!-- <div class="icon-wrap" @click="goToPage('/blogSearchResult')"> -->
+
+          <input v-model="searchQuery" class='' type="text" placeholder="搜尋筆記" @keyup.enter="goToSearch">
+
+
+          <div class="icon-wrap" @click="goToSearch">
             <font-awesome-icon icon="magnifying-glass" />
           </div>
         </div>
@@ -32,26 +36,16 @@
     <div class="container">
       <div class="blogList-row row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4">
         <!-- 使用 BCBlogCard 元件來顯示每一篇筆記卡片 -->
-        <BCBlogCard v-for="(blog, index) in currentCardBlogs" 
-          :key="blog.b_id"
-          :bcImg="parseServerImg(blog.b_img)"
-          :bcTitle="blog.b_title" 
-          :bcLikesCount="blog.b_likes"
-          :bcViewsCount="blog.b_viewers" 
-          :bcDate="blog.b_date"
-          @click="navigateToBlogPage(blog.b_id)"
-        />
+        <BCBlogCard v-for="(blog, index) in currentCardBlogs" :key="blog.b_id" :bcImg="parseBlogImg(blog.b_img)"
+          :bcTitle="blog.b_title" :bcLikesCount="blog.b_likes" :bcViewsCount="blog.b_viewers" :bcDate="blog.b_date"
+          @click="navigateToBlogPage(blog.b_id)" />
       </div>
     </div>
   </div>
 
   <!-- 分頁元件 -->
-  <GCompPagination 
-    :totalItems="blogsCount" 
-    :pageLimit="itemsLimit" 
-    :pageIndex="currentIndex" 
-    @emitClick="pagenationClickHandle" 
-  />
+  <GCompPagination :totalItems="blogsCount" :pageLimit="itemsLimit" :pageIndex="currentIndex"
+    @emitClick="pagenationClickHandle" />
 
   <!-- Debug 區塊 -->
   <!-- <p>debug用 此頁顯示{{ currentCardBlogs.length }} 筆資料, 共有{{ blogsCount }}筆資料</p>
@@ -63,37 +57,81 @@
 
 </template>
 
+<!-- <script>
+import { useRouter } from 'vue-router';
+import BCBlogCard from '@/components/blog/BCBlogCard.vue';
+import GCompPagination from '@/components/global/GCompPagination.vue';
+default return{
+  data(){
+    blogCardData:[],
+    blogsCount:-1,
+  },
+  methods{
+    fetchData(){
+
+    },
+    goToPage(toLink){
+      this.$router.push(toLink);
+    }
+
+
+
+    }
+
+}
+</script> -->
+
+
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import BCBlogCard from '@/components/blog/BCBlogCard.vue';
 import GCompPagination from '@/components/global/GCompPagination.vue';
 
 // 儲存資料的陣列
 const blogs = ref([]); // 資料存取位置
-
+const searchQuery = ref('')
 // 計算資料的總數
 const blogsCount = ref(0); // 先建立存取位置
 
 // 取得資料的方法
 const fetchData = async () => {
   try {
-    const response = await fetch(`${import.meta.env.BASE_URL}json/data.json`);
+    let path = `${import.meta.env.VITE_API_URL}/api`;
+    let url = path + `/blogView.php`;
+
+    const response = await fetch(url);
     const data = await response.json();
+    console.log('http://localhost/phpG6/api/blogView.php')
+    console.log('url:',url)
+    console.log(data)
 
     // 存取資料到陣列中
-    blogs.value = data.blog;
-    blogsCount.value = data.blog.length; //計算blog總數
+    blogs.value = data.blogs;
+    blogsCount.value = data.blogs.length; //計算blog總數
   } catch (error) {
+    console.log('erro link at',`${import.meta.env.VITE_API_URL}/api/blogView.php`)
     console.error('Error fetching data:', error);
   }
-};
-fetchData();
+};  
+onMounted(()=>{
+  fetchData();
+});
+
+// 
+function prevent() {
+  console.log('ignore');
+}
+// 搜尋切換
 
 // 路由方法
 const router = useRouter();
 const goToPage = (toLink) => {
   router.push(toLink);
+};
+const goToSearch = () => {
+  if(searchQuery==='')return;
+  router.push(`blogsSearchResult/${searchQuery.value}`);
 };
 
 // Pagination 元件接取索引
@@ -122,10 +160,16 @@ const currentCardBlogs = computed(() => {
 const parseServerImg = (imgURL) => {
   return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
 };
+const parseBlogImg = (imgURL) => {
+  if(imgURL)return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+  return '/public/default-userBg.png'
+};
 
 // 導航至BlogPage頁面
 const navigateToBlogPage = (b_id) => {
-  router.push({ name: 'blogPage', params: { b_id } });
+  // router.push({ name: 'blogPage', params: { b_id } });
+  router.push(`blog/${b_id}`);
+
 };
 </script>
 
@@ -144,34 +188,46 @@ const navigateToBlogPage = (b_id) => {
 //---- Search Bar ----
 $searchBarHeight: 30px;
 
-input { border: none; }
+input {
+  border: none;
+}
+
 .section-headSearch {
   padding-top: 120px;
 }
+
 .sh-row {
   justify-content: space-between;
   align-items: end;
+
   .sh-headContent {
     .sh-hc-breadcrumb {
       margin-bottom: 8px;
+
       span {
         display: inline-block;
         // background-color: #6e6060;
         cursor: pointer;
         padding: 2px 2px;
         padding-right: 2px;
+
         &:hover {
           color: $accentColor-2;
         }
       }
     }
-    h2 { color: $secondColor-2; }
+
+    h2 {
+      color: $secondColor-2;
+    }
   }
+
   .comp-searchBar {
     height: $searchBarHeight;
     display: flex;
     align-content: center;
     justify-content: center;
+
     input {
       height: $searchBarHeight;
       width: 80%;
@@ -180,6 +236,7 @@ input { border: none; }
     }
   }
 }
+
 .icon-wrap {
   display: flex;
   justify-content: center;
@@ -192,6 +249,8 @@ input { border: none; }
   color: #fff;
   border-radius: 3px;
 }
-.icon-wrap:hover { background-color: $secondColor-2; }
-</style>
 
+.icon-wrap:hover {
+  background-color: $secondColor-2;
+}
+</style>

@@ -8,7 +8,7 @@
                 <div class="tc-title">
                     <h5>{{ tcTitle }}</h5>
                 </div>
-                <user-account :uName="tcMemName" />
+                <user-account :uName="tcMemName " :uImg="tcMemImg" />
 
             </div>
         </div>
@@ -27,8 +27,11 @@ const props = defineProps({
     },
     tcMemName: {
         type: String,
-
     },
+    tcMemImg: {
+        type: String,
+        default: null
+    }
 
 })
 </script>
@@ -37,7 +40,6 @@ const props = defineProps({
 @import '../../assets/styles/base/color';
 
 .trip-card-wrapper {
-    max-width: 400px;
     box-sizing: border-box;
     padding: 5px;
     cursor: pointer;

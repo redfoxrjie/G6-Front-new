@@ -61,13 +61,25 @@
             @dragover="dragOver"
             @drop="drop">
             <div class="spot-img">
-              <img src="https://picsum.photos/300/200/?random=5">
+              <img src="https://picsum.photos/300/200/?random=1">
             </div>
             <div class="spot-info">
-              <div class="spot-time font-time">04:10 - 06:30</div>
+              <div class="spot-time font-time">{{ location.spotTime }}</div>
               <div class="spot-name">{{ location.name }}</div>
-              <div class="duration">停留2小時20分</div>
-              <button @click="removeLocation(location)" class="delete-btn">刪除</button>
+              <div class="duration" @click="showEditStayTime(location)">停留{{ location.receivedStayTime || receivedStayTime }}</div>
+              <button class="tools" @click="toggleTools">
+                <font-awesome-icon icon="ellipsis"/>
+              </button>
+              <ul v-if="showTools" class="tool-list" @click.stop>
+                <li class="note" @click="handleNote">
+                  <font-awesome-icon icon="file-pen" size="sm" />
+                  筆記
+                </li>
+                <li @click="removeLocation(location)" class="delete">
+                  <font-awesome-icon icon="trash-can" size="sm"/>
+                  刪除
+                </li>
+              </ul>
             </div>
           </li>
         </ul>
@@ -125,6 +137,10 @@ export default {
       type: Object,
       required: true
     },
+    location: {
+      type: Object,
+      required: true
+    },
   },
   data() {
     return {
@@ -145,12 +161,13 @@ export default {
       isMapVisible: true, 
       switchBtnText: '返回行程',
       defaultMarkerIcon: null, //保存自定義marker icon
-      // 新增：筆記相關的數據
-      isNotePopupOpen: false,
+      isNotePopupOpen: false, // 筆記相關的數據
       noteTitle: '',
       noteContent: '',
       coverImageUrl: sessionStorage.getItem('coverImage') || 'src/assets/images/default-userBg.png',
       showFunctionList: false, // 預設隱藏 FunctionList
+      showTools: false,
+      receivedStayTime: '2小時0分',
     };
   },
   components: {
@@ -168,7 +185,7 @@ export default {
     filteredItinerary() {
       // Filter itinerary based on selectedDay (this function now is unfunctional)
       return this.itinerary.filter(item => item.day === this.selectedDay);
-    }
+    },
   },
   watch: {
     tripData: {
@@ -180,6 +197,20 @@ export default {
       },
       deep: true,
       immediate: true,
+    },
+    departureTimes: {
+      handler() {
+        // 出發時間改變時重新計算景點時間
+        this.recalculateSpotTimes();
+      },
+      deep: true
+    },
+    itinerary: {
+      handler() {
+        // 行程改變時重新計算景點時間
+        this.recalculateSpotTimes();
+      },
+      deep: true
     },
   },
   methods: {
@@ -305,13 +336,6 @@ export default {
       container.appendChild(button);
       return container;
     },
-
-    // 加入行程
-    // addToPlan(location) {
-    //   if (!this.itinerary.some(item => item.place_id === location.place_id)) {
-    //     this.itinerary.push(location);
-    //   }
-    // },
     addToPlan(location) {
       if (!this.itinerary.some(item => item.place_id === location.place_id)) {
         location.day = this.selectedDay; // 將行程分配到選中的天數
@@ -337,6 +361,7 @@ export default {
 
       // 從行程表中移除地點
       this.itinerary = this.itinerary.filter(item => item !== location);
+      this.closeTools();
     },
     // -------------------------Darg and Drop--------------------------------
     dragStart(location, event) {
@@ -386,23 +411,15 @@ export default {
       const sourceIndex = this.itinerary.indexOf(this.source);
       this.itinerary.splice(sourceIndex, 1);
 
-      // 檢查 overItem 的位置和 class
-      if (this.overItem && this.overItem.classList.contains('after')) {
-        overIndex++;
-      }
-    
-      // 如果 `sourceIndex` 在 `overIndex` 之前，則 `overIndex` 需要減少1
-      if (sourceIndex < overIndex) {
-        overIndex--;
-      }
-    
-      // 將 this.source 插入正確的位置
-      if (this.overItem) {
-        this.itinerary.splice(overIndex, 0, this.source);
-      } else {
-        // 如果没有 overItem，默認將 this.source 插入到列表末尾
-        this.itinerary.push(this.source);
-      }
+       // 確認是否有 before 或 after 的 class
+  if (this.overItem && this.overItem.classList.contains('after')) {
+    overIndex++;
+  } else if (this.overItem && this.overItem.classList.contains('before')) {
+    overIndex = overIndex > 0 ? overIndex - 1 : 0;
+  }
+
+  // 將 this.source 插入正確的位置
+  this.itinerary.splice(overIndex, 0, this.source);
     
       // 清除所有樣式和狀態
       this.clearOverItem();
@@ -475,19 +492,20 @@ export default {
       this.isMapVisible = !this.isMapVisible;
       this.switchBtnText = this.isMapVisible ? '返回行程' : '顯示地圖';
     },
-    // 新增：打開筆記彈出層
+    //---------- 新增/編輯筆記 -----------------------------
+    // 打開筆記彈出層
     openNotePopup(location) {
       this.noteTitle = location.name || '';
       this.noteContent = location.full_address || '';
       this.isNotePopupOpen = true;
     },
 
-    // 新增：關閉筆記彈出層
+    // 關閉筆記彈出層
     closeNotePopup() {
       this.isNotePopupOpen = false;
     },
 
-    // 新增：保存筆記
+    // 保存筆記
     saveNote(note) {
       console.log('保存的筆記:', note);
       // 這裡可以添加保存筆記到行程或其他邏輯
@@ -523,6 +541,57 @@ export default {
       container.appendChild(addNoteButton);
       return container;
     },
+    /*--------------------編輯停留時間-----------------------*/
+    showEditStayTime(location) {
+      this.$emit('show-edit-stay-time', location); 
+      //向父組件發送 show-edit-stay-time 事件，並將 location 物件作為參數傳遞。
+    },
+    // 更新接收到的停留時間
+    updateReceivedStayTime(time) {
+      this.receivedStayTime = time;
+    },
+    //---------計算每個景點的時間範圍-----------------------
+    calculateEndTime(departureTime, duration) {
+      if (!departureTime || !duration) return '00:00';
+
+      // 解析出發時間
+      const [departureHour, departureMin] = departureTime.split(':').map(Number);
+
+      // 解析停留時間
+      const durationMatch = duration.match(/(\d+)小時(\d+)分/);
+      const durationHour = durationMatch ? parseInt(durationMatch[1]) : 0;
+      const durationMin = durationMatch ? parseInt(durationMatch[2]) : 0;
+
+      // 計算結束時間
+      let endHour = departureHour + durationHour;
+      let endMin = departureMin + durationMin;
+
+      // 調整分鐘超過60的情況
+      if (endMin >= 60) {
+        endHour += Math.floor(endMin / 60);
+        endMin = endMin % 60;
+      }
+
+      // 轉換為字串格式
+      const formattedEndHour = String(endHour).padStart(2, '0');
+      const formattedEndMin = String(endMin).padStart(2, '0');
+      return `${formattedEndHour}:${formattedEndMin}`;
+    },
+    recalculateSpotTimes() {
+      const departureTime = this.departureTimes[this.calculateDate(this.selectedDay)] || '07:00';
+      const itinerary = this.getItineraryForDay(this.selectedDay);
+
+      let startTime = departureTime;
+
+      itinerary.forEach((location, index) => {
+        const duration = location.receivedStayTime || this.receivedStayTime;
+        const endTime = this.calculateEndTime(startTime, duration);
+        location.spotTime = `${startTime} - ${endTime}`;
+        startTime = endTime; // 下一個位置的開始時間
+      });
+      this.$forceUpdate(); // 強制重新渲染組件
+    },
+
     /*--------------------行程封面照片-----------------------*/
     // 處理來自FunctionList.vue的圖片資料暫存於sessionStorage
     handleCoverImageUploaded(imageUrl) {
@@ -546,8 +615,22 @@ export default {
     handleEditPlanSetting() {
       this.$emit('edit-plan-setting');
       this.showFunctionList = false;
-    }
-
+    },
+    /*-------------------行程工具------------------------*/
+    toggleTools(event) {
+      event.stopPropagation(); // 防止事件冒泡
+      this.showTools = !this.showTools;
+    },
+    closeTools() {
+      this.showTools = false;
+    },
+    handleNote() {
+      // 筆記功能邏輯
+      this.closeTools();
+    },
+    handleClickOutside(event) {
+      this.closeTools();
+    },
   },
   mounted() {
     this.initializeMap(); // 初始化地圖
@@ -561,10 +644,14 @@ export default {
 
     // 監聽 beforeunload 事件，以在掛載時先清除儲存於session storage的行程封面
     window.addEventListener('beforeunload', this.clearCoverImage);
+    // 監聽全畫面任意點擊，以關閉Tool List
+    document.addEventListener('click', this.handleClickOutside);
   },
   beforeUnmount() {
     // 移除 beforeunload 事件監聽
-    window.removeEventListener('beforeunload', this.clearCoverImage);
+    window.removeEventListener('beforeunload', this.clearCoverImage, true);
+    // 關閉Tool List後移除監聽事件
+    document.removeEventListener('click', this.handleClickOutside, true);
   },
 };
 </script>
@@ -678,10 +765,47 @@ li.dragging{
           font-size: $base-fontSize * 0.75;
           color: $gray;
         }
-        .delete-btn {
+        .tools {
           position: absolute;
-          bottom: 0;
-          right: 0;
+          top: 4px;
+          right: 4px;
+          cursor: pointer;
+        }
+        ul.tool-list {
+          font-size: 0.875rem;
+          background-color: #fff;
+          color: $secondColor-2;
+          position: absolute;
+          top: 24px;
+          right: 4px;
+          padding: 0;
+          overflow: hidden;
+          box-shadow: 0 2px 4px rgba(0,0,0,.2);
+          width: fit-content;
+          li {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            background-color: unset;
+            border-radius: unset;
+            padding: 4px 12px;
+            box-sizing: border-box;
+            margin: 6px 0;
+            text-align: right;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            &:hover {
+              background-color: $secondColor-2;
+              color: #fff;
+            }
+          }
+          .delete {
+            color: #f66758;
+            &:hover {
+              background-color: #f66758;
+              color: #fff;
+            }
+          }
         }
       }
     }
