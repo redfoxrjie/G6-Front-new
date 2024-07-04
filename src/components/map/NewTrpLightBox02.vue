@@ -8,12 +8,12 @@
         </div>
         <div class="selections">
           <div class="drop-down-box" @click.stop="toggleDropdown('area')">
-            <div id="trp_area">{{ selectedArea }}</div>
+            <div id="trp_area">{{ areaMapping[selectedArea] }}</div>
             <font-awesome-icon :icon="['fas', 'chevron-down']" />
           </div>
           <ul v-if="showAreaDropdown" class="drop-down-list">
             <li v-for="(area, index) in areas" :key="index" @click="selectArea(area)">
-              {{ area }}
+              {{ areaMapping[area] }}
             </li>
           </ul>
         </div>
@@ -67,9 +67,15 @@
         endDate: '', // 結束日期
         endDateMin: '', // 結束日期的最小值
         isPublic: false, // 是否公開
-        areas: ['日本', '韓國', '泰國', '港澳'],
+        areas: ['jp', 'kr', 'th', 'cn'],
         showAreaDropdown: false,
-        selectedArea: '日本',
+        selectedArea: 'jp',
+        areaMapping: {
+          jp: '日本',
+          kr: '韓國',
+          cn: '港澳',
+          th: '泰國'
+        }
       };
     },
     methods: {
