@@ -9,7 +9,7 @@
             <div class="cover-text">
               <div class="plan-region">
                 <font-awesome-icon icon="location-dot" />
-                {{ tripData.selectedArea }}
+                {{ areaMapping[tripData.selectedArea] }}
               </div>
               <h4 class="plan-title">{{ tripData.tripName }}</h4>
               <div class="plan-dates font-time">
@@ -67,10 +67,10 @@
               <div class="spot-time font-time">{{ location.spotTime }}</div>
               <div class="spot-name">{{ location.name }}</div>
               <div class="duration" @click="showEditStayTime(location)">停留{{ location.receivedStayTime || receivedStayTime }}</div>
-              <button class="tools" @click="toggleTools">
+              <button class="tools" @click="toggleTools($event, location)">
                 <font-awesome-icon icon="ellipsis"/>
               </button>
-              <ul v-if="showTools" class="tool-list" @click.stop>
+              <ul v-if="location.showTools" class="tool-list" @click.stop>
                 <li class="note" @click="handleNote">
                   <font-awesome-icon icon="file-pen" size="sm" />
                   筆記
@@ -145,6 +145,12 @@ export default {
   data() {
     return {
       map: null, // 儲存地圖實例
+      areaMapping: {
+        jp: '日本',
+        kr: '韓國',
+        cn: '港澳',
+        th: '泰國'
+      },
       searchQuery: '', // 搜索查詢
       searchResults: [], // 搜索结果
       itinerary: [], // 行程列表
@@ -166,7 +172,6 @@ export default {
       noteContent: '',
       coverImageUrl: sessionStorage.getItem('coverImage') || 'src/assets/images/default-userBg.png',
       showFunctionList: false, // 預設隱藏 FunctionList
-      showTools: false,
       receivedStayTime: '2小時0分',
     };
   },
@@ -194,6 +199,9 @@ export default {
           this.startDateObj = new Date(newValue.startDate); // 更新開始日期的 Date 物件
           this.calcDaysDiff(); // 重新計算天數
         }
+        if (newValue.selectedArea && newValue.selectedArea !== oldValue.selectedArea) {
+          this.updateGeocoder(newValue.selectedArea);
+        }
       },
       deep: true,
       immediate: true,
@@ -216,9 +224,7 @@ export default {
   methods: {
     // 初始化地圖
     initializeMap() {
-      // 台灣的setView
-      // this.map = L.map('map-container').setView([24.958277478835058, 121.22528019206256], 13);
-      this.map = L.map('map-container').setView([35.682203, 139.7617181], 13);
+      this.map = L.map('map-container').setView([35.6821936, 139.762221], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(this.map);
@@ -238,19 +244,32 @@ export default {
       // 初始化地理編碼器
       this.geocoder = L.Control.Geocoder.nominatim({
         geocodingQueryParams: {
-          //---------------------------------台灣
-          // limit: 50, // 增加返回结果的數量上限
-          // countrycodes: 'tw', // 限制结果在台灣
-          // viewbox: '120.8,25.3,122.1,21.8', // 限制在台灣範圍
-          // bounded: 1 // 使視圖框架生效
-
-          //-----------------------------------日本
+          //-----------------------------------採用預設的countrycode圖資：日本
           limit: 50, // 增加返回结果的數量上限
           countrycodes: 'jp', // 限制结果在日本
           viewbox: '122.56,20.25,153.59,45.33', // 限制在日本範圍
           bounded: 1 // 使視圖框架生效
         }
       });
+    },
+    //更新對應的國家或地區的圖資
+    updateGeocoder(countryCode) {
+      const geocodingQueryParams = {
+        limit: 50,
+        countrycodes: countryCode
+      };
+      
+      if (countryCode === 'jp') {
+        geocodingQueryParams.viewbox = '122.56,20.25,153.59,45.33';
+      } else if (countryCode === 'kr') {
+        geocodingQueryParams.viewbox = '124.59,33.06,131.53,38.37';
+      } else if (countryCode === 'th') {
+        geocodingQueryParams.viewbox = '97.20,5.37,105.39,20.27';
+      } else if (countryCode === 'cn') {
+        geocodingQueryParams.viewbox = '113.31,22.09,114.30,22.37';
+      }
+
+      this.geocoder = L.Control.Geocoder.nominatim({ geocodingQueryParams });
     },
     // 設置當前的地理位置
     setCurrentLocation(position) {
@@ -268,11 +287,8 @@ export default {
         this.searchResults = [];
         return;
       }
-      //台灣區域的資料fetch
-      // fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(this.searchQuery)}&format=json&addressdetails=1&limit=50&countrycodes=tw`)
-
-      //日本區域的資料fetch
-      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(this.searchQuery)}&format=json&addressdetails=1&limit=50&countrycodes=jp`)
+      //OSM地圖資料fetch：根據countrycodes
+      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(this.searchQuery)}&format=json&addressdetails=1&limit=50&countrycodes=${this.tripData.selectedArea}`)
         .then(response => response.json())
         .then(results => {
           this.searchResults = results.map(result => ({
@@ -305,10 +321,9 @@ export default {
     // 添加marker
     addMarker(result) {
       const latlng = { lat: result.lat, lng: result.lon };
-      this.map.setView([latlng.lat, latlng.lng], 13);
 
       // 在地圖上添加搜索结果的marker
-      const marker = L.marker([latlng.lat, latlng.lng], { icon: this.defaultMarkerIcon }).addTo(this.map)
+      const marker = L.marker(latlng, { icon: this.defaultMarkerIcon }).addTo(this.map)
       .bindPopup(this.createMarkerPopupContent(result));
         
       // 儲存標記
@@ -320,6 +335,18 @@ export default {
 
       // 清空 filteredSearchResults
       this.filteredSearchResults = [];
+
+      // 只在第一次添加標記時設置地圖視角
+      if (this.markers.length === 1) {
+        this.map.setView([latlng.lat, latlng.lng], 13);
+      }
+
+      // 監聽地圖縮放事件，並調整標記位置
+      this.map.on('zoomend', () => {
+        this.markers.forEach(({ marker }) => {
+          marker.setLatLng(marker.getLatLng()).update(); // 強制更新標記位置
+        });
+      });
     },
 
     // 創建popup彈出框內容
@@ -617,12 +644,15 @@ export default {
       this.showFunctionList = false;
     },
     /*-------------------行程工具------------------------*/
-    toggleTools(event) {
+    toggleTools(event, location) {
       event.stopPropagation(); // 防止事件冒泡
-      this.showTools = !this.showTools;
+      location.showTools = !location.showTools;
     },
     closeTools() {
-      this.showTools = false;
+      // 關閉所有 location 的 tools
+      this.getItineraryForDay(this.selectedDay).forEach(loc => {
+        loc.showTools = false;
+      });
     },
     handleNote() {
       // 筆記功能邏輯
@@ -761,9 +791,17 @@ li.dragging{
           margin: 8px 0;
         }
         .duration {
+          width: fit-content;
           margin-top: auto;
           font-size: $base-fontSize * 0.75;
           color: $gray;
+          cursor: pointer;
+          text-decoration: underline;
+          transition: color .3s ease;
+          &:hover {
+            color: $secondColor-2;
+            transition: color .3s ease;
+          }
         }
         .tools {
           position: absolute;
