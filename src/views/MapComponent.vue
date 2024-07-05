@@ -145,6 +145,7 @@ export default {
   data() {
     return {
       map: null, // 儲存地圖實例
+      geocoder: null,
       areaMapping: {
         jp: '日本',
         kr: '韓國',
@@ -201,6 +202,7 @@ export default {
         }
         if (newValue.selectedArea && newValue.selectedArea !== oldValue.selectedArea) {
           this.updateGeocoder(newValue.selectedArea);
+          this.setCenterByCountryCode(newValue.selectedArea);
         }
       },
       deep: true,
@@ -241,16 +243,19 @@ export default {
 
       this.defaultMarkerIcon = markerIcon; // 保存到 this.defaultMarkerIcon 中
 
+      this.updateGeocoder(this.tripData.selectedArea);
+      this.setCenterByCountryCode(this.tripData.selectedArea);
+
       // 初始化地理編碼器
-      this.geocoder = L.Control.Geocoder.nominatim({
-        geocodingQueryParams: {
-          //-----------------------------------採用預設的countrycode圖資：日本
-          limit: 50, // 增加返回结果的數量上限
-          countrycodes: 'jp', // 限制结果在日本
-          viewbox: '122.56,20.25,153.59,45.33', // 限制在日本範圍
-          bounded: 1 // 使視圖框架生效
-        }
-      });
+      // this.geocoder = L.Control.Geocoder.nominatim({
+      //   geocodingQueryParams: {
+      //     //-----------------------------------採用預設的countrycode圖資：日本
+      //     limit: 50, // 增加返回结果的數量上限
+      //     countrycodes: 'jp', // 限制结果在日本
+      //     viewbox: '122.56,20.25,153.59,45.33', // 限制在日本範圍
+      //     bounded: 1 // 使視圖框架生效
+      //   }
+      // });
     },
     //更新對應的國家或地區的圖資
     updateGeocoder(countryCode) {
@@ -270,6 +275,28 @@ export default {
       }
 
       this.geocoder = L.Control.Geocoder.nominatim({ geocodingQueryParams });
+    },
+    // 根據countryCode設定地圖中心位置
+    setCenterByCountryCode(countryCode) {
+      let lat, lng;
+      if (countryCode === 'jp') {
+        lng = 139.7612242;
+        lat = 35.6829273;
+      } else if (countryCode === 'kr') {
+        lng = 127.0020568;
+        lat = 37.571731;
+      } else if (countryCode === 'th') {
+        lng = 100.5048956;
+        lat = 13.7393362;
+      } else if (countryCode === 'cn') {
+        lng = 114.1678282;
+        lat = 22.3180126;
+      } else {
+        // 如果 countryCode 不在上面列出，則設定為某個默認位置，例如台北101
+        lng = 121.5654177;
+        lat = 25.033968;
+      }
+      this.map.setView([lat, lng], 13);
     },
     // 設置當前的地理位置
     setCurrentLocation(position) {
@@ -481,7 +508,6 @@ export default {
                 .catch((error) => {
                     //捕捉錯誤例外
                     console.error('Error loading JSON data:', error);
-                    // console.log(`Error: ${error}`);
                 });
         },
     //-----------------------------------計算行程天數
@@ -664,11 +690,7 @@ export default {
   },
   mounted() {
     this.initializeMap(); // 初始化地圖
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this.setCurrentLocation, this.showError); // 獲取目前的地理位置
-    } else {
-      alert('您的瀏覽器或裝置不支援GPS定位功能');
-    }
+
     this.loadJsonData();
     this.calcDaysDiff();
 
