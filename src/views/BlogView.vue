@@ -97,7 +97,7 @@ const blogsCount = ref(0); // 先建立存取位置
 // 取得資料的方法
 const fetchData = async () => {
   try {
-    let path = `${import.meta.env.VITE_API_URL}/api`;
+    let path = `${import.meta.env.VITE_API_URL}`;
     let url = path + `/blogView.php`;
 
     const response = await fetch(url);
