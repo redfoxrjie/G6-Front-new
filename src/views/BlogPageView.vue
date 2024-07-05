@@ -29,7 +29,7 @@
                 <div class="journey-content col-12 col-md-9">
                     <div class="journey-info">
                         <div class="member">
-                            <!-- <div class="mem-data">
+                            <div class="mem-data">
                                 <div class="mem-headshot">
                                     <img src="https://picsum.photos/300/200/?random=10">
                                 </div>
@@ -38,7 +38,7 @@
                                     <div class="mem-slogan">一台相機，一只皮箱，一趟說走就走的旅行</div>
                                 </div>
 
-                            </div> -->
+                            </div>
                             <!-- <button class="report-btn">檢舉文章</button> -->
 
                         </div>
@@ -77,12 +77,13 @@
                                         <div class="mem-headshot">
                                             <img src="/default-userImg.png">
                                         </div>
-                                        <div class="mem-name">訪客</div>
+                                        <div v-if="isLoggedIn" class="mem-name">{{ userInfo.u_nickname }}</div>
+                                        <div v-else class="mem-name">訪客</div>
                                     </div>
                                 </div>
-                                <form class="comment-text">
-                                    <textarea placeholder="留言回覆"></textarea>
-                                    <button class="submit-btn" name="回覆" type="submit">回覆</button>
+                                <form class="comment-text" @submit.prevent="rpsubmit">
+                                    <textarea v-model='msg' placeholder="留言回覆" required></textarea>
+                                    <button class="submit-btn" name="回覆">回覆</button>
                                 </form>
                             </div>
                         </div>
@@ -121,6 +122,9 @@
 
 <script>
 import GCompUserAcoount from '@/components/global/GCompUserAcoount.vue';
+import { useUserStore } from '@/stores/userStore';
+import { storeToRefs } from 'pinia';
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -129,32 +133,35 @@ export default {
             liked: false,
 
             blogpost: {},
-            blogrp: {}
+            blogrp: {},
+            //b_id 目前文章編號,rp_content 文章內容,u_id 留言會員帳號
 
+            msg: ''
         }
     },
+    computed: {
+        isLoggedIn() {
+            const store = useUserStore();
+            return store.isLoggedIn;
+        },
+        userInfo() {
+            const store = useUserStore();
+            return store.userInfo;
+        },
+        formrpdata() {
+            return {
+                b_id: this.blogpost.b_id,
+                rp_content: this.msg,
+                u_id: this.userInfo.u_id
+            }
+        },
+    },
     methods: {
-        // async loadJsonData() {
-        //     const blogId = this.$route.params.b_id;
-        //     try {
-        //         const response = await fetch(`${import.meta.env.BASE_URL}json/data.json`);
-        //         const data = await response.json();
 
-        //         // 確認 data 中的 blog 是一個陣列
-        //         if (data.blog && Array.isArray(data.blog)) {
-        //             this.item = data.blog.find(blog => blog.b_id == blogId);
-        //             console.log('Loaded item:', this.item);
-        //         } else {
-        //             throw new Error('Data format is incorrect');
-        //         }
-        //     } catch (error) {
-        //         console.error('Error loading JSON data:', error);
-        //     }
-        // },
         async fetchData() {
             try {
 
-                let path = `${import.meta.env.VITE_API_URL}/api`;
+                let path = `${import.meta.env.VITE_API_URL}`;
                 let url = path + `/blogPostView.php?keyword=` + this.$route.params.query;
 
                 const response = await fetch(url);
@@ -201,10 +208,48 @@ export default {
                 return raw.replace(/\\n/g, '<br>');
             } else { return '' }
 
-        }
+        },
+        async rpsubmit() {
+            if (!this.isLoggedIn) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '尚未登入',
+                    text: `必須登入才能對文章進行留言`
+                });
+            } else {
+                try {
+                    let path = `${import.meta.env.VITE_API_URL}/api`;
+                    let url = path + `/responseWrite.php`;
+                    console.log('url:' + url)
+
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(this.formrpdata)
+                    });
+                    const data = await response.json();
+                    console.log(data)
+                    if(data.code===1){
+                        Swal.fire({
+                            icon: 'success',
+                            title: '留言送出',
+            
+                        });  
+                        this.msg='';
+                        this.fetchData();                      
+                    }
+
+                } catch (error) {
+                    console.log('fetch error:', error);
+                }
+
+            }
+        },
+
     },
     mounted() {
-        // this.loadJsonData(); // 在組件mounted之後載入data
         this.fetchData();
     }
 };
@@ -223,6 +268,7 @@ article {
 
     .container {
         width: 100%;
+
         .goback-wrapper {
             margin: 12px 0 16px;
             display: flex;
@@ -271,7 +317,7 @@ article {
                     line-height: 140%;
                     letter-spacing: $base-fontSize * 1.375 * 0.1;
                     text-shadow: 2p 2px .6px $black;
-                    background-color:$accentColor-1;
+                    background-color: $accentColor-1;
                     color: $black;
                     margin-top: 6px;
                 }
@@ -307,6 +353,7 @@ article {
         .journey-main {
             margin-bottom: 20px;
             background-color: $subtle-bgDrop;
+
             .journey-content {
                 box-sizing: border-box;
                 padding: 0 24px;
@@ -368,11 +415,13 @@ article {
                                 margin-right: 4px;
 
                             }
-                            .report_icon{
-                                &:hover{
+
+                            .report_icon {
+                                &:hover {
                                     color: red;
                                 }
                             }
+
                             // &::before {
                             //     content: '';
                             //     vertical-align: middle;
@@ -453,11 +502,13 @@ article {
                                 padding: 22px;
                                 line-height: 160%;
                                 font-size: 16px;
+
                                 textarea {
                                     width: 100%;
                                     min-height: 50px;
                                     background-color: $primaryColor;
                                     resize: none;
+                                    font-family: huninn
                                 }
 
                                 .submit-btn {
@@ -500,17 +551,18 @@ article {
                             width: 100%;
                             height: 100%;
                             object-fit: cover;
-                            object-position: 50% 50%;;
+                            object-position: 50% 50%;
+                            ;
                         }
                     }
 
                     .paragraph {
-                        p{
-                        // font-size: $base-fontSize * 1.2;
-                        font-size: 16px;
-                        line-height: 150%;
-                        margin-top: 24px;
-                        text-indent: $base-fontSize * 1.2 *2;
+                        p {
+                            // font-size: $base-fontSize * 1.2;
+                            font-size: 16px;
+                            line-height: 150%;
+                            margin-top: 24px;
+                            text-indent: $base-fontSize * 1.2 *2;
                         }
                     }
                 }
@@ -551,6 +603,7 @@ article {
         }
     }
 }
+
 // 以下是桌機size為主 設定
 @media screen and (min-width: 768px) {
 
@@ -558,7 +611,7 @@ article {
         margin-top: 120px;
 
         .container {
-            width:75vw;
+            width: 75vw;
 
             .journey-main {
                 margin-bottom: 20px;
@@ -594,16 +647,17 @@ article {
                         }
                     }
                 }
-                .journey-column{
-                    .journey-block {
-                    .paragraph{
-                        p{
-                            // font-size: $base-fontSize * 1.2;
-                            font-size: 18px;
-                        }
 
+                .journey-column {
+                    .journey-block {
+                        .paragraph {
+                            p {
+                                // font-size: $base-fontSize * 1.2;
+                                font-size: 18px;
+                            }
+
+                        }
                     }
-                }
                 }
             }
         }

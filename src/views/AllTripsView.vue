@@ -132,7 +132,7 @@ export default {
     async fetchData() {
       try {
 
-        let path = `${import.meta.env.VITE_API_URL}/api`;
+        let path = `${import.meta.env.VITE_API_URL}`;
         let url = path + `/tripView.php`;
         // url ='/public/json/data.json'        //測試使用:本地json 資料比較多 目前資料庫不夠多
         const response = await fetch(url);

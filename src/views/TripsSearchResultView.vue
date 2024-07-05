@@ -3,7 +3,7 @@
         <div class="container">
             <h2>搜尋結果</h2>
             <h3>找到 {{ tripsResultLength }} 符合的行程</h3>
-            <h4>這是目前搜尋關鍵字（路由參數query: {{ $route.params.query }}</h4>
+            <h4>搜尋關鍵字: {{ $route.params.query }}</h4>
 
         </div>
     </section>
@@ -37,7 +37,7 @@ export default{
     methods: {
         async fetchData() {
             try {
-                let path = `${import.meta.env.VITE_API_URL}/api`;
+                let path = `${import.meta.env.VITE_API_URL}`;
                 let url = path + `/tripSearch.php?keyword=` + this.$route.params.query;
                 console.log('url:' + import.meta.env.VITE_API_URL)
                 console.log('url:' + url)

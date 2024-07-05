@@ -18,7 +18,7 @@
                         <RouterLink to="/news">最新消息</RouterLink>
                         <RouterLink to="/tickets">票券訂購</RouterLink>
                         <RouterLink v-if="isLoggedIn" to="/member">
-                            <img :src="userInfo.u_avatar"
+                            <img :src=parseUserImg(userInfo.u_avatar)
                                 style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid;">
                             <span>{{ userInfo.u_nickname }}</span>
                         </RouterLink>
@@ -46,6 +46,11 @@ import { useUserStore } from '@/stores/userStore';
 import { storeToRefs } from 'pinia';
 import LoginRegisterModal from './components/layout/LoginRegisterBox.vue';
 
+// parseUserImg(imgURL) {
+//             // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+//             if (imgURL) return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+//             return '/default-userBg.png'
+//         }
 
 export default defineComponent({
     components: {
@@ -91,7 +96,11 @@ export default defineComponent({
             router.push('/');
             openLoginModal(); // 登出後重新打開登錄彈窗
         };
-
+        const parseUserImg=(imgURL)=>{
+            // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+            if (imgURL) return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+            return '/default-userImg.png'
+        };
         onMounted(() => {
             userStore.initializeStore();
         });
@@ -105,6 +114,7 @@ export default defineComponent({
             closeLoginModal,
             loginSuccessHandler,
             logout,
+            parseUserImg,
             isLoggedIn,
             userInfo
         }
@@ -117,8 +127,10 @@ export default defineComponent({
 
 /* 全域 ::selection 樣式 */
 ::selection {
-  background: $secondColor-2; /* 背景顏色 */
-  color: #fff; /* 文字顏色 */
+    background: $secondColor-2;
+    /* 背景顏色 */
+    color: #fff;
+    /* 文字顏色 */
 }
 
 header {
