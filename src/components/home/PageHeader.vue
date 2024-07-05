@@ -38,7 +38,7 @@
                     <button class="openLoginModal" @click="openLoginModal">會員登入</button>
                 </li>
             </ul>
-            <div class="bottom-section" @click="goToPage('/trips')">
+            <div class="bottom-section" @click="handlePlanningClick">
                 <img src="@/assets/images/global/icons/Vector.svg" alt="map icon" crossorigin="anonymous">
                 <span>開始規劃</span>
             </div>
@@ -161,7 +161,6 @@ export default defineComponent({
         LoginRegisterModal
     },
     setup() {
-
         const userStore = useUserStore();
         const { isLoggedIn, userInfo } = storeToRefs(userStore);
 
@@ -169,6 +168,7 @@ export default defineComponent({
         const menu = ref(null);
         const isLoginMode = ref(true);
         const isLoginModalVisible = ref(false);
+        const redirectToTripsAfterLogin = ref(false); //登入後自動跳轉創建行程
         // const user = ref(null);
 
         const toggleMenu = () => {
@@ -208,6 +208,10 @@ export default defineComponent({
         const loginSuccessHandler = (userData) => {
             userStore.setUser(userData);
             closeLoginModal();
+            if (redirectToTripsAfterLogin.value) {
+                goToPage('/trips');
+                redirectToTripsAfterLogin.value = false;  // 重置變數
+            }
         };
 
         const logout = () => {
@@ -218,6 +222,15 @@ export default defineComponent({
 
         const switchMode = (mode) => {
             isLoginMode.value = mode;
+        };
+
+        const handlePlanningClick = () => {
+            if (isLoggedIn.value) {
+                goToPage('/trips');
+            } else {
+                openLoginModal();
+                redirectToTripsAfterLogin.value = true;  // 設置變數
+            }
         };
 
         return {
@@ -233,6 +246,7 @@ export default defineComponent({
             switchMode,
             goToPage,
             logout,
+            handlePlanningClick,
         };
     },
 });
@@ -313,7 +327,7 @@ nav {
             color: $primaryColor;
             text-decoration: none;
             font-size: 1rem;
-
+            cursor: pointer;
             &:hover {
                 color: $accentColor-2;
             }
