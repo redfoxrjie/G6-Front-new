@@ -3,80 +3,80 @@
     <h2>票券一覽</h2>
     <h3 class="Area_TicketTitle">日本-沖繩</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in okinawaTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
+      <div class="Card_Container col" v-for="ticket in tickets.slice(0, 3)" :key="ticket.t_id" @click="goToDetail(ticket.t_id)">
         <div class="ticket_Card">
           <div class="ticket-img">
-            <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
+            <img :src="parseServerImg(ticket.t_image)" :alt="ticket.t_name" />
           </div>
           <div class="Ticket_Txt">
-            <h4>{{ ticket.name }}</h4>
-            <p>{{ ticket.content }}</p>
-            <p class="TicketPrice">{{ ticket.price }}</p>
-            <p>{{ ticket.viewers }}</p>
+            <h4>{{ ticket.t_name }}</h4>
+            <p>{{ ticket.t_title }}</p>
+            <p class="TicketPrice">TWD {{ ticket.t_price }}</p>
+            <p class="viewers">{{ ticket.t_viewers }} 人氣</p>
           </div>
         </div>
       </div>
     </div>
     <h3 class="Area_TicketTitle">日本-大阪</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in osakaTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
+      <div class="Card_Container col" v-for="ticket in tickets.slice(3, 6)" :key="ticket.t_id" @click="goToDetail(ticket.t_id)">
         <div class="ticket_Card">
           <div class="ticket-img">
-            <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
+            <img :src="parseServerImg(ticket.t_image)" :alt="ticket.t_name" />
           </div>
           <div class="Ticket_Txt">
-            <h4>{{ ticket.name }}</h4>
-            <p>{{ ticket.content }}</p>
-            <p class="TicketPrice">{{ ticket.price }}</p>
-            <p>{{ ticket.viewers }}</p>
+            <h4>{{ ticket.t_name }}</h4>
+            <p>{{ ticket.t_title }}</p>
+            <p class="TicketPrice">TWD {{ ticket.t_price }}</p>
+            <p class="viewers">{{ ticket.t_viewers }} 人氣</p>
           </div>
         </div>
       </div>
     </div>
     <h3 class="Area_TicketTitle">泰國-曼谷</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in thailandTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
+      <div class="Card_Container col" v-for="ticket in tickets.slice(6, 9)" :key="ticket.t_id" @click="goToDetail(ticket.t_id)">
         <div class="ticket_Card">
           <div class="ticket-img">
-            <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
+            <img :src="parseServerImg(ticket.t_image)" :alt="ticket.t_name" />
           </div>
           <div class="Ticket_Txt">
-            <h4>{{ ticket.name }}</h4>
-            <p>{{ ticket.content }}</p>
-            <p class="TicketPrice">{{ ticket.price }}</p>
-            <p>{{ ticket.viewers }}</p>
+            <h4>{{ ticket.t_name }}</h4>
+            <p>{{ ticket.t_title }}</p>
+            <p class="TicketPrice">TWD {{ ticket.t_price }}</p>
+            <p class="viewers">{{ ticket.t_viewers }} 人氣</p>
           </div>
         </div>
       </div>
     </div>
     <h3 class="Area_TicketTitle">韓國-首爾</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in koreaTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
+      <div class="Card_Container col" v-for="ticket in tickets.slice(9, 12)" :key="ticket.t_id" @click="goToDetail(ticket.t_id)">
         <div class="ticket_Card">
           <div class="ticket-img">
-            <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
+            <img :src="parseServerImg(ticket.t_image)" :alt="ticket.t_name" />
           </div>
           <div class="Ticket_Txt">
-            <h4>{{ ticket.name }}</h4>
-            <p>{{ ticket.content }}</p>
-            <p class="TicketPrice">{{ ticket.price }}</p>
-            <p>{{ ticket.viewers }}</p>
+            <h4>{{ ticket.t_name }}</h4>
+            <p>{{ ticket.t_title }}</p>
+            <p class="TicketPrice">TWD {{ ticket.t_price }}</p>
+            <p class="viewers">{{ ticket.t_viewers }} 人氣</p>
           </div>
         </div>
       </div>
     </div>
-    <h3 class="Area_TicketTitle">越南-富國島</h3>
+    <h3 class="Area_TicketTitle">港澳</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in vietnamTickets" :key="ticket.id" @click="goToDetail(ticket.id)">
+      <div class="Card_Container col" v-for="ticket in tickets.slice(12, 15)" :key="ticket.t_id" @click="goToDetail(ticket.t_id)">
         <div class="ticket_Card">
           <div class="ticket-img">
-            <img :src="parseServerImg(ticket.image)" :alt="ticket.name" />
+            <img :src="parseServerImg(ticket.t_image)" :alt="ticket.t_name" />
           </div>
           <div class="Ticket_Txt">
-            <h4>{{ ticket.name }}</h4>
-            <p>{{ ticket.content }}</p>
-            <p class="TicketPrice">{{ ticket.price }}</p>
-            <p>{{ ticket.viewers }}</p>
+            <h4>{{ ticket.t_name }}</h4>
+            <p>{{ ticket.t_title }}</p>
+            <p class="TicketPrice">TWD {{ ticket.t_price }}</p>
+            <p class="viewers">{{ ticket.t_viewers }} 人氣</p>
           </div>
         </div>
       </div>
@@ -91,39 +91,38 @@ export default {
       tickets: [],
     };
   },
-  computed: {
-    okinawaTickets() {
-      return this.tickets.filter(ticket => [1, 2, 3].includes(ticket.id));
-    },
-    osakaTickets() {
-      return this.tickets.filter(ticket => [4, 5, 6].includes(ticket.id));
-    },
-    thailandTickets() {
-      return this.tickets.filter(ticket => [7, 8, 9].includes(ticket.id));
-    },
-    koreaTickets() {
-      return this.tickets.filter(ticket => [10, 11, 12].includes(ticket.id));
-    },
-    vietnamTickets() {
-      return this.tickets.filter(ticket => [13, 14, 15].includes(ticket.id));
-    }
-  },
   mounted() {
     this.loadJsonData();
   },
   methods: {
-    loadJsonData() {
-      fetch(`${import.meta.env.BASE_URL}json/tickets.json`)
-        .then(response => response.json())
-        .then(data => {
-          this.tickets = data.tickets;
-        })
-        .catch(error => {
-          console.error('Error loading JSON data:', error);
+    async loadJsonData(){
+      try {
+        const response = await fetch('http://localhost/phpG6/front/getTickets.php', { //使用fetch 發送請求
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' //設置headers 指定請求內容為json檔
+            },
+            // 放有需要傳遞的資料
+            body: JSON.stringify({ //將 JavaScript 對象 { t_id: t_id } 轉換為JSON字符串，並將其作為請求的body發送。
+                // 可以放你要傳遞的資料的物件
+                
+            })
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+        console.log('Response:', responseData);
+        // 將後端返回的票券資料存入 tickets 中
+        this.tickets = responseData.tickets;
+      } catch (error) {
+          console.error('Error:', error);
+      }
     },
     goToDetail(id){
-      this.$router.push({ name: 'TicketInner', params: { id } });
+      this.$router.push({ name: 'TicketInner', params: { id } }); //跳頁設置
     },
     parseImg(imgURL) {
       // 將相對路徑解析成正確的 URL
@@ -184,9 +183,13 @@ export default {
       cursor: pointer;
       .TicketPrice{
         color: $secondColor-2;
+        margin: 2% 0px;
       }
       &:hover {
         color: $secondColor-2;
+      }
+      .viewers{
+        font-size: 12px;
       }
     }
   }

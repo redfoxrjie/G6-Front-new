@@ -3,20 +3,24 @@
         <div class="light-box-container">
             <div class="header-block">
                 <div class="title">
-                    <h3>設定當天出發時間</h3>
+                    <h3>預計停留時間</h3>
+                    <h4>
+                        <font-awesome-icon icon="map-pin" />
+                        JR博多車站
+                    </h4>
+                    <p>日本〒812-0012 Fukuoka, Hakata Ward, 博多駅中央街1−1</p>
                 </div>
                 <div class="input-wrapper">
-                    <label for="editTime">
-                        <h4>出發時間</h4>
-                    </label>
-                    <!-- 使用 v-model 雙向綁定 -->
-                    <input type="time" id="editTime" name="edit-time" min="00:00" max="23:59" pattern="([01]?[0-9]|2[0-3]): [0-5][0-9]" required v-model="selectedTime">
+                    <input type="number" id="hh" name="hh" min="0" max="23" v-model="hours"/>
+                    <label for="hh">時</label>
+                    <input type="number" id="mm" name="mm" min="0" max="59" step="5" v-model="minutes"/>
+                    <label for="mm">分</label>
                 </div>
             </div>
             <div class="footer-block">
                 <div class="btn-wrapper">
                     <button class="btn cancel" @click="cancel">取消</button>
-                    <button class="btn confirm" @click="saveTime">儲存</button>
+                    <button class="btn confirm" @click="saveStayTime">儲存</button>
                 </div>
             </div>
         </div>
@@ -28,35 +32,30 @@
 import Swal from 'sweetalert2';
 
 export default {
-    data() {
-        return {
-            selectedTime: ''  // 使用的時間數據
-        };
-    },
-    methods: {
-        // 儲存時間的方法
-        saveTime() {
-            // 檢查是否選擇了時間
-            if (!this.selectedTime) {
-                // 顯示 SweetAlert 提示
-                Swal.fire({
-                    title: '錯誤',
-                    text: '請選擇出發時間',
-                    icon: 'error',
-                    confirmButtonText: '確定',
-                    confirmButtonColor: '#4F82D4'
-                });
-                return;
-            }
-            // 觸發自定義事件，將選擇的時間傳遞給父組件
-            this.$emit('time-saved', this.selectedTime);
-            console.log('選擇的時間：', this.selectedTime);
-        },
-        // 取消按鈕的處理邏輯
-        cancel() {
-            this.$emit('close');
-        }
+  props: {
+    location: {
+      type: Object,
+      required: true
     }
+  },
+  data() {
+      return {
+          hours: 2,
+          minutes: 0
+      };
+  },
+  methods: {
+      // 儲存時間的方法
+      saveStayTime() {
+        const { hours, minutes } = this;
+        const formattedTime = `${hours}小時${minutes}分`;
+        this.$emit('save-stay-time', formattedTime);
+      },
+      // 取消按鈕
+      cancel() {
+          this.$emit('close');
+      },
+  }
 }
 </script>
 
@@ -86,23 +85,26 @@ export default {
       .header-block {
         .title {
             h3 { margin-bottom: 12px; }
+            h4 { color: $secondColor-2 }
             p { 
-                font-size: 0.875rem;
-                color: $secondColor-2;
+                font-size: 0.8rem;
+                color: $secondColor-1;
+                letter-spacing: unset;
+                line-height: 100%;
+                margin: 6px 0 24px;
             }
         }
         .input-wrapper {
-          input {
-            border: 2px solid $secondColor-1;
-            border-radius: 5px;
-            padding: 4px 16px;
-            margin: 12px 0 0;
-            font-family: 'HunInn';
-            &:focus {
-              border: 2px solid $secondColor-2;
-              outline: unset;
+            margin: 16px 0;
+            input {
+                width: 40px;
+                text-align: center;
+                margin-right: 8px;
+                font-size: 1rem;
             }
-          }
+            label {
+                margin-right: 12px;
+            }
         }
       }
       .footer-block {

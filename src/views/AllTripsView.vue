@@ -5,8 +5,8 @@
     <div class="filter"></div>
     <h1>全世界最棒的旅遊體驗</h1>
     <div class="comp-searchBar col-md-7 col-12">
-      <input class='' type="text" placeholder="下一個旅遊地點">
-      <div class="icon-wrap" @click="goToPage('/tripsSearchResult')">
+      <input class='' v-model="searchQuery" type="text" placeholder="下一個旅遊地點" @keyup.enter="goToSearch">
+      <div class="icon-wrap" @click="goToSearch()">
         <span class="material-symbols-outlined">
           search
         </span>
@@ -18,9 +18,10 @@
       <h3>在ToGo的熱門行程</h3>
       <p>幫助每個人，更容易規劃行程，更輕鬆分享體驗</p>
       <p>這些是受大家喜愛的熱門行程</p>
-      <GCompUserAccount />
     </div>
   </div>
+
+
   <div class="section-tripRank">
     <div class="container">
       <div class="tripRank-tabs-wrapper col-11 col-md-12">
@@ -37,7 +38,7 @@
             </div>
             <div class="tr-item shadow-v1 bdradius-sm col-10 col-md-11">
               <div class="tr-item-img col-12 col-md-3 col-xl-2">
-                <img :src="trips[selectedCase][index].trp_img">
+                <img :src="parseServerImg(trips[selectedCase][index].trp_img)" alt="">
               </div>
               <div class="tr-item-content col-12 col-md-9 col-xl-10">
                 <div class="content-title">
@@ -45,7 +46,9 @@
                     {{ trips[selectedCase][index].trp_name }}
                   </h4>
                 </div>
-                <user-account :uName="trips[selectedCase][index].u_nickname" />
+
+                <user-account :uName="trips[selectedCase][index].u_nickname " :uImg="trips[selectedCase][index].u_avatar" />
+
               </div>
             </div>
           </div>
@@ -56,96 +59,173 @@
   <div class="section-title">
     <div class="container">
       <h3>探索所有{{ areaFormat[selectedCase] }}的行程地圖</h3>
-      <p>{{ areaFormat[selectedCase] }}地區總共有432個行程地圖，127位ToGo 創作者參與。</p>
+      <p>{{ areaFormat[selectedCase] }}地區總共有{{areaTripsLength[selectedCase]}}個行程地圖，127位ToGo 創作者參與。</p>
     </div>
   </div>
   <div class="section-tripList">
     <div class="container">
-      <div class="row-btns row">
-        <button id="lastBtn" class="col-2 col-md-1">
+      
+  <!-- <p>{{ displayLimit}}</p>
+  <p>目前在第displatStatus{{ displayStatus }}頁，此地區資料共有displayLimit:{{ displayLimit }}頁面</p> -->
+  <!-- <p>顯示陣列{{ displayTrips }}</p> -->
+  <!-- <p v-for="n in displayTrips">{{n}}</p> -->
+
+  <div class="row-btns row">
+        <button id="prevBtn" class="col-2 col-md-1" @click="btnSwitch('prev')">
           <font-awesome-icon :icon="['fas', 'chevron-left']" />
         </button>
-        <button id="nextBtn" class="col-2 col-md-1">
+        <button id="nextBtn" class="col-2 col-md-1" @click="btnSwitch('next')">
           <font-awesome-icon :icon="['fas', 'chevron-right']" />
         </button>
       </div>
       <div class="tripList-row row row-cols-1 row-cols-md-2 row-cols-lg-3">
-        <trip-card v-for="(n, i) in 6" :tcImg="trips[selectedCase][i].trp_img"
-          :tc-title="trips[selectedCase][i].trp_name" :tcMemName="trips[selectedCase][i].u_nickname"
-          :key="trips[selectedCase][i].trp_id" />
-
+        <trip-card v-for="(trip, i) in displayTrips" :tcImg="parseServerImg(trip.trp_img)"
+          :tc-title="trip.trp_name" :tcMemName="trip.u_nickname" :tcMemImg='trip.u_avatar'
+          :key="trip.trp_id" />
       </div>
     </div>
   </div>
 
+
 </template>
-<script setup>
-import { ref, onMounted } from 'vue';
+<script>
 import { useRouter } from 'vue-router';
-
-// tab中文內容對照
-const areaFormat = { 'jp': '日本', 'kr': "韓國", 'th': "泰國", 'hkmo': "港澳" };
-//紀錄資料 (綁定)
-const trips = ref([]);
-//紀錄切換狀態 (綁定)
-const selectedCase = ref('jp');
-
-const fetchData = async () => {
-  try {
-    const response = await fetch(`${import.meta.env.BASE_URL}json/data.json`);
-    const data = await response.json();
-    //先根據地區區分 暫存陣列位置
-    const classifiedTrips = {
-      jp: [],
-      kr: [],
-      th: [],
-      hkmo: []
+import { ref } from 'vue';
+export default {
+  data() {
+    return {
+      areaFormat: { 'jp': '日本', 'kr': "韓國", 'th': "泰國", 'hkmo': "港澳" },
+      trips: [],
+      areaTripsLength: [], //每個地區　的資料長度
+      selectedCase: 'jp', //tab 地區選取狀態
+      // --trip search 搜尋用變數
+      searchQuery:'',
+      // ---trip list　換頁區塊用變數
+      displayStatus: 1, //頁數索引 (從1開始)
+      displayMax: 6 //一頁的資料數量
     }
-    data.trip.forEach(trip => {
-      switch (trip.trp_area) {
-        case '日本':
-          classifiedTrips.jp.push(trip);
-          break;
-        case '韓國':
-          classifiedTrips.kr.push(trip);
-          break;
-        case '泰國':
-          classifiedTrips.th.push(trip);
-          break;
-        case '港澳':
-          classifiedTrips.hkmo.push(trip);
-          break;
+  },
+  computed: {
+    displayLimit() { //此地區類別的總頁數
+      // 紀錄 目前tab的資料總數量
+      let currentAreaLength = this.areaTripsLength[this.selectedCase]
+      // 算出 根據總數所算出的頁面總數量
+      let currrentPageLimit =Math.ceil(currentAreaLength / this.displayMax)
+      return currrentPageLimit
+    },
+    displayTrips() { 
+      //根據頁面索引 回傳顯示的資料
+      //如果是最後一頁 要多判定剩餘的資料
+      let index = 0+this.displayMax*(this.displayStatus-1) //此頁第一筆資料索引
+      let lastPageLength = this.areaTripsLength[this.selectedCase]%this.displayMax
+      if(this.displayStatus==this.displayLimit && lastPageLength!==0){
+        const notFullList =this.trips[this.selectedCase].slice(index,index+lastPageLength)
+        // return `slice list [${index},${index+lastPageLength}],` //debug
+        return notFullList
+      }
+      const newList =this.trips[this.selectedCase].slice(index,index+this.displayMax)
+      // return `slice list [${index},${index+this.displayMax}],` //debug 
+      return newList
+    }
+  },
+  methods: {
+    async fetchData() {
+      try {
 
+        let path = `${import.meta.env.VITE_API_URL}`;
+        let url = path + `/tripView.php`;
+        // url ='/public/json/data.json'        //測試使用:本地json 資料比較多 目前資料庫不夠多
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data)
+        //先根據地區區分 暫存陣列位置
+        const classifiedTrips = {
+          jp: [],
+          kr: [],
+          th: [],
+          hkmo: []
+        }
+        const areaTripsLength = {
+          jp: 0,
+          kr: 0,
+          th: 0,
+          hkmo: 0
+        }
+        data.trips.forEach(trip => {
+          switch (trip.trp_area) {
+            case '日本':
+              classifiedTrips.jp.push(trip);
+              areaTripsLength.jp++
+              break;
+            case '韓國':
+              classifiedTrips.kr.push(trip);
+              areaTripsLength.kr++
+              break;
+            case '泰國':
+              classifiedTrips.th.push(trip);
+              areaTripsLength.th++
+
+              break;
+            case '港澳':
+              classifiedTrips.hkmo.push(trip);
+              areaTripsLength.hkmo++
+              break;
+
+          }
+        }
+        );
+        this.areaTripsLength = areaTripsLength;
+        this.trips = classifiedTrips;
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
+    tabSwitch(area) {
+      this.selectedCase = area;
+      console.log('hii', area, 'result:', this.selectedCase);
+    },
+    btnSwitch(action) {
+      //判定目前頁數是否小於在Limit最大頁面 才執行換頁
+      if (action == 'next' && this.displayStatus< this.displayLimit) {
+        this.displayStatus++;
+        //判定目前頁數如果為1，則無法執行換頁
+      } else if (action == 'prev' &&this.displayStatus>1) {
+        this.displayStatus--;
+      }else{
+        alert(error)
+      }
+    },
+    goToSearch() {
+      // console.log(`tripSearchResult/${this.searchQuery}`)
+      if(this.searchQuery==='')return;
+      this.$router.push(`tripsSearchResult/${this.searchQuery}`)
+    }
+    ,
+    parseServerImg(imgURL) {
+      return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+    },
+    goToPage(toLink) {
+      this.$router.push(toLink)
+    }
+
+
+
+  },
+  watch:{
+    selectedCase:{ //當切換tab發生(透過偵測顯示地區) 重置目前頁面索引
+      immediate: true,
+      handler(){
+        this.displayStatus=1
       }
     }
-    );
-    //存回到ref位置 ref要用ref.value的方式才會存入
-    trips.value = classifiedTrips;
-    console.log(classifiedTrips)
-  } catch (error) {
-    console.error('Error fetching data:', error);
+  },
+  beforeMount() {
+    this.fetchData();
   }
-};
-//切換狀態 設置方法 
-
-const tabSwitch = (area) => {
-  selectedCase.value = area;
-  console.log('hii', area, 'result:', selectedCase.value);
 }
-const test = () => {
-  alert('dddd');
-}
-
-// 路由切換 方法
-const router = useRouter();
-const goToPage = (toLink) => {
-  router.push(toLink);
-}
-
-// 執行
-fetchData();
-
 </script>
+
 
 <style lang="scss" scoped>
 @import '../assets/styles/base/color';
@@ -405,6 +485,7 @@ $searchBarHeight: 30px;
     // border: 1px solid #000;
     padding: 10px 0;
     margin: 0 5px;
+
     button {
       background-color: $secondColor-2;
 
@@ -415,12 +496,13 @@ $searchBarHeight: 30px;
       transition: .1s;
     }
 
-    #lastBtn {
+    #prevBtn {
       border-top-left-radius: 20px;
       border-bottom-left-radius: 20px;
 
       &:hover {
-          box-shadow: inset 0px 0px 20px .2px #0b5fe572;
+        box-shadow: inset 0px 0px 20px .2px #0b5fe572;
+
         svg {
           transform: scale(1.05);
         }
@@ -428,9 +510,10 @@ $searchBarHeight: 30px;
 
       &:active {
         box-shadow: inset 0px 0px 40px .4px $secondColor-1;
+
         svg {
           color: $primaryColor;
-          transform: scale(0.97) ;
+          transform: scale(0.97);
 
         }
       }
@@ -443,6 +526,7 @@ $searchBarHeight: 30px;
 
       &:hover {
         box-shadow: inset 0px 0px 20px .2px #0b5fe572;
+
         svg {
           transform: scale(1.1) rotate(2deg);
         }
@@ -450,6 +534,7 @@ $searchBarHeight: 30px;
 
       &:active {
         box-shadow: inset 0px 0px 40px .4px $secondColor-1;
+
         svg {
           color: $secondColor-1;
         }
@@ -561,8 +646,9 @@ $searchBarHeight: 30px;
       padding-bottom: 10px;
     }
   }
-  .section-tripList{
-    .tripList-row{
+
+  .section-tripList {
+    .tripList-row {
       justify-content: center;
     }
   }

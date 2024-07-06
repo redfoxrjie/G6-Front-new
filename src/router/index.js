@@ -33,7 +33,7 @@ const router = createRouter({
       component: () => import('../views/BlogView.vue')
     },
     {
-      path: '/blog/:b_id',
+      path: '/blog/:query',
       name: 'blogPage',
       component: () => import('../views/BlogPageView.vue')
     },
@@ -53,9 +53,9 @@ const router = createRouter({
       component: () => import('../views/TicketsView.vue')
     },
     {
-      path: '/tickets/:id',
-      name: 'ticketsInfo',
-      component: () => import('../views/TicketInner.vue')
+      // path: '/tickets/:id',
+      // name: 'ticketsInfo',
+      // component: () => import('../views/TicketInner.vue')
     },
     {
       path: '/login',
@@ -78,19 +78,20 @@ const router = createRouter({
       component: () => import('../views/EditMemberMainView.vue')
     },
     {
-      path: '/tripsSearchResult',
+      path: '/tripsSearchResult/:query',
       name: 'tripsSearchResult',
       component: () => import('../views/TripsSearchResultView.vue')
     },
     {  
-      path: '/TicketOrder',
+      path: '/TicketOrder/:id',
       name: 'TicketOrder',
-      component: () => import('../views/TicketOrder.vue')
+      component: () => import('../views/TicketOrder.vue'),
     },
     {  
       path: '/TicketInner/:id',
       name: 'TicketInner',
-      component: () => import('../views/TicketInner.vue')
+      component: () => import('../views/TicketInner.vue'),
+      props: true
     },
     {  
       path: '/Contact',
@@ -98,9 +99,10 @@ const router = createRouter({
       component: () => import('../views/ContactView.vue')
     },
     {
-      path: '/blogSearchResult',
-      name: 'blogSearchResult',
-      component: () => import('../views/BlogSearchResultView.vue')
+      path: '/blogsSearchResult/:query',
+      name: 'blogsSearchResult',
+      component: () => import('../views/BlogsSearchResultView.vue'),
+      
     },
     // {
     //   path: '/blogPage',
@@ -118,6 +120,11 @@ const router = createRouter({
       name: 'NotFound',
       component: () => import('../views/NotFoundView.vue') 
     },
+    {
+      path: '/test',
+      name: 'testpage',
+      component: () => import('../views/TestPageView.vue') 
+    }
     // {
     //   path: '/PageFooter',
     //   name: 'PageFooter',

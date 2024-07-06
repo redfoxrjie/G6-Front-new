@@ -1,9 +1,9 @@
 <template>
   <main>
     <PageHeader />
-    <SectionNews />
     <SectionHotTrips />
     <SectionHotBlog />
+    <SectionNews />
     <SectionTicket />
     <LoginRegisterModal />
   </main>

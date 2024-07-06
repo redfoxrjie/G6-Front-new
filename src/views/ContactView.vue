@@ -6,35 +6,31 @@
             <img class="leftHand" src="../assets/images/contactusDog_03.png" alt="">
             <img class="rightHand" src="../assets/images/contactusDog_02.png" alt="">
         </div>
-        <div id="contactus"  @submit.prevent="contactFinish">
+        <div id="contactus">
             <div class="form_frame">
                 <table>
                     <tbody>
                             <tr class="form_group form_name">  
-                                <!-- <td>姓名</td> -->
                                 <td><input type="text" id="name" v-model="formData.name" placeholder="請輸入姓名" required></td>
                             </tr>
                             <tr class="form_group form_phone">
-                                <!-- <td>聯絡電話</td> -->
                                 <td><input type="tel" id="tel" v-model="formData.tel" placeholder="請輸入電話" required></td>
                             </tr>
                             <tr class="form_group form_email">
-                                <!-- <td>E-mail</td> -->
-                                <td><input for="email" id="email" v-model="formData.email" placeholder="請輸入e-mail" required></td>
+                                <td><input type="email" id="email" v-model="formData.email" placeholder="請輸入e-mail" required></td>
                             </tr>
                     </tbody>
                     <div class="form_group form_choice">
                         <p>想詢問項目</p>
                         {{ checkbox }}<br />
                         <label >
-                        <input type="checkbox" v-model="formData.about1">介面操作
-                        <!-- <span class="coverStyle"></span> -->
+                        <input type="checkbox" v-model="formData.aboutIF" @change="handleChange('aboutIF')" >介面操作
                         </label>
                         <label >
-                        <input type="checkbox" v-model="formData.about2">已購入票券
+                        <input type="checkbox" v-model="formData.aboutTK" @change="handleChange('aboutTK')" >已購入票券
                         </label>
                         <label >
-                        <input type="checkbox" v-model="formData.about3">其他
+                        <input type="checkbox" v-model="formData.aboutOT" @change="handleChange('aboutOT')" >其他
                         </label>
                     </div>
                     <div class="form_group">
@@ -44,7 +40,7 @@
                 </table>
             </div>
             <div class="btn">
-                <button type="submit" class="btn-1">確認送出</button>
+                <button type="submit" class="btn-1" @click="contactFinish">確認送出</button>
             </div>
         </div>
     </section>
@@ -57,19 +53,31 @@ export default {
     data() {
         return {
             formData: {
+                id: '',
                 name: '',
                 tel: '',
                 email: '',
-                inquiryInterface: false,
-                inquiryTickets: false,
-                inquiryOther: false,
-                message: ''
+                message: '',
+                aboutIF: false,
+                aboutTK: false,
+                aboutOT: false,
+                aboutClass: ''
             }
         }
     },
     methods:{
-        contactFinish(){
-            this.showSuccessAlert();
+        async contactFinish(){
+            try{
+                if (this.isFormValid){
+                await this.saveContact();
+                this.showSuccessAlert();
+                this.resetForm();
+            }else{
+                this.showErrorAlert();
+            }
+            } catch (error) {
+                console.error('Error finishing order:', error);
+            }
         },
         showSuccessAlert(){
             Swal.fire({
@@ -81,24 +89,92 @@ export default {
                 confirmButtonColor: '#4F82D4'
             })
         },
-        async contactFinish() {
+        showErrorAlert(){
+            Swal.fire({
+                title: '尚未填寫完成無法訂購',
+                text: '請完整填寫所有必填項目',
+                icon: 'warning',
+                confirmButtonText: '確定',
+            })
+        },
+        resetForm(){
+            this.formData.name = '';
+            this.formData.tel = '';
+            this.formData.email = '';
+            this.formData.message = '';
+            this.formData.aboutIF = false;
+            this.formData.aboutTK = false;
+            this.formData.aboutOT = false;
+        },
+        async saveContact() {
+            
+            let aboutClass; //問題分類選項 1.介面操作2.已購入票券3.其他	
+            if(this.formData.aboutIF){
+                aboutClass = 1;
+            }else if(this.formData.aboutTK){
+                aboutClass = 2;
+            }else if(this.formData.aboutOT){
+                aboutClass = 3;
+            }
+
             try {
-                // 发送邮件的请求
-                await axios.post('/send-email.php', this.formData); // 或者其他适合你的后端发送邮件的方法和路径
-                alert('Email sent successfully!');
-                this.formData.name = '';
-                this.formData.tel = '';
-                this.formData.email = '';
-                this.formData.inquiryInterface = false;
-                this.formData.inquiryTickets = false;
-                this.formData.inquiryOther = false;
-                this.formData.message = '';
+                // 使用axios送請求
+                // await axios.post('/http://localhost/phpG6/front/saveContact.php', this.formData);
+                // alert('Email sent successfully!');
+                // this.formData.id = '';
+                // this.formData.name = '';
+                // this.formData.tel = '';
+                // this.formData.email = '';
+                // this.formData.message = '';
+                // aboutClass ='';
+                // 
+                // this.formData.aboutIF = false;
+                // this.formData.aboutTK = false;
+                // this.formData.aboutOT = false;
+                
+                const response = await fetch('http://localhost/phpG6/front/saveContact.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    // 如果有需要傳遞的資料，可以透過 body 屬性傳遞
+                    body: JSON.stringify({
+                        // 可以放你要傳遞的資料的物件
+                        // u_id: userStore.userInfo.u_id,
+                        cu_id: this.formData.id,
+                        cu_name: this.formData.name,
+                        cu_phone: this.formData.phone,
+                        cu_email: this.formData.email,
+                        cu_class: this.formData.aboutClass,
+                        cu_message: this.formData.message,
+                        cu_time: this.formData.time
+                    })
+                });
             } catch (error) {
                 console.error('Failed to send email:', error);
                 alert('Failed to send email. Please try again later.');
             }
-        }
+        },
+        handleChange(option){
+            if(option === 'aboutIF' && this.formData.aboutIF){
+                this.formData.aboutTK  = false;
+                this.formData.aboutOT = false;
+            }else if (option === 'aboutTK' && this.formData.aboutTK){
+                this.formData.aboutIF  = false;
+                this.formData.aboutOT = false;
+            }else{
+                this.formData.aboutIF  = false;
+                this.formData.aboutTK = false;
+            }
+        }   
     },
+    computed: {
+        isFormValid(){
+            return this.formData.name !== ''&&
+                this.formData.email !== ''&&
+                this.formData.message !== '';
+        }
+    }
 }
 </script>
 
