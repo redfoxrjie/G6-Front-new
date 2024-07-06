@@ -1,4 +1,5 @@
 <template>
+
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js"
@@ -79,7 +80,7 @@ export default defineComponent({
       // const router = useRouter();
       router.push(toLink)
     }
-
+    
     const toggleMobileMenu = () => {
       isMobileMenuClosed.value = !isMobileMenuClosed.value //設置toggleMobileMenu每次都會轉換closed/!closed狀態
     }

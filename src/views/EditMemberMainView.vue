@@ -7,22 +7,21 @@
                     <label for="banner-upload" class="banner-label">
                         <font-awesome-icon :icon="['fas', 'pen-to-square']" /> 編輯封面
                     </label>
-                    <input id="banner-upload" type="file" @change="uploadImage('bannerImage', $event)" accept="image/*"
+                    <input id="banner-upload" type="file" @change="uploadImage('u_background', $event)" accept="image/*"
                         style="display: none;">
                 </div>
             </div>
             <div class="mem-info">
                 <div class="mem-headshot">
-                    <img :src="headshotImageUrl || defaultHeadshotImageUrl" alt="member headshot photo">
-
-                    <input id="headshot-upload" type="file" @change="uploadImage('headshotImage', $event)"
-                        accept="image/*" style="display: none;">
+                    <img :src="headshotImageUrl || defaultHeadshotImageUrl" alt="">
+                    <input id="headshot-upload" type="file" @change="uploadImage('u_avatar', $event)" accept="image/*"
+                        style="display: none;">
                 </div>
                 <label for="headshot-upload" class="headshot-label">
                     <font-awesome-icon :icon="['fas', 'camera']" />
                 </label>
-                <div class="mem-name">Josh Cheng</div>
-                <div class="mem-id">@用戶ID</div>
+                <div class="mem-name">{{ userInfo.u_nickname }}</div>
+                <div class="mem-id">{{ userInfo.u_account }}</div>
                 <input id="edit-quote" type="text" class="input-quote" placeholder="Write your quote...">
                 <label for="edit-quote" class="edit-quote">
                     <font-awesome-icon :icon="['fas', 'pen-to-square']" />
@@ -43,57 +42,99 @@
         </div>
     </main>
 </template>
-
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
 import MyBlog from '@/components/layout/MyBlog.vue';
 import EditMyTrip from '@/components/layout/EditMyTrip.vue';
+import defaultBannerImageUrl from '@/assets/images/default-userBg.png';
+import defaultHeadshotImageUrl from '@/assets/images/default-userImg.png';
+import axios from 'axios';
 
+const router = useRouter();
+const userStore = useUserStore();
+const bannerImageUrl = ref(defaultBannerImageUrl);
+const headshotImageUrl = ref(defaultHeadshotImageUrl);
+const userId = computed(() => userStore.userId);
+const userInfo = computed(() => userStore.userInfo);
 
-// const defaultBannerImageUrl = require('@/assets/images/mem-page-banner.jpg');
-// const defaultHeadshotImageUrl = require('../assets/images/global/logo/logo.png');
-
-const bannerImageUrl = ref('');
-const headshotImageUrl = ref('');
-
-//更換背景照片及大頭照
-const uploadImage = (type, event) => {
+const uploadImage = async (field, event) => {
     const files = event.target.files;
     if (!files.length) return;
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        if (type === 'bannerImage') {
-            bannerImageUrl.value = e.target.result;
-            localStorage.setItem('bannerImage', e.target.result);
-        } else if (type === 'headshotImage') {
-            headshotImageUrl.value = e.target.result;
-            localStorage.setItem('headshotImage', e.target.result);
+    const formData = new FormData();
+    formData.append('image', files[0]);
+    formData.append('field', field);
+    formData.append('userId', userId.value);
+
+    try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/upload.php`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+        if (response.data.success) {
+            const fullPath = `${import.meta.env.VITE_IMG_URL}/${response.data.filePath}`;
+            if (field === 'u_background') {
+                bannerImageUrl.value = fullPath;
+                localStorage.setItem('bannerImageUrl', fullPath);
+            } else if (field === 'u_avatar') {
+                headshotImageUrl.value = fullPath;
+                localStorage.setItem('headshotImageUrl', fullPath);
+                userStore.updateUserAvatar(response.data.filePath); //頭像會即時更新
+            }
+        } else {
+            alert('上傳失敗：' + response.data.message);
         }
-    };
-    reader.readAsDataURL(files[0]);
+    } catch (error) {
+        alert('上傳圖片時出錯，請稍後再試。');
+    }
 };
 
-// 設定"旅行筆記"為預選狀態
 const selectedTab = ref('旅行筆記');
 
 const selectTab = (tabName) => {
     selectedTab.value = tabName;
 };
+const initialize = async () => {
+    userStore.initializeStore();
 
-// 從localStorage 加載圖片
+    const storedBannerImageUrl = localStorage.getItem('bannerImageUrl');
+    const storedHeadshotImageUrl = localStorage.getItem('headshotImageUrl');
+
+    if (storedBannerImageUrl) {
+        bannerImageUrl.value = storedBannerImageUrl;
+    }
+    if (storedHeadshotImageUrl) {
+        headshotImageUrl.value = storedHeadshotImageUrl;
+    }
+
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/getImages.php?userId=${userId.value}`);
+        console.log('Raw API response:', response.data);
+        if (response.data.success) {
+            bannerImageUrl.value = response.data.bannerImage ? `${import.meta.env.VITE_IMG_URL}/${response.data.bannerImage}` : defaultBannerImageUrl;
+            headshotImageUrl.value = response.data.headshotImage ? `${import.meta.env.VITE_IMG_URL}/${response.data.headshotImage}` : defaultHeadshotImageUrl;
+            localStorage.setItem('bannerImageUrl', bannerImageUrl.value);
+            localStorage.setItem('headshotImageUrl', headshotImageUrl.value);
+        } else {
+            console.error('Failed to fetch user images:', response.data.message);
+        }
+    } catch (error) {
+        console.error('Error fetching user images:', error);
+    }
+};
+
 onMounted(() => {
-    const storedBannerImage = localStorage.getItem('bannerImage');
-    if (storedBannerImage) {
-        bannerImageUrl.value = storedBannerImage;
-    }
-
-    const storedHeadshotImage = localStorage.getItem('headshotImage');
-    if (storedHeadshotImage) {
-        headshotImageUrl.value = storedHeadshotImage;
-    }
+    initialize();
 });
+
 </script>
+
+
+
 
 <style lang="scss" scoped>
 @import '@/assets/styles/base/color';
@@ -103,7 +144,7 @@ onMounted(() => {
     .mem-page-banner {
         width: 100%;
         aspect-ratio: 3.72/1;
-        // background: no-repeat center/cover url(@/assets/images/mem-page-banner.jpg);
+        background: no-repeat 50% 30%/100%;
         position: relative;
     }
 
@@ -120,6 +161,7 @@ onMounted(() => {
         line-height: 1.25;
         letter-spacing: .1em;
         transform: translate(-50%, -50%);
+        cursor: pointer;
     }
 
     .fa-camera {

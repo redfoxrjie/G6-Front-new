@@ -17,3 +17,14 @@
     cursor: pointer;
 
 }
+.btn-3{ //白底藍字
+    color:$secondColor-2;
+    background-color: $primaryColor; padding: 5px 13px;
+    border: 2px $secondColor-2 solid;
+    border-radius: 20px;
+    cursor: pointer;
+    &:hover{
+        background-color: $secondColor-2;
+        color: $primaryColor;
+}
+}
