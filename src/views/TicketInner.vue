@@ -50,6 +50,12 @@
 <script>
 export default {
     name:'TicketInner',
+    props: {
+        id: {
+            type: String,
+            required: true
+        }
+    },
     data() {
         return {
             tickets:{
@@ -80,7 +86,7 @@ export default {
     methods: {
         async loadJsonData(){
             try {
-                const response = await fetch('http://localhost/phpG6/back/getTicketInner.php', {
+                const response = await fetch('http://localhost/phpG6/front/getTicketInner.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -88,7 +94,8 @@ export default {
                     // 如果有需要傳遞的資料，可以透過 body 屬性傳遞
                     body: JSON.stringify({
                         // 可以放你要傳遞的資料的物件
-                        t_id: this.$route.params.id 
+                        // t_id: this.$route.params.id //方式一
+                        t_id: this.id //方式二較快且簡潔
                     })
                 });
 
@@ -114,9 +121,8 @@ export default {
             }
         },
         goToOrderPage(tickets){
-
-            this.$router.push({
-                name: 'TicketOrder',
+            this.$router.push({ //導航至新頁面
+                name: 'TicketOrder', //目標頁面
                 query: {
                     id: tickets.t_id,
                     name: tickets.t_name,
