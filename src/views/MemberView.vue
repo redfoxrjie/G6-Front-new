@@ -2,11 +2,11 @@
     <div class="container">
         <div class="panel-row row row-cols-1 row-cols-md-2">
             <div class="panel-sidenav col-12 col-md-3
-             row row-cols-2 row-cols-md-1">
+                row row-cols-2 row-cols-md-1">
                 <div class="p-s-mem col-2 col-md-12">
-                    <div class="p-s-m-imgwrap"><img src="@/assets/images/mem-headshot-01.jpg"></div>
+                    <div class="p-s-m-imgwrap"><img :src="userAvatarUrl" alt="avatar"></div>
                     <div class="p-s-m-name">
-                        <h4>John Cheng</h4>
+                        <h4>{{ userInfo.u_nickname }}</h4>
                     </div>
                 </div>
                 <div class="p-s-nav col-12 col-md-12 
@@ -24,7 +24,7 @@
                             :class="{ 'active-view': panelView == 'msg' }">
                             <p><font-awesome-icon :icon="['fas', 'bell']" /><span>我的通知</span></p>
                         </div>
-                        <div class="p-s-n-link col-5 col-md-12" @click="logoutTask()">
+                        <div class="p-s-n-link col-5 col-md-12" @click="confirmLogout">
                             <p><font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" /><span>登出</span>
                             </p>
                         </div>
@@ -35,35 +35,64 @@
             <div class="panel-view col-12 col-md-9">
                 <div class="p-v-title">
                     <h1>{{ panelTitle[panelView] }}</h1>
-
-
                 </div>
                 <MCompPanelMsg v-if="panelView == 'msg'" />
                 <MCompPanelProfile v-if="panelView == 'profile'" />
             </div>
         </div>
-<!-- :class="{ 'active-view': panelView == 'profile' }" -->
+        <!-- :class="{ 'active-view': panelView == 'profile' }" -->
     </div>
 </template>
 <script setup>
 import { computed, onBeforeMount, onMounted, ref, watch } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
+import { storeToRefs } from 'pinia';
+import Swal from 'sweetalert2';
 import MCompPanelMsg from '@/components/member/MCompPanelMsg.vue';
 import MCompPanelProfile from '@/components/member/MCompPanelProfile.vue';
 const panelView = ref('profile');
 const panelTitle = { 'profile': '會員資料設定', 'msg': '我的通知' }
 const router = useRouter();
+const userStore = useUserStore();
+const { userInfo } = storeToRefs(userStore);
+
 const changeView = (tabName) => {
     panelView.value = tabName;
 }
 const goToPage = (toLink) => {
     router.push(toLink)
 }
-const logoutTask = () => {
-    alert('logout!')
-    goToPage('/')
 
+const confirmLogout = () => {
+    Swal.fire({
+        title: '您確定要登出嗎?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '確定',
+        cancelButtonText: '取消'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            logout();
+        }
+    });
 }
+const logout = () => {
+    userStore.logout();
+    Swal.fire({
+        title: '您已成功登出',
+        icon: 'success',
+        confirmButtonText: '確定'
+    }).then(() => {
+        router.push('/');
+        openLoginModal(); // 登出後重新打開登錄彈窗
+    });
+};
+const userAvatarUrl = computed(() => {
+    return userInfo.value && userInfo.value.u_avatar ? `${import.meta.env.VITE_IMG_URL}/${userInfo.value.u_avatar}` : new URL('@/assets/images/default-userImg.png', import.meta.url).href;
+});
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -73,6 +102,7 @@ const logoutTask = () => {
 .panel-row {
     padding-top: 200px;
     align-items: start;
+
     .panel-sidenav {
         box-sizing: border-box;
         padding-right: 2%;
@@ -83,6 +113,7 @@ const logoutTask = () => {
             margin-bottom: 15px;
             padding: 20px 0;
             border-radius: 4px;
+
             .p-s-m-imgwrap {
                 width: 100px;
                 aspect-ratio: 1;
@@ -119,6 +150,7 @@ const logoutTask = () => {
             .p-s-n-linkslist {
                 margin: auto;
                 padding: 20px;
+
                 .p-s-n-link {
                     padding: 2px 5px;
                     margin: 5px 0px;
@@ -155,7 +187,8 @@ const logoutTask = () => {
         box-sizing: border-box;
         padding: 0px 20px;
         min-height: 600px;
-        .p-v-title{
+
+        .p-v-title {
             color: $secondColor-2;
             margin-top: 60px;
             margin-bottom: 20px
@@ -188,7 +221,7 @@ const logoutTask = () => {
                 padding: 5px 0;
                 padding-left: 5px;
                 justify-content: space-around;
-                
+
                 .p-s-n-link {
                     // width: 70%;
                     // background-color: #7e1a1a;
@@ -210,6 +243,7 @@ const logoutTask = () => {
         }
     }
 }
+
 // @media screen and (max-width: 576px) {
 //     .panel-row>.panel-sidenav>.p-s-mem{
 //         width: 20%;
@@ -233,8 +267,4 @@ const logoutTask = () => {
 //             padding: 0 10px
 //         }
 //     }
-// }
-</style> 
-
-
-
+// }</style>

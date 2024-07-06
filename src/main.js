@@ -2,7 +2,7 @@
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+// import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 
 import App from './App.vue'
@@ -28,7 +28,7 @@ import Swal from 'sweetalert2';
 
 // 創建 Pinia 實例
 const pinia = createPinia();
-pinia.use(piniaPluginPersistedstate);
+// pinia.use(piniaPluginPersistedstate);
 
 const app = createApp(App)
 import GCompUserAccount from './components/global/GCompUserAcoount.vue'

@@ -1,6 +1,6 @@
 <template>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js">
+    <!-- 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js"> -->
     <div id="app">
         <header>
             <div v-if="!isHomePage" id="menuBar">
@@ -17,12 +17,12 @@
                         <RouterLink to="/blog">旅行筆記</RouterLink>
                         <RouterLink to="/news">最新消息</RouterLink>
                         <RouterLink to="/tickets">票券訂購</RouterLink>
-                        <RouterLink v-if="isLoggedIn" to="/member">
-                            <img :src="userInfo.u_avatar"
-                                style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid;">
+                        <RouterLink v-if="isLoggedIn" to="/member" style="display: flex; align-items: center; gap:5px;">
+                            <img :src="userAvatarUrl" alt="avatar"
+                                style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
                             <span>{{ userInfo.u_nickname }}</span>
                         </RouterLink>
-                        <button v-if="isLoggedIn" @click="logout" class="logout">登出</button>
+                        <!-- <button v-if="isLoggedIn" @click="logout" class="logout">登出</button> -->
                         <button v-else @click="openLoginModal">會員登入</button>
                         <!-- <RouterLink to="/member">會員登入</RouterLink> -->
                         <RouterLink to="/trips" class="btn-start-plan">開始規劃</RouterLink>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, watch } from 'vue';
+import { defineComponent, ref, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter, RouterLink, RouterView } from 'vue-router'
 import PageFooter from './components/footer/PageFooter.vue';
 import { useUserStore } from '@/stores/userStore';
@@ -92,6 +92,9 @@ export default defineComponent({
             openLoginModal(); // 登出後重新打開登錄彈窗
         };
 
+        const userAvatarUrl = computed(() => {
+            return userInfo.value && userInfo.value.u_avatar ? `${import.meta.env.VITE_IMG_URL}/${userInfo.value.u_avatar}` : new URL('@/assets/images/default-userImg.png', import.meta.url).href;
+        });
         onMounted(() => {
             userStore.initializeStore();
         });
@@ -106,7 +109,8 @@ export default defineComponent({
             loginSuccessHandler,
             logout,
             isLoggedIn,
-            userInfo
+            userInfo,
+            userAvatarUrl
         }
     }
 })
@@ -223,8 +227,9 @@ header {
                 align-items: center;
                 transition: height .3s ease;
 
-                .logout {
+                span {
                     position: relative;
+                    color: $primaryColor;
 
                     &::after {
                         content: " ";
@@ -240,7 +245,6 @@ header {
                         right: 0%;
                         left: 0%;
                     }
-
                 }
 
                 a:hover,

@@ -3,11 +3,11 @@ import axios from 'axios';
 
 //創建一個axios實例(可以有很多個)
 const apiInstance = axios.create({
-    // Set a base URL for all requests
+    // 將所有請求的基礎 URL 設置為 /api
     baseURL: '/api', 
-    // Set a default timeout for all requests (in milliseconds)
+    // 設置請求的默認超時時間為 5000 毫秒（5 秒）
     timeout: 5000,
-    // Set default headers for all requests
+    // 為所有請求設置默認標頭，其中包括 Content-Type 設置為 application/json
     headers: {
         'Content-Type': 'application/json', 
     },

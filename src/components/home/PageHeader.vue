@@ -28,11 +28,11 @@
                 <!-- <li><RouterLink to="/trips">暫時的地圖編輯位置等到學會怎麼在icon切換頁面</RouterLink></li> -->
                 <li v-if="isLoggedIn">
                     <router-link to="/member">
-                        <img :src="userInfo.u_avatar"
-                            style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid;"><br>
+                        <img :src="userAvatarUrl" alt="avatar"
+                            style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"><br>
                         <span>{{ userInfo.u_nickname }}</span>
                     </router-link><br>
-                    <button @click="logout" class="logout">登出</button>
+                    <!-- <button @click="logout" class="logout">登出</button> -->
                 </li>
                 <li v-else>
                     <button class="openLoginModal" @click="openLoginModal">會員登入</button>
@@ -88,11 +88,13 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue';
+
+import { defineComponent, ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import { storeToRefs } from 'pinia';
 import { RouterLink, RouterView, useRouter } from 'vue-router';
 import LoginRegisterModal from '../layout/LoginRegisterBox.vue';
+
 
 export default defineComponent({
     components: {
@@ -153,12 +155,16 @@ export default defineComponent({
         const logout = () => {
             userStore.logout();
             router.push('/'); // 重定向到首頁或其他頁面
-            openLoginModal(); // 登出後重新打開登錄彈窗
+            openLoginModal(); // 登出後重新打開登入彈窗
         };
 
         const switchMode = (mode) => {
             isLoginMode.value = mode;
         };
+
+        const userAvatarUrl = computed(() => {
+            return userInfo.value && userInfo.value.u_avatar ? `${import.meta.env.VITE_IMG_URL}/${userInfo.value.u_avatar}` : new URL('@/assets/images/default-userImg.png', import.meta.url).href;
+        });
 
         return {
             isMenuClosed,
@@ -173,6 +179,7 @@ export default defineComponent({
             switchMode,
             goToPage,
             logout,
+            userAvatarUrl
         };
     },
 });
@@ -258,12 +265,10 @@ nav {
                 color: $accentColor-2;
             }
         }
-
     }
 
-    .logout {
+    span {
         position: relative;
-        margin-top: 20px;
         color: $primaryColor;
 
         &::after {
@@ -414,12 +419,12 @@ nav.closed {
 
 @keyframes morph {
     0% {
-        border-radius: 14% 0% 23% 42% / 82% 48% 47% 55% ;
-        
+        border-radius: 14% 0% 23% 42% / 82% 48% 47% 55%;
+
     }
 
     100% {
-        border-radius: 40% 60% ;
+        border-radius: 40% 60%;
     }
 }
 
