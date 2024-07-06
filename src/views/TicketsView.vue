@@ -91,30 +91,13 @@ export default {
       tickets: [],
     };
   },
-  computed: {
-    // okinawaTickets() {
-    //   return this.tickets.filter(ticket => [1, 2, 3].includes(ticket.t_id));
-    // },
-    // osakaTickets() {
-    //   return this.tickets.filter(ticket => [4, 5, 6].includes(ticket.t_id));
-    // },
-    // thailandTickets() {
-    //   return this.tickets.filter(ticket => [7, 8, 9].includes(ticket.id));
-    // },
-    // koreaTickets() {
-    //   return this.tickets.filter(ticket => [10, 11, 12].includes(ticket.id));
-    // },
-    // vietnamTickets() {
-    //   return this.tickets.filter(ticket => [13, 14, 15].includes(ticket.id));
-    // }
-  },
   mounted() {
     this.loadJsonData();
   },
   methods: {
     async loadJsonData(){
       try {
-        const response = await fetch('http://localhost/phpG6/back/getTickets.php', { //使用fetch 發送請求
+        const response = await fetch('http://localhost/phpG6/front/getTickets.php', { //使用fetch 發送請求
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json' //設置headers 指定請求內容為json檔
@@ -138,10 +121,6 @@ export default {
           console.error('Error:', error);
       }
     },
-    // filterTicketsByRegion(ids) {
-    //   if (!this.tickets) return [];
-    //   return this.tickets.filter(ticket => ids.includes(ticket.id));
-    // },
     goToDetail(id){
       this.$router.push({ name: 'TicketInner', params: { id } }); //跳頁設置
     },

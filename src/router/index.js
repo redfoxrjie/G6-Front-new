@@ -53,9 +53,9 @@ const router = createRouter({
       component: () => import('../views/TicketsView.vue')
     },
     {
-      path: '/tickets/:id',
-      name: 'ticketsInfo',
-      component: () => import('../views/TicketInner.vue')
+      // path: '/tickets/:id',
+      // name: 'ticketsInfo',
+      // component: () => import('../views/TicketInner.vue')
     },
     {
       path: '/login',
@@ -83,14 +83,15 @@ const router = createRouter({
       component: () => import('../views/TripsSearchResultView.vue')
     },
     {  
-      path: '/TicketOrder',
+      path: '/TicketOrder/:id',
       name: 'TicketOrder',
-      component: () => import('../views/TicketOrder.vue')
+      component: () => import('../views/TicketOrder.vue'),
     },
     {  
       path: '/TicketInner/:id',
       name: 'TicketInner',
-      component: () => import('../views/TicketInner.vue')
+      component: () => import('../views/TicketInner.vue'),
+      props: true
     },
     {  
       path: '/Contact',
