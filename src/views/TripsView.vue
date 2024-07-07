@@ -8,6 +8,7 @@
       @edit-plan-setting="showTripSetting"
       @show-edit-stay-time="showEditStayTimeHandler"
       @save-stay-time="saveStayTimeHandler"
+      @save-trip-plan="handleSaveTripPlan"
     />
     <NewTrpLightBox02 :class="{ hidden: !showNewTrpLightBox02 }" @submit-trip="handleTripSubmit" />
     <BlackLayout :class="{ hidden: !showBlackLayout }" />
@@ -142,6 +143,31 @@ const saveStayTimeHandler = (formattedTime) => {
   selectedLocation.value.receivedStayTime = formattedTime;
 
   closeEditStayTime(); // 儲存完畢後關閉 EditStayTime 組件
+};
+//處理儲存行程事件與接收資料
+const handleSaveTripPlan = async (tripPlanData) => {
+  console.log('接收到的行程資料：', tripPlanData); // 確認 tripPlanData 的內容
+  try {
+    const response = await fetch('http://localhost/phpG6/api/saveTripPlan.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(tripPlanData),
+    });
+
+    const data = await response.json();
+    console.log('後端回應資料：', data); // 檢查後端回應的內容
+
+    if (data.status === 'success') {
+      alert('行程保存成功！');
+    } else {
+      alert('else:行程保存失敗，請重試。');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('catch:行程保存失敗，請重試。');
+  }
 };
 
 // 在組件載入後顯示 MapGuide、NewTrpLightBox01 及 BlackLayout
