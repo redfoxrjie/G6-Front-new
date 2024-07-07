@@ -64,7 +64,7 @@
               <img src="https://picsum.photos/300/200/?random=1">
             </div>
             <div class="spot-info">
-              <div class="spot-time font-time">{{ location.spotTime }}</div>
+              <div class="spot-time font-time">{{ formatSpotTime(location.spotTime) }}</div>
               <div class="spot-name">{{ location.name }}</div>
               <div class="duration" @click="showEditStayTime(location)">停留{{ location.receivedStayTime || receivedStayTime }}</div>
               <button class="tools" @click="toggleTools($event, location)">
@@ -83,6 +83,12 @@
             </div>
           </li>
         </ul>
+        <div class="save-plan">
+          <button id="saveTripPlan" @click="saveTripPlan">
+            <font-awesome-icon icon="floppy-disk" />
+            儲存行程
+          </button>
+        </div>
         <div class="mb-btn-fixed">
           <button id="mapSwitch" @click="mbMapToggle">{{ switchBtnText }}</button>
         </div>
@@ -605,7 +611,7 @@ export default {
     },
     //---------計算每個景點的時間範圍-----------------------
     calculateEndTime(departureTime, duration) {
-      if (!departureTime || !duration) return '00:00';
+      if (!departureTime || !duration) return '00:00:00';
 
       // 解析出發時間
       const [departureHour, departureMin] = departureTime.split(':').map(Number);
@@ -643,6 +649,10 @@ export default {
         startTime = endTime; // 下一個位置的開始時間
       });
       this.$forceUpdate(); // 強制重新渲染組件
+    },
+    //格式化景點時間，隱藏"秒"
+    formatSpotTime(spotTime) {
+      return spotTime.split(' - ').map(time => time.slice(0, 5)).join(' - '); // 去掉秒部分
     },
 
     /*--------------------行程封面照片-----------------------*/
@@ -686,6 +696,79 @@ export default {
     },
     handleClickOutside(event) {
       this.closeTools();
+    },
+    /*-----------------儲存行程--------------------------*/
+    saveTripPlan() {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      const userId = userData?.u_id;
+
+      if (!userId) {
+        alert('未找到使用者ID，請確認您已登入');
+        return;
+      }
+
+      const tripPlanData = {
+        u_id: userId,
+        trp_name: this.tripData.tripName,
+        trp_sdate: this.tripData.startDate,
+        trp_edate: this.tripData.endDate,
+        trp_area: this.areaMapping[this.tripData.selectedArea],
+        trp_rate: 0,
+        trp_rate_sum: 0,
+        trp_is_public: false,
+        trp_img: '', // 假設這個值是空字符串或從其他地方獲得
+        days: [], // days屬性來儲存每天的資料
+      };
+      for (let day = 1; day <= this.daysCount; day++) {
+        const dayData = {
+          day_num: day,
+          spots: []
+        };
+      
+        const locations = this.getItineraryForDay(day);
+        locations.forEach((location, index) => {
+
+        // 將 receivedStayTime 轉換為 HH:mm:ss 格式
+        const formattedTime = this.formatToHHMMSS(location.receivedStayTime || this.receivedStayTime);
+      
+          dayData.spots.push({
+            osm_id: location.place_id || location.osm_id,
+            sp_time: formattedTime,
+            sp_order: index
+          });
+           // 設置 console.log 來檢查 sp_time
+          console.log(`Day ${day}, Spot ${index + 1} - sp_time: ${formattedTime}`);
+        });
+        tripPlanData.days.push(dayData);
+      }
+
+      // 確認 tripPlanData 的內容
+      console.log('即將發送的行程資料：', tripPlanData);
+
+      this.$emit('save-trip-plan', tripPlanData);
+    },
+    // 將時間轉換為 HH:mm:ss 格式的方法
+    formatToHHMMSS(timeString) {
+      // 將時間字串分割成小時和分鐘部分
+      const [hoursStr, minutesStr] = timeString.split('小時');
+
+      // 將小時和分鐘轉換為數字
+      const hours = parseInt(hoursStr.trim(), 10);
+      const minutes = parseInt(minutesStr.trim().replace('分', ''), 10);
+
+      // 使用 padStart 方法來確保時與分都是兩位數
+      const formattedHours = hours.toString().padStart(2, '0');
+      const formattedMinutes = minutes.toString().padStart(2, '0');
+
+      // 返回以 HH:mm:ss 格式表示的時間
+      return `${formattedHours}:${formattedMinutes}:00`;
+    },
+    saveData() {
+      // 確保spotTime格式為HH:mm:ss
+      this.itinerary.forEach(location => {
+        const [startTime, endTime] = location.spotTime.split(' - ');
+        location.spotTime = `${startTime}:00 - ${endTime}:00`;
+      });
     },
   },
   mounted() {
@@ -919,6 +1002,21 @@ li.dragging{
       }
     }
   }
+  #saveTripPlan {
+      width: 100%;
+      background-color: #fff;
+      color: $secondColor-2;
+      padding: 12px;
+      font-size: 0.875rem;
+      transition: all .3s ease;
+      box-shadow: 0 -2px 10px rgba(0,0,0,.1);
+      cursor: pointer;
+      &:hover {
+        color: #fff;
+        background-color: $secondColor-2;
+        transition: all .3s ease;
+      }
+    }
   .mb-btn-fixed {
     width: 100%;
     background-color: #fff;
