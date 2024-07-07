@@ -8,19 +8,19 @@
             <table>
               <tbody class="panel">
                 <tr class="Infor_Title">
-                  <td>名字</td>
+                  <td><font-awesome-icon :icon="['fas', 'star']" style="color: #FFD43B;" />名字</td>
                   <td><input v-model="formData.name" type="text" required /></td>
-                  <td>生日</td>
+                  <td><font-awesome-icon :icon="['fas', 'star']" style="color: #FFD43B;" />生日</td>
                   <td><input v-model="formData.birthdate" type="date" required /></td>
                 </tr>
                 <tr class="Infor_Title">
-                  <td>國家地區</td>
+                  <td><font-awesome-icon :icon="['fas', 'star']" style="color: #FFD43B;" />國家地區</td>
                   <td><input v-model="formData.country" type="text" required /></td>
-                  <td>連絡電話</td>
+                  <td><font-awesome-icon :icon="['fas', 'star']" style="color: #FFD43B;" />連絡電話</td>
                   <td><input v-model="formData.phone" type="tel" required /></td>
                 </tr>
                 <tr class="Infor_Title">
-                  <td>Email</td>
+                  <td><font-awesome-icon :icon="['fas', 'star']" style="color: #FFD43B;" />Email</td>
                   <td><input v-model="formData.email" type="email" required /></td>
                 </tr>
               </tbody>
@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="Order_Purchase frame" ref="accountSection" >
-          <h5>請確認付款資訊</h5>
+          <h5><font-awesome-icon :icon="['fas', 'star']" style="color: #FFD43B;" />請確認付款資訊</h5>
           <div class="ECPay">
             <input type="checkbox" v-model="formData.ecpay" @change="handleChange('ecpay')">
             <label>綠界</label>
@@ -158,22 +158,35 @@ export default {
       
       const remark = document.getElementById('remark');
       try {
-        const response = await fetch('http://localhost/phpG6/front/saveTicketOrder.php', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          // 如果有需要傳遞的資料，可以透過 body 屬性傳遞
-          body: JSON.stringify({
-              // 可以放你要傳遞的資料的物件
-              u_id: userStore.userInfo.u_id,
-              t_id: this.ticket.id,
-              o_count: this.ticket.count,
-              o_price: this.ticket.totalPrice,
-              o_payment: payment,
-              o_remarks: remark.value
-          })
-        });
+        const form = document.createElement('form')
+        const inputEl = document.createElement('input')
+        inputEl.name = 'price'
+        inputEl.value= 123333
+        form.appendChild(inputEl)
+        form.action = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5'
+        form.style.display = 'none'
+        document.body.appendChild(form)
+        form.submit()
+        //--------------------------
+        // const response = await fetch('http://localhost/phpG6/front/SDK_PHP-master/example/Payment/Aio/CreateOrder.php', {
+        // const response = await fetch('http://localhost/phpG6/front/saveTicketOrder', {
+        //   method: 'POST',
+        //   headers: {
+        //       'Content-Type': 'application/json'
+        //   },
+        //   // 如果有需要傳遞的資料，可以透過 body 屬性傳遞
+        //   body: JSON.stringify({
+        //       // 可以放你要傳遞的資料的物件
+        //       u_id: userStore.userInfo.u_id,
+        //       t_id: this.ticket.id,
+        //       u_name: this.formData.name,
+        //       o_count: this.ticket.count,
+        //       o_price: this.ticket.totalPrice,
+        //       o_payment: payment,
+        //       o_remarks: remark.value
+        //   })
+          
+        // });
         // const data = await response.json;
         // if (data.tq_url) {
         //     this.showSuccessAlert(data.tq_url);
@@ -224,15 +237,16 @@ export default {
       const day = String(today.getDate()).padStart(2,'0');
       return `${year}-${month}-${day}`;
     },
-    async orderFinish(){ //條件完全符合or不符合
+    orderFinish(event){ //條件完全符合or不符合
+      event.preventDefault(); // 阻止按钮的默认提交行为
       try{
         if (this.isOrderValid){
-          await this.saveTicketOrder(); //等待訂單保存完成
+          this.saveTicketOrder(); //等待訂單保存完成
           this.showSuccessAlert(); //訂單完成後才調用showSuccessAlert
           this.resetForm();
-      }else{
-        this.showErrorAlert();
-      }
+        }else{
+          this.showErrorAlert();
+        }
       } catch (error) {
           console.error('Error finishing order:', error);
       }
@@ -240,7 +254,7 @@ export default {
     showSuccessAlert(tq_url) {
       Swal.fire({
         title: '已完成訂單',
-        html: `<p>請掃描以下QR Code以獲取您的票券：</p><img src="${tq_url}" alt="tq_url" />`,
+        html: `<p>待查核付款資訊後QRCode即生效：</p><img src="${tq_url}" alt="tq_url" />`,
         icon: 'success',
         iconColor: '#4F82D4',
         confirmButtonText: '確定',

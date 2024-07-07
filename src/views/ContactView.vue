@@ -8,8 +8,9 @@
         </div>
         <div id="contactus">
             <div class="form_frame">
-                <table>
-                    <tbody>
+                <form @submit.prevent="contactFinish">
+                    <table>
+                        <tbody>
                             <tr class="form_group form_name">  
                                 <td><input type="text" id="name" v-model="formData.name" placeholder="請輸入姓名" required></td>
                             </tr>
@@ -19,29 +20,31 @@
                             <tr class="form_group form_email">
                                 <td><input type="email" id="email" v-model="formData.email" placeholder="請輸入e-mail" required></td>
                             </tr>
-                    </tbody>
-                    <div class="form_group form_choice">
-                        <p>想詢問項目</p>
-                        {{ checkbox }}<br />
-                        <label >
-                        <input type="checkbox" v-model="formData.aboutIF" @change="handleChange('aboutIF')" >介面操作
-                        </label>
-                        <label >
-                        <input type="checkbox" v-model="formData.aboutTK" @change="handleChange('aboutTK')" >已購入票券
-                        </label>
-                        <label >
-                        <input type="checkbox" v-model="formData.aboutOT" @change="handleChange('aboutOT')" >其他
-                        </label>
-                    </div>
-                    <div class="form_group">
-                        <label for="message"></label>
-                        <textarea id="message" v-model="formData.message" placeholder="想詢問什麼呢" required></textarea>
-                    </div>
-                </table>
+                        </tbody>
+                        <div class="form_group form_choice">
+                            <p>想詢問項目</p>
+                            {{ checkbox }}<br />
+                            <label >
+                            <input type="checkbox" v-model="formData.aboutIF" @change="handleChange('aboutIF')" >介面操作
+                            </label>
+                            <label >
+                            <input type="checkbox" v-model="formData.aboutTK" @change="handleChange('aboutTK')" >已購入票券
+                            </label>
+                            <label >
+                            <input type="checkbox" v-model="formData.aboutOT" @change="handleChange('aboutOT')" >其他
+                            </label>
+                        </div>
+                        <div class="form_group">
+                            <label for="message"></label>
+                            <textarea id="message" v-model="formData.message" placeholder="想詢問什麼呢" required></textarea>
+                        </div>
+                        <div class="btn">
+                            <button type="submit" class="btn-1">確認送出</button>
+                        </div>
+                    </table>
+                </form> 
             </div>
-            <div class="btn">
-                <button type="submit" class="btn-1" @click="contactFinish">確認送出</button>
-            </div>
+            
         </div>
     </section>
 </template>
@@ -66,15 +69,16 @@ export default {
         }
     },
     methods:{
-        async contactFinish(){
+        async contactFinish(event){
+            event.preventDefault(); // 阻止按钮的默认提交行为
             try{
                 if (this.isFormValid){
-                await this.saveContact();
-                this.showSuccessAlert();
-                this.resetForm();
-            }else{
-                this.showErrorAlert();
-            }
+                    await this.saveContact();
+                    this.showSuccessAlert();
+                    this.resetForm();
+                }else{
+                    this.showErrorAlert();
+                }
             } catch (error) {
                 console.error('Error finishing order:', error);
             }
@@ -117,21 +121,13 @@ export default {
                 aboutClass = 3;
             }
 
-            try {
-                // 使用axios送請求
-                // await axios.post('/http://localhost/phpG6/front/saveContact.php', this.formData);
-                // alert('Email sent successfully!');
-                // this.formData.id = '';
-                // this.formData.name = '';
-                // this.formData.tel = '';
-                // this.formData.email = '';
-                // this.formData.message = '';
-                // aboutClass ='';
-                // 
-                // this.formData.aboutIF = false;
-                // this.formData.aboutTK = false;
-                // this.formData.aboutOT = false;
-                
+            console.log(this.formData.name);
+            console.log(this.formData.tel);
+            console.log(this.formData.email);
+            console.log(aboutClass);
+            console.log(this.formData.message);
+
+            try {             
                 const response = await fetch('http://localhost/phpG6/front/saveContact.php', {
                     method: 'POST',
                     headers: {
@@ -141,11 +137,11 @@ export default {
                     body: JSON.stringify({
                         // 可以放你要傳遞的資料的物件
                         // u_id: userStore.userInfo.u_id,
-                        cu_id: this.formData.id,
+                        // cu_id: this.formData.id,
                         cu_name: this.formData.name,
-                        cu_phone: this.formData.phone,
+                        cu_phone: this.formData.tel,
                         cu_email: this.formData.email,
-                        cu_class: this.formData.aboutClass,
+                        cu_class: aboutClass,
                         cu_message: this.formData.message,
                         cu_time: this.formData.time
                     })
