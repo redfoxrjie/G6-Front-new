@@ -172,7 +172,7 @@ const login = async () => {
     formData.append('u_psw', password.value);
 
     try {
-        const response = await apiInstance.post('http://localhost/phpG6/api/login.php', formData, {
+        const response = await apiInstance.post(`${import.meta.env.VITE_API_URL}/login.php`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
 
@@ -253,7 +253,7 @@ const handleRegistration = async () => {
     formData.append('nickname', registerUsername.value); // 將使用者名稱作為暱稱
 
     try {
-        const response = await apiInstance.post('http://localhost/phpG6/api/register.php', formData, {
+        const response = await apiInstance.post(`${import.meta.env.VITE_API_URL}/register.php`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         if (response.data.code === 1) {

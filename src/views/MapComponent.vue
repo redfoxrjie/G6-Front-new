@@ -251,17 +251,6 @@ export default {
 
       this.updateGeocoder(this.tripData.selectedArea);
       this.setCenterByCountryCode(this.tripData.selectedArea);
-
-      // 初始化地理編碼器
-      // this.geocoder = L.Control.Geocoder.nominatim({
-      //   geocodingQueryParams: {
-      //     //-----------------------------------採用預設的countrycode圖資：日本
-      //     limit: 50, // 增加返回结果的數量上限
-      //     countrycodes: 'jp', // 限制结果在日本
-      //     viewbox: '122.56,20.25,153.59,45.33', // 限制在日本範圍
-      //     bounded: 1 // 使視圖框架生效
-      //   }
-      // });
     },
     //更新對應的國家或地區的圖資
     updateGeocoder(countryCode) {
@@ -667,6 +656,30 @@ export default {
       sessionStorage.removeItem('coverImage');
       console.log('coverImage 已清除');
     },
+    // 新增上傳圖片的方法
+    async uploadCoverImage() {
+        const coverImage = sessionStorage.getItem('coverImage');
+        if (!coverImage) return null;
+
+        try {
+            const response = await fetch('http://localhost/phpG6/api/uploadTripImage.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ image: coverImage }),
+            });
+            const result = await response.json();
+            if (result.status === 'success') {
+                return result.filename; // 假設伺服器回傳圖片檔名
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            console.error('圖片上傳失敗：', error);
+            return null;
+        }
+    },
     /*------------------Function List----------------------*/
     toggleFunctionList() {
       this.showFunctionList = !this.showFunctionList;
@@ -698,13 +711,20 @@ export default {
       this.closeTools();
     },
     /*-----------------儲存行程--------------------------*/
-    saveTripPlan() {
+    async saveTripPlan() {
       const userData = JSON.parse(localStorage.getItem('userData'));
       const userId = userData?.u_id;
 
       if (!userId) {
         alert('未找到使用者ID，請確認您已登入');
         return;
+      }
+
+      // 取得上傳圖片檔
+      const coverImageFilename = await this.uploadCoverImage();
+      if (!coverImageFilename) {
+          alert('圖片上傳失敗，請重試');
+          return;
       }
 
       const tripPlanData = {
@@ -716,9 +736,10 @@ export default {
         trp_rate: 0,
         trp_rate_sum: 0,
         trp_is_public: false,
-        trp_img: '', // 假設這個值是空字符串或從其他地方獲得
+        trp_img: coverImageFilename, // 使用圖片檔名
         days: [], // days屬性來儲存每天的資料
       };
+
       for (let day = 1; day <= this.daysCount; day++) {
         const dayData = {
           day_num: day,
@@ -727,9 +748,8 @@ export default {
       
         const locations = this.getItineraryForDay(day);
         locations.forEach((location, index) => {
-
-        // 將 receivedStayTime 轉換為 HH:mm:ss 格式
-        const formattedTime = this.formatToHHMMSS(location.receivedStayTime || this.receivedStayTime);
+          // 將 receivedStayTime 轉換為 HH:mm:ss 格式
+          const formattedTime = this.formatToHHMMSS(location.receivedStayTime || this.receivedStayTime);
       
           dayData.spots.push({
             osm_id: location.place_id || location.osm_id,
@@ -737,7 +757,7 @@ export default {
             sp_order: index,
             day_num: day
           });
-           // 設置 console.log 來檢查 sp_time
+          // 設置 console.log 來檢查 sp_time
           console.log(`Day ${day}, Spot ${index + 1} - sp_time: ${formattedTime}`);
         });
         tripPlanData.days.push(dayData);
