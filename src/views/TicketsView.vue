@@ -97,7 +97,7 @@ export default {
   methods: {
     async loadJsonData(){
       try {
-        const response = await fetch('http://localhost/phpG6/front/getTickets.php', { //使用fetch 發送請求
+        const response = await fetch('http://localhost/phpG6/api/getTickets.php', { //使用fetch 發送請求
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json' //設置headers 指定請求內容為json檔
