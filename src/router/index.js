@@ -88,11 +88,6 @@ const router = createRouter({
       component: () => import('../views/TicketOrder.vue'),
     },
     {  
-      path: '/TicketOrder_QRCode',
-      name: 'TicketOrder_QRCode',
-      component: () => import('../views/TicketOrder_QRCode.vue'),
-    },
-    {  
       path: '/TicketInner/:id',
       name: 'TicketInner',
       component: () => import('../views/TicketInner.vue'),
