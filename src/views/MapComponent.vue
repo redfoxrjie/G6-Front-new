@@ -734,7 +734,8 @@ export default {
           dayData.spots.push({
             osm_id: location.place_id || location.osm_id,
             sp_time: formattedTime,
-            sp_order: index
+            sp_order: index,
+            day_num: day
           });
            // 設置 console.log 來檢查 sp_time
           console.log(`Day ${day}, Spot ${index + 1} - sp_time: ${formattedTime}`);
