@@ -96,22 +96,25 @@ export default {
       tickets: [],
     };
   },
+  computed: {
+    
+  },
   mounted() {
     this.loadJsonData();
   },
   methods: {
     async loadJsonData() {
       try {
-        const response = await fetch('http://localhost/phpG6/api/getTickets.php', { //使用fetch 發送請求
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json' //設置headers 指定請求內容為json檔
-          },
-          // 放有需要傳遞的資料
-          body: JSON.stringify({ //將 JavaScript 對象 { t_id: t_id } 轉換為JSON字符串，並將其作為請求的body發送。
-            // 可以放你要傳遞的資料的物件
-
-          })
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/getTickets.php`, { //使用fetch 發送請求
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' //設置headers 指定請求內容為json檔
+            },
+            // 放有需要傳遞的資料
+            body: JSON.stringify({ //將 JavaScript 對象 { t_id: t_id } 轉換為JSON字符串，並將其作為請求的body發送。
+                // 可以放你要傳遞的資料的物件
+                t_id: this.id 
+            })
         });
 
         if (!response.ok) {
@@ -144,6 +147,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/styles/base/color';
 @import '@/assets/styles/base/font';
+
 
 .Ticket_Section {
   padding: 100px;

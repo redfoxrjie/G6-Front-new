@@ -56,6 +56,7 @@
 </template>
 
 <script>
+
 export default {
     name: 'TicketInner',
     props: {
@@ -94,7 +95,7 @@ export default {
     methods: {
         async loadJsonData() {
             try {
-                const response = await fetch('http://localhost/phpG6/api/getTicketInner.php', {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/getTicketInner.php`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
