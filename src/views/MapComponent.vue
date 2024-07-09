@@ -64,7 +64,7 @@
               <img src="https://picsum.photos/300/200/?random=1">
             </div>
             <div class="spot-info">
-              <div class="spot-time font-time">{{ location.spotTime }}</div>
+              <div class="spot-time font-time">{{ formatSpotTime(location.spotTime) }}</div>
               <div class="spot-name">{{ location.name }}</div>
               <div class="duration" @click="showEditStayTime(location)">停留{{ location.receivedStayTime || receivedStayTime }}</div>
               <button class="tools" @click="toggleTools($event, location)">
@@ -83,6 +83,12 @@
             </div>
           </li>
         </ul>
+        <div class="save-plan">
+          <button id="saveTripPlan" @click="saveTripPlan">
+            <font-awesome-icon icon="floppy-disk" />
+            儲存行程
+          </button>
+        </div>
         <div class="mb-btn-fixed">
           <button id="mapSwitch" @click="mbMapToggle">{{ switchBtnText }}</button>
         </div>
@@ -245,17 +251,6 @@ export default {
 
       this.updateGeocoder(this.tripData.selectedArea);
       this.setCenterByCountryCode(this.tripData.selectedArea);
-
-      // 初始化地理編碼器
-      // this.geocoder = L.Control.Geocoder.nominatim({
-      //   geocodingQueryParams: {
-      //     //-----------------------------------採用預設的countrycode圖資：日本
-      //     limit: 50, // 增加返回结果的數量上限
-      //     countrycodes: 'jp', // 限制结果在日本
-      //     viewbox: '122.56,20.25,153.59,45.33', // 限制在日本範圍
-      //     bounded: 1 // 使視圖框架生效
-      //   }
-      // });
     },
     //更新對應的國家或地區的圖資
     updateGeocoder(countryCode) {
@@ -605,7 +600,7 @@ export default {
     },
     //---------計算每個景點的時間範圍-----------------------
     calculateEndTime(departureTime, duration) {
-      if (!departureTime || !duration) return '00:00';
+      if (!departureTime || !duration) return '00:00:00';
 
       // 解析出發時間
       const [departureHour, departureMin] = departureTime.split(':').map(Number);
@@ -644,6 +639,10 @@ export default {
       });
       this.$forceUpdate(); // 強制重新渲染組件
     },
+    //格式化景點時間，隱藏"秒"
+    formatSpotTime(spotTime) {
+      return spotTime.split(' - ').map(time => time.slice(0, 5)).join(' - '); // 去掉秒部分
+    },
 
     /*--------------------行程封面照片-----------------------*/
     // 處理來自FunctionList.vue的圖片資料暫存於sessionStorage
@@ -656,6 +655,30 @@ export default {
       // 清除 sessionStorage 中的 coverImage 資料
       sessionStorage.removeItem('coverImage');
       console.log('coverImage 已清除');
+    },
+    // 新增上傳圖片的方法
+    async uploadCoverImage() {
+        const coverImage = sessionStorage.getItem('coverImage');
+        if (!coverImage) return null;
+
+        try {
+            const response = await fetch('http://localhost/phpG6/api/uploadTripImage.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ image: coverImage }),
+            });
+            const result = await response.json();
+            if (result.status === 'success') {
+                return result.filename; // 假設伺服器回傳圖片檔名
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            console.error('圖片上傳失敗：', error);
+            return null;
+        }
     },
     /*------------------Function List----------------------*/
     toggleFunctionList() {
@@ -686,6 +709,87 @@ export default {
     },
     handleClickOutside(event) {
       this.closeTools();
+    },
+    /*-----------------儲存行程--------------------------*/
+    async saveTripPlan() {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      const userId = userData?.u_id;
+
+      if (!userId) {
+        alert('未找到使用者ID，請確認您已登入');
+        return;
+      }
+
+      // 取得上傳圖片檔
+      const coverImageFilename = await this.uploadCoverImage();
+      if (!coverImageFilename) {
+          alert('圖片上傳失敗，請重試');
+          return;
+      }
+
+      const tripPlanData = {
+        u_id: userId,
+        trp_name: this.tripData.tripName,
+        trp_sdate: this.tripData.startDate,
+        trp_edate: this.tripData.endDate,
+        trp_area: this.areaMapping[this.tripData.selectedArea],
+        trp_rate: 0,
+        trp_rate_sum: 0,
+        trp_is_public: false,
+        trp_img: coverImageFilename, // 使用圖片檔名
+        days: [], // days屬性來儲存每天的資料
+      };
+
+      for (let day = 1; day <= this.daysCount; day++) {
+        const dayData = {
+          day_num: day,
+          spots: []
+        };
+      
+        const locations = this.getItineraryForDay(day);
+        locations.forEach((location, index) => {
+          // 將 receivedStayTime 轉換為 HH:mm:ss 格式
+          const formattedTime = this.formatToHHMMSS(location.receivedStayTime || this.receivedStayTime);
+      
+          dayData.spots.push({
+            osm_id: location.place_id || location.osm_id,
+            sp_time: formattedTime,
+            sp_order: index,
+            day_num: day
+          });
+          // 設置 console.log 來檢查 sp_time
+          console.log(`Day ${day}, Spot ${index + 1} - sp_time: ${formattedTime}`);
+        });
+        tripPlanData.days.push(dayData);
+      }
+
+      // 確認 tripPlanData 的內容
+      console.log('即將發送的行程資料：', tripPlanData);
+
+      this.$emit('save-trip-plan', tripPlanData);
+    },
+    // 將時間轉換為 HH:mm:ss 格式的方法
+    formatToHHMMSS(timeString) {
+      // 將時間字串分割成小時和分鐘部分
+      const [hoursStr, minutesStr] = timeString.split('小時');
+
+      // 將小時和分鐘轉換為數字
+      const hours = parseInt(hoursStr.trim(), 10);
+      const minutes = parseInt(minutesStr.trim().replace('分', ''), 10);
+
+      // 使用 padStart 方法來確保時與分都是兩位數
+      const formattedHours = hours.toString().padStart(2, '0');
+      const formattedMinutes = minutes.toString().padStart(2, '0');
+
+      // 返回以 HH:mm:ss 格式表示的時間
+      return `${formattedHours}:${formattedMinutes}:00`;
+    },
+    saveData() {
+      // 確保spotTime格式為HH:mm:ss
+      this.itinerary.forEach(location => {
+        const [startTime, endTime] = location.spotTime.split(' - ');
+        location.spotTime = `${startTime}:00 - ${endTime}:00`;
+      });
     },
   },
   mounted() {
@@ -919,6 +1023,21 @@ li.dragging{
       }
     }
   }
+  #saveTripPlan {
+      width: 100%;
+      background-color: #fff;
+      color: $secondColor-2;
+      padding: 12px;
+      font-size: 0.875rem;
+      transition: all .3s ease;
+      box-shadow: 0 -2px 10px rgba(0,0,0,.1);
+      cursor: pointer;
+      &:hover {
+        color: #fff;
+        background-color: $secondColor-2;
+        transition: all .3s ease;
+      }
+    }
   .mb-btn-fixed {
     width: 100%;
     background-color: #fff;

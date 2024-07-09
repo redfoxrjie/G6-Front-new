@@ -100,6 +100,7 @@ export default {
   methods: {
     async loadJsonData(){
       try {
+
         const response = await fetch(`${import.meta.env.VITE_API_URL}/getTickets.php`, { //使用fetch 發送請求
             method: 'POST',
             headers: {
