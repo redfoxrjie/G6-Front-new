@@ -172,7 +172,7 @@ const login = async () => {
     formData.append('u_psw', password.value);
 
     try {
-        const response = await apiInstance.post('http://localhost/phpG6/front/login.php', formData, {
+        const response = await apiInstance.post('http://localhost/phpG6/api/login.php', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
 

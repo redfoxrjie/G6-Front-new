@@ -53,11 +53,6 @@ const router = createRouter({
       component: () => import('../views/TicketsView.vue')
     },
     {
-      // path: '/tickets/:id',
-      // name: 'ticketsInfo',
-      // component: () => import('../views/TicketInner.vue')
-    },
-    {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue')
@@ -88,9 +83,9 @@ const router = createRouter({
       component: () => import('../views/TicketOrder.vue'),
     },
     {  
-      path: '/TicketOrder_QRCode',
-      name: 'TicketOrder_QRCode',
-      component: () => import('../views/TicketOrder_QRCode.vue'),
+      path: '/OrderQRCode/:id',
+      name: 'OrderQRCode',
+      component: () => import('../views/OrderQRCode.vue'),
     },
     {  
       path: '/TicketInner/:id',

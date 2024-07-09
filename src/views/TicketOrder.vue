@@ -28,8 +28,6 @@
             <div class="continue_1">
               <button class="btn-1" type="submit">繼續</button>
               <div class="container">
-                <!-- <input type="checkbox" id="ticketSplit" @change="showSplit">
-                <label for="ticketSplit">是否分票</label> -->
               </div>
             </div>
           </form>
@@ -49,10 +47,10 @@
         </div>
         <div class="Order_Purchase frame" ref="accountSection" >
           <h5><font-awesome-icon :icon="['fas', 'star']" style="color: #FFD43B;" />請確認付款資訊</h5>
-          <div class="ECPay">
+          <!-- <div class="ECPay">
             <input type="checkbox" v-model="formData.ecpay" @change="handleChange('ecpay')">
             <label>綠界</label>
-          </div>
+          </div> -->
           <div class="Account">
             <input type="checkbox" v-model="formData.transfer" @change="handleChange('transfer')">
             <label>轉帳</label>
@@ -63,11 +61,11 @@
               </tr>
               <tr class="Account_Number1">
                 <td>銀行代碼</td>
-                <td><input type="text" v-model="formData.bankCode"></td>
+                <td><input type="text" v-model="formData.bankCode" @input="isAccountNB1Valid"></td>
               </tr>
               <tr class="Account_Number1">
                 <td>轉出帳號</td>
-                <td><input type="text" v-model="formData.accountNumber"></td>
+                <td><input type="text" v-model="formData.accountNumber" @input="isAccountNB2Valid"></td>
               </tr>
             </table>
           </div>
@@ -93,6 +91,8 @@
 <script>
 import Swal from 'sweetalert2';
 import { useUserStore } from '@/stores/userStore';
+
+import { mapStores } from 'pinia';
 
 export default {
   name: "TicketOrder",
@@ -127,6 +127,7 @@ export default {
     this.ticket.image = this.$route.query.image;
     this.ticket.totalPrice = this.$route.query.totalPrice;
     this.ticket.count = this.$route.query.count;
+    this.formData.transferAmount = this.$route.query.totalPrice;
   },
   computed: {
     isFormValid() { //確認框一是否都有填寫
@@ -137,13 +138,15 @@ export default {
         this.formData.email !== '';
     },
     isOrderValid() { //確認框一框二填寫
-      const isTransferValid = this.formData.transfer ? (this.formData.transferAmount !== '' &&
-      this.formData.bankCode !== '' &&
-      this.formData.accountNumber !== '')
-      : true;
+      const isTransferValid = this.formData.transfer ? (
+      this.formData.transferAmount !== '' &&
+      this.formData.bankCode.length === 3 &&
+      this.formData.accountNumber !== '' 
+    ): true;
       
       return this.isFormValid && (this.formData.ecpay || (this.formData.transfer && isTransferValid));     
-    }
+    },
+    // ...mapStores(useUserStore)
   },
   methods:{
     async saveTicketOrder(){
@@ -158,78 +161,61 @@ export default {
       
       const remark = document.getElementById('remark');
       try {
-        const form = document.createElement('form')
-        const inputEl = document.createElement('input')
-        inputEl.name = 'price'
-        inputEl.value= 123333
-        form.appendChild(inputEl)
-        form.action = 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5'
-        form.style.display = 'none'
-        document.body.appendChild(form)
-        form.submit()
-        //--------------------------
-        // const response = await fetch('http://localhost/phpG6/front/SDK_PHP-master/example/Payment/Aio/CreateOrder.php', {
-        // const response = await fetch('http://localhost/phpG6/front/saveTicketOrder', {
-        //   method: 'POST',
-        //   headers: {
-        //       'Content-Type': 'application/json'
-        //   },
-        //   // 如果有需要傳遞的資料，可以透過 body 屬性傳遞
-        //   body: JSON.stringify({
-        //       // 可以放你要傳遞的資料的物件
-        //       u_id: userStore.userInfo.u_id,
-        //       t_id: this.ticket.id,
-        //       u_name: this.formData.name,
-        //       o_count: this.ticket.count,
-        //       o_price: this.ticket.totalPrice,
-        //       o_payment: payment,
-        //       o_remarks: remark.value
-        //   })
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/saveTicketOrder.php`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              // 放要傳遞的資料的物件
+              u_id: userStore.userInfo.u_id,
+              t_id: this.ticket.id,
+              t_name: this.ticket.name,
+              o_name: this.formData.name,
+              o_count: this.ticket.count,
+              o_price: this.ticket.totalPrice,
+              o_payment: payment,
+              o_remarks: remark.value
+          })
           
-        // });
-        // const data = await response.json;
-        // if (data.tq_url) {
-        //     this.showSuccessAlert(data.tq_url);
-        // } else {
-        //     console.error('Error:', data.error);
-        // }
+        });
+        const data = await response.json();
+        if (data.tq_url) {
+          this.ticketInfo = { tq_url: data.tq_url }; //將data.tq_url值放入this.ticketInfo
+          const url = this.ticketInfo.tq_url;
+          this.showSuccessAlert(url); //tq_url存在且ticketInfo被正確設置\才調用showSuccessAlert
+          console.log(url);
+        } else {
+          console.error('Error:', data.error);
+        }
 
       } catch (error) {
           console.error('Error:', error);
       }
     },
-    handleChange(option){
+    handleChange(option){ //控制付款選項單選
       if(option === 'ecpay' && this.formData.ecpay){
         this.formData.transfer = false;
       }else if(option === 'transfer' && this.formData.transfer){
         this.formData.ecpay = false;
       } 
     },
-    // async confirmTicketOrder() {
-    //   try {
-    //       const response = await fetch('http://localhost/phpG6/back/confirmTicketOrder.php', {
-    //           method: 'POST',
-    //           headers: {
-    //               'Content-Type': 'application/json'
-    //           },
-    //           body: JSON.stringify({
-    //               t_id: this.ticket.id
-    //           })
-    //       });
-
-    //       const responseData = await response.json();
-    //       console.log('Confirm Ticket Response:', responseData);
-
-    //       if (responseData.status === 'success') {
-    //           this.showSuccessAlert(responseData.tq_url);
-    //       } else {
-    //           console.error('Error:', responseData.message);
-    //       }
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //     }
-    // },
-
+    isAccountNB1Valid(e){
+      let value = e.target.value; 
+      value = value.replace(/\D/g, ''); //移除所有非數字字符
+      if(value>3){
+        value = value.slice(0,3);
+      }
+      this.formData.bankCode = value;
+    },
+    isAccountNB2Valid(e){
+      let value = e.target.value; 
+      value = value.replace(/\D/g, '');
+      if(value>14){
+        value = value.slice(0,14);
+      }
+      this.formData.accountNumber = value;
+    },
     getTodayDate(){ //抓訂購當天日期
       const today = new Date();
       const year = today.getFullYear();
@@ -242,7 +228,6 @@ export default {
       try{
         if (this.isOrderValid){
           this.saveTicketOrder(); //等待訂單保存完成
-          this.showSuccessAlert(); //訂單完成後才調用showSuccessAlert
           this.resetForm();
         }else{
           this.showErrorAlert();
@@ -251,10 +236,10 @@ export default {
           console.error('Error finishing order:', error);
       }
     },
-    showSuccessAlert(tq_url) {
+    showSuccessAlert(url) {
       Swal.fire({
         title: '已完成訂單',
-        html: `<p>待查核付款資訊後QRCode即生效：</p><img src="${tq_url}" alt="tq_url" />`,
+        html: `<p>請掃此QRCode取得訂單資訊及下載：</p><img src='${url}'alt="tq_url" />`,
         icon: 'success',
         iconColor: '#4F82D4',
         confirmButtonText: '確定',
@@ -269,7 +254,7 @@ export default {
         confirmButtonText: '確定',
       })
     },
-    resetForm(){
+    resetForm(){ //提交後重置
       this.formData.name = '',
       this.formData.birthdate = '',
       this.formData.country = '',
@@ -281,37 +266,13 @@ export default {
       this.formData.bankCode = '',
       this.formData.accountNumber = ''
     },
-    // showSplit(e){ //分票彈窗
-    //   if(e.target.checked){
-    //     Swal.fire({
-    //       title: '受票者資訊',
-    //       html:`
-    //       <input type="text" id="name" class="swal_input" placeholder="請輸入姓名">
-    //       <input type="email" id="email" class="swal_input" placeholder="請輸入電子信箱">`,
-    //       width: 450,
-    //       focusConfirm: false,
-    //       showCancelButton: true,
-    //       confirmButtonText: '確認',
-    //       confirmButtonColor: '#FFC800',
-    //       cancelButtonColor: '#888',
-    //       cancelButtonText: '取消',
-    //       preConfirm: () => {
-    //         const name = Swal.getPopup().querySelector('#name').value;
-    //         const email = Swal.getPopup().querySelector('#email').value;
-    //         if (!name || !email) {
-    //           Swal.showValidationMessage('Please fill out all fields');
-    //         }
-    //         return { name, email };
-    //       }
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
-    //         console.log('User details:', result.value);
-    //         Swal.fire('Submitted!', 'Your details have been submitted.', 'success');
-    //       } else {
-    //         e.target.checked = false;
-    //       }
-    //     });
-    //   }
+    // populateFormData() {
+    //   const user = this.userStore.user;
+    //   this.formData.name = user.name;
+    //   this.formData.birthdate = user.birthdate;
+    //   this.formData.country = user.country;
+    //   this.formData.phone = user.phone;
+    //   this.formData.email = user.email;
     // },
     parseImg(imgURL) {
       // 將相對路徑解析成正確的 URL
@@ -335,6 +296,7 @@ export default {
   },
   mounted(){
     this.todayDate = this.getTodayDate();
+    // this.populateFormData();
   }
 };
 
