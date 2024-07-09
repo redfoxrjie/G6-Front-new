@@ -128,7 +128,7 @@ export default {
             console.log(this.formData.message);
 
             try {             
-                const response = await fetch('http://localhost/phpG6/front/saveContact.php', {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/saveContact.php`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
