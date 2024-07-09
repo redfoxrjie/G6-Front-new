@@ -1,10 +1,10 @@
 <template>
-    <div class="myTrip-section">
-        <button @click="addTripModal" class="creat-new-plan">建立行程</button>
+    <div class="myTrip-section" @click="closeAllDropdowns">
+        <RouterLink to="/trips"><button @click="addTripModal" class="creat-new-plan">建立行程</button></RouterLink>
         <h2>我的行程</h2>
         <div class="trip-card-wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-            <div class="card-container col" v-for="card in cards" :key="card.trp_id"
-                @click="navigateToTripMap(card.trp_id)">
+            <div class="card-container col" v-for="card in cards" :key="card.trp_id" :ref="`card-${card.trp_id}`"
+                @click.stop="navigateToTripMap(card.trp_id)">
                 <div class="trip-card">
                     <div class="option-btn" @click.stop="Dropdown(card)" style="cursor: pointer;">
                         <ul v-show="card.isDropdownOpen" class="dropdown-menu">
@@ -28,11 +28,11 @@
 </template>
 
 <script>
-import AddTrip from '@/components/layout/AddTrip.vue';
+// import AddTrip from '@/components/layout/AddTrip.vue';
 export default {
     name: 'MyComponent',
     components: {
-        AddTrip// 註冊組件
+        // AddTrip// 註冊組件
     },
     props: {
         options: {
@@ -54,13 +54,18 @@ export default {
         };
     },
     mounted() {
-
         this.loadJsonData();
     },
     methods: {
         //卡片下拉選單開合
         Dropdown(card) {
+            this.closeAllDropdowns();
             card.isDropdownOpen = !card.isDropdownOpen;
+        },
+        closeAllDropdowns() {
+            this.cards.forEach(card => {
+                card.isDropdownOpen = false;
+            });
         },
         loadJsonData() {
             fetch(`${import.meta.env.BASE_URL}json/mytrips.json`)
@@ -85,9 +90,29 @@ export default {
         selectOption(option, card) {
             if (option.label === '編輯行程') {
                 this.navigateToTripMap(card.trp_id);
+            } else if (option.label === '複製行程') {
+                this.copyTrip(card);
             } else {
                 console.log('Selected option:', option, 'for card:', card);
             }
+        },
+        //複製行程
+        copyTrip(card) {
+            const newCard = { ...card, trp_id: this.generateId() };
+            this.cards.push(newCard);
+            this.$nextTick(() => {
+                const newCardElement = this.$refs[`card-${newCard.trp_id}`][0];
+                const offset = 100; // 偏移量，根據需要調整
+                window.scrollTo({
+                    top: newCardElement.getBoundingClientRect().top + window.pageYOffset - offset,
+                    behavior: 'smooth'
+                });
+            });
+            card.isDropdownOpen = false; // 確保複製後關閉下拉選單
+        },
+        //生成ID
+        generateId() {
+            return 'trip-' + Date.now();
         }
     }
 }

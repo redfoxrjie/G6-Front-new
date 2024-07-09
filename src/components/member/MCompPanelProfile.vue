@@ -40,7 +40,6 @@
         </div>
     </div>
 </template>
-
 <script setup>
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -84,6 +83,7 @@ const changetab = (tab) => {
     tabview.value = tab;
 };
 
+// 獲取用戶資料
 const fetchUserData = async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/getUserInfo.php?userId=${userId.value}`);
@@ -98,7 +98,6 @@ const fetchUserData = async () => {
 };
 
 // 設定密碼三個判斷
-
 const validatePassword = () => {
     if (!passwordData.value.orginalPsw) {
         Swal.fire({
@@ -141,6 +140,7 @@ const validateOldPassword = async () => {
     }
 };
 
+// 保存用戶編輯
 const saveEdit = async () => {
     try {
         if (tabview.value === 'profile') {
@@ -150,6 +150,7 @@ const saveEdit = async () => {
                 userId: userId.value,
             });
             if (response.data.success) {
+                userStore.updateUserNickname(userData.value.memNickname); // 更新 Pinia 狀態
                 Swal.fire({
                     title: '儲存成功',
                     icon: 'success',
@@ -201,22 +202,22 @@ const saveEdit = async () => {
         console.error('Error saving user data:', error);
     }
 };
+
+// 計算帳號狀態
 const accountStatus = computed(() => {
     return userData.value.status === 1 ? '停權' : '正常';
 });
 
+// 取消編輯
 const cancelEdit = () => {
     fetchUserData(); //取得資料重置表單
 };
 
-
+// 加載時取得會員資料
 onMounted(() => {
-    fetchUserData(); //加載時取得會員資料
+    fetchUserData();
 });
 </script>
-
-
-
 
 <style lang="scss" scoped>
 @import '@/assets/styles/base/color';

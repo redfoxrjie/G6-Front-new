@@ -3,7 +3,8 @@
     <h2>票券一覽</h2>
     <h3 class="Area_TicketTitle">日本-沖繩</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in tickets.slice(0, 3)" :key="ticket.t_id" @click="goToDetail(ticket.t_id)">
+      <div class="Card_Container col" v-for="ticket in tickets.slice(0, 3)" :key="ticket.t_id"
+        @click="goToDetail(ticket.t_id)">
         <div class="ticket_Card">
           <div class="ticket-img">
             <img :src="parseServerImg(ticket.t_image)" :alt="ticket.t_name" />
@@ -19,7 +20,8 @@
     </div>
     <h3 class="Area_TicketTitle">日本-大阪</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in tickets.slice(3, 6)" :key="ticket.t_id" @click="goToDetail(ticket.t_id)">
+      <div class="Card_Container col" v-for="ticket in tickets.slice(3, 6)" :key="ticket.t_id"
+        @click="goToDetail(ticket.t_id)">
         <div class="ticket_Card">
           <div class="ticket-img">
             <img :src="parseServerImg(ticket.t_image)" :alt="ticket.t_name" />
@@ -35,7 +37,8 @@
     </div>
     <h3 class="Area_TicketTitle">泰國-曼谷</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in tickets.slice(6, 9)" :key="ticket.t_id" @click="goToDetail(ticket.t_id)">
+      <div class="Card_Container col" v-for="ticket in tickets.slice(6, 9)" :key="ticket.t_id"
+        @click="goToDetail(ticket.t_id)">
         <div class="ticket_Card">
           <div class="ticket-img">
             <img :src="parseServerImg(ticket.t_image)" :alt="ticket.t_name" />
@@ -51,7 +54,8 @@
     </div>
     <h3 class="Area_TicketTitle">韓國-首爾</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in tickets.slice(9, 12)" :key="ticket.t_id" @click="goToDetail(ticket.t_id)">
+      <div class="Card_Container col" v-for="ticket in tickets.slice(9, 12)" :key="ticket.t_id"
+        @click="goToDetail(ticket.t_id)">
         <div class="ticket_Card">
           <div class="ticket-img">
             <img :src="parseServerImg(ticket.t_image)" :alt="ticket.t_name" />
@@ -67,7 +71,8 @@
     </div>
     <h3 class="Area_TicketTitle">港澳</h3>
     <div class="TicketCard_Wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-      <div class="Card_Container col" v-for="ticket in tickets.slice(12, 15)" :key="ticket.t_id" @click="goToDetail(ticket.t_id)">
+      <div class="Card_Container col" v-for="ticket in tickets.slice(12, 15)" :key="ticket.t_id"
+        @click="goToDetail(ticket.t_id)">
         <div class="ticket_Card">
           <div class="ticket-img">
             <img :src="parseServerImg(ticket.t_image)" :alt="ticket.t_name" />
@@ -98,9 +103,8 @@ export default {
     this.loadJsonData();
   },
   methods: {
-    async loadJsonData(){
+    async loadJsonData() {
       try {
-
         const response = await fetch(`${import.meta.env.VITE_API_URL}/getTickets.php`, { //使用fetch 發送請求
             method: 'POST',
             headers: {
@@ -114,7 +118,7 @@ export default {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         const responseData = await response.json();
@@ -122,10 +126,10 @@ export default {
         // 將後端返回的票券資料存入 tickets 中
         this.tickets = responseData.tickets;
       } catch (error) {
-          console.error('Error:', error);
+        console.error('Error:', error);
       }
     },
-    goToDetail(id){
+    goToDetail(id) {
       this.$router.push({ name: 'TicketInner', params: { id } }); //跳頁設置
     },
     parseImg(imgURL) {
@@ -133,8 +137,8 @@ export default {
       return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
     },
     parseServerImg(imgURL) {
-          // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
-                return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
+      // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
+      return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
     }
   }
 };
@@ -147,59 +151,68 @@ export default {
 
 .Ticket_Section {
   padding: 100px;
-  h2{
+
+  h2 {
     margin: 50px 0px;
     text-align: center;
     color: $secondColor-2;
   }
-  .Area_TicketTitle{
+
+  .Area_TicketTitle {
     padding: 30px 0px;
     color: $secondColor-2;
   }
 }
+
 @media (max-width: 768px) {
   .Ticket_Section {
     padding: 5% 0px;
-    h3{
+
+    h3 {
       margin: 0px 5%;
     }
   }
 }
+
 .TicketCard_Wrapper {
   display: flex;
   flex-wrap: wrap;
+
   .ticket_Card {
     padding: 20px;
-    .ticket-img img { 
-    width: 90%;
-    border-radius: 80px;
-    box-shadow: 0 4px 12px rgba(0,0,0,.5);
-    cursor: pointer;
-    transform: translate(0, -10%);
-    transition: scale .5s ease-in-out;
-    &:hover{
+
+    .ticket-img img {
+      width: 90%;
+      border-radius: 80px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .5);
+      cursor: pointer;
+      transform: translate(0, -10%);
+      transition: scale .5s ease-in-out;
+
+      &:hover {
         scale: 1.05;
         transition: scale .5s ease-in-out;
+      }
     }
-  }
+
     .Ticket_Txt {
       padding: 10px 20px;
       color: $gray;
       cursor: pointer;
-      .TicketPrice{
+
+      .TicketPrice {
         color: $secondColor-2;
         margin: 2% 0px;
       }
+
       &:hover {
         color: $secondColor-2;
       }
-      .viewers{
+
+      .viewers {
         font-size: 12px;
       }
     }
   }
 }
-
-
-
 </style>
