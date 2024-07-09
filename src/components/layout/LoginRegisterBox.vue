@@ -23,8 +23,9 @@
                             class="input-icon" @click="togglePasswordVisibility('registerConfirm')" />
                     </div>
                     <button class="register-btn" @click="handleRegistration" type="submit">註冊</button>
-                    <button class="else-way">
-                        <img src="/src/assets/images/global/icons/google.png" alt="">使用google帳號註冊
+                    <button class="else-way" ref="googleRegisterButton">
+                        <GoogleLogin :callback="callback" />
+                        <!-- <img src="/src/assets/images/global/icons/google.png" alt="">使用google帳號註冊 -->
                     </button>
                     <div class="rwd-btn">
                         <p>已有會員?</p>
@@ -46,11 +47,13 @@
                     <div class="credentials-container">
                         <input type="checkbox" id="remember-email">
                         <label for="remember-email">記住Email</label>
-                        <a href="#" class="forgot-password">忘記密碼?</a>
+                        <!-- <a href="#" class="forgot-password">忘記密碼?</a> -->
+                        <button @click="openForgotPswModal" class="forgot-password">忘記密碼?</button>
                     </div>
                     <button class="login-btn" @click="login" type="submit">登入</button>
-                    <button class="else-way">
-                        <img src="/src/assets/images/global/icons/google.png" alt="">使用google帳號登入
+                    <button class="else-way" ref="googleLoginButton">
+                        <!-- <img src="/src/assets/images/global/icons/google.png" alt=""> -->
+                        <GoogleLogin :callback="callback" />
                     </button>
                     <div class="rwd-btn">
                         <p>還沒有帳號?</p>
@@ -76,6 +79,7 @@
                 <button @click="switchLoginEvent">會員登入</button>
             </div>
         </div>
+        <ForgotPsw :isVisible="isForgotPasswordModalVisible" @close="closeForgotPswModal" />
     </section>
 </template>
 
@@ -87,9 +91,67 @@ import { onMounted, watch } from 'vue';
 import { ref, defineProps, defineEmits } from 'vue';
 import Swal from 'sweetalert2';
 import { isValidPassword } from '@/components/layout/validation';
+import ForgotPsw from '@/components/member/ForgotPsw.vue';
+
+
+const callback = (response) => {
+    console.log('Google 登入回應:', JSON.stringify(response, null, 2));
+
+    if (response.credential) {
+        // 使用 credential 進行驗證
+        handleCredential(response.credential);
+    } else if (response.select_by === 'btn') {
+        // 用戶點擊了登入按鈕，但尚未完成登入流程
+        console.log('用戶點擊了 Google 登入按鈕');
+    } else {
+        onError(new Error('Google 登入失敗：回應格式不符合預期'));
+    }
+};
+
+const handleCredential = async (credential) => {
+    try {
+        // 解碼 JWT token 以獲取用戶信息
+        const payload = JSON.parse(atob(credential.split('.')[1]));
+
+        console.log('解碼後的用戶信息:', payload);
+
+        // 使用解碼後的信息更新用戶狀態
+        onSuccess({
+            name: payload.name,
+            email: payload.email,
+            picture: payload.picture,
+            sub: payload.sub // 這是 Google 的唯一識別碼
+        });
+    } catch (error) {
+        console.error('處理 Google 憑證時出錯:', error);
+        onError(error);
+    }
+};
+
+const onSuccess = (profile) => {
+    console.log('Google 登入成功:', profile);
+    userStore.setGoogleUser({
+        name: profile.name,
+        email: profile.email,
+        avatar: profile.picture,
+        googleId: profile.sub
+    });
+    emit('close', { status: 'login-success', user: profile });
+
+};
+
+
+const onError = (error) => {
+    console.error('Google 登入失敗:', error);
+    Swal.fire({
+        icon: 'error',
+        title: 'Google 登入失敗',
+        text: error.message || '未知錯誤'
+    });
+};
 
 const userStore = useUserStore();
-const { isLoggedIn, userInfo } = storeToRefs(userStore);
+const { isLoggedIn, isGoogleUser, googleUserInfo, userInfo } = storeToRefs(userStore);
 
 const props = defineProps({
     isVisible: Boolean
@@ -172,7 +234,7 @@ const login = async () => {
     formData.append('u_psw', password.value);
 
     try {
-        const response = await apiInstance.post('http://localhost/phpG6/front/login.php', formData, {
+        const response = await apiInstance.post(`${import.meta.env.VITE_API_URL}/login.php`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
 
@@ -253,7 +315,7 @@ const handleRegistration = async () => {
     formData.append('nickname', registerUsername.value); // 將使用者名稱作為暱稱
 
     try {
-        const response = await apiInstance.post('http://localhost/phpG6/api/register.php', formData, {
+        const response = await apiInstance.post(`${import.meta.env.VITE_API_URL}/register.php`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         if (response.data.code === 1) {
@@ -266,7 +328,6 @@ const handleRegistration = async () => {
         console.error('Registration error:', error);
     }
 };
-
 // 登入註冊切換
 const switchLoginEvent = () => {
     switchLogin.value = !switchLogin.value;
@@ -285,11 +346,22 @@ const switchLoginEvent = () => {
     }
 };
 
+// 忘記密碼
+const isForgotPasswordModalVisible = ref(false);
+
+const openForgotPswModal = () => {
+    isForgotPasswordModalVisible.value = true;
+};
+
+const closeForgotPswModal = () => {
+    isForgotPasswordModalVisible.value = false;
+};
+
 const closeForm = () => {
     isVisible.value = false;
 };
-</script>
 
+</script>
 
 
 <style lang="scss" scoped>
@@ -341,9 +413,7 @@ const closeForm = () => {
 
 .form-box {
     position: absolute;
-    // left: 5%;
     background-color: $secondColor-2;
-    ;
     width: 400px;
     height: 500px;
     border-radius: 5px;
@@ -537,7 +607,6 @@ h1 {
     background-color: #fff;
     outline: none;
     border-radius: 28px;
-    padding: 13px;
     color: "black";
     font-size: 1rem;
     letter-spacing: 2px;
@@ -545,10 +614,10 @@ h1 {
     cursor: pointer;
 }
 
-.form-box button.else-way:hover {
-    background-color: $secondColor-1;
-    color: #fff;
-}
+// .form-box button.else-way:hover {
+//     background-color: $secondColor-1;
+//     color: #fff;
+// }
 
 .else-way img {
     width: 8%;

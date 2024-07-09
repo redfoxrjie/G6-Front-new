@@ -1,16 +1,14 @@
 <template>
     <div class="container">
         <div class="panel-row row row-cols-1 row-cols-md-2">
-            <div class="panel-sidenav col-12 col-md-3
-                row row-cols-2 row-cols-md-1">
+            <div class="panel-sidenav col-12 col-md-3 row row-cols-2 row-cols-md-1">
                 <div class="p-s-mem col-2 col-md-12">
                     <div class="p-s-m-imgwrap"><img :src="userAvatarUrl" alt="avatar"></div>
                     <div class="p-s-m-name">
-                        <h4>{{ userInfo.u_nickname }}</h4>
+                        <h4>{{ userNickname }}</h4>
                     </div>
                 </div>
-                <div class="p-s-nav col-12 col-md-12 
-                row">
+                <div class="p-s-nav col-12 col-md-12 row">
                     <div class="p-s-n-linkslist col-12 col-md-10 row row-cols-3 ">
                         <div class="p-s-n-link col-5 col-md-12">
                             <p @click="goToPage('editMemberMain')"><font-awesome-icon
@@ -25,10 +23,8 @@
                             <p><font-awesome-icon :icon="['fas', 'bell']" /><span>我的通知</span></p>
                         </div>
                         <div class="p-s-n-link col-5 col-md-12" @click="confirmLogout">
-                            <p><font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" /><span>登出</span>
-                            </p>
+                            <p><font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" /><span>登出</span></p>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -40,19 +36,20 @@
                 <MCompPanelProfile v-if="panelView == 'profile'" />
             </div>
         </div>
-        <!-- :class="{ 'active-view': panelView == 'profile' }" -->
     </div>
 </template>
+
 <script setup>
-import { computed, onBeforeMount, onMounted, ref, watch } from 'vue';
-import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
 import { storeToRefs } from 'pinia';
 import Swal from 'sweetalert2';
 import MCompPanelMsg from '@/components/member/MCompPanelMsg.vue';
 import MCompPanelProfile from '@/components/member/MCompPanelProfile.vue';
+
 const panelView = ref('profile');
-const panelTitle = { 'profile': '會員資料設定', 'msg': '我的通知' }
+const panelTitle = { 'profile': '會員資料設定', 'msg': '我的通知' };
 const router = useRouter();
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
@@ -61,7 +58,7 @@ const changeView = (tabName) => {
     panelView.value = tabName;
 }
 const goToPage = (toLink) => {
-    router.push(toLink)
+    router.push(toLink);
 }
 
 const confirmLogout = () => {
@@ -77,6 +74,7 @@ const confirmLogout = () => {
         }
     });
 }
+
 const logout = () => {
     userStore.logout();
     Swal.fire({
@@ -87,13 +85,17 @@ const logout = () => {
         router.push('/');
         openLoginModal(); // 登出後重新打開登錄彈窗
     });
-};
+}
+
 const userAvatarUrl = computed(() => {
     return userInfo.value && userInfo.value.u_avatar ? `${import.meta.env.VITE_IMG_URL}/${userInfo.value.u_avatar}` : new URL('@/assets/images/default-userImg.png', import.meta.url).href;
 });
-
+const userNickname = computed(() => {
+    return userInfo.value ? userInfo.value.u_nickname : '';
+});
 
 </script>
+
 
 <style lang="scss" scoped>
 @import '../assets/styles/base/color';

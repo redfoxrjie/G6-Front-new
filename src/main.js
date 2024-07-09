@@ -2,6 +2,7 @@
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+
 // import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 
@@ -41,13 +42,17 @@ app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.config.globalProperties.$swal = Swal;
 
+import vue3GoogleLogin from 'vue3-google-login'
+app.use(vue3GoogleLogin, {
+    clientId:'451967960846-83b5ehqsliuurjdh9tihtopin79u9fp5.apps.googleusercontent.com'
+})
+
 app.use(pinia)
 app.use(createPinia())
 app.use(router)
 app.mount('#app')
 
 
-// 在 setup 方法中初始化用户状态
-// 初始化用户状态
+// 在 setup 方法中初始化會員狀態
 const userStore = useUserStore(pinia);
 userStore.initializeStore();
