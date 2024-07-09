@@ -52,15 +52,7 @@
                 <div class="dog-pic dog-0">
                     <img src="@/assets/images/airplane-dog.png" alt="飛機狗">
                 </div>
-                <div class="dog-pic dog-1">
-                    <img src="@/assets/images/dog-1.png" alt="地圖狗">
-                </div>
-                <div class="dog-pic dog-2">
-                    <img src="@/assets/images/dog-2.png" alt="行李狗">
-                </div>
-                <div class="dog-pic dog-3">
-                    <img src="@/assets/images/dog-3.png" alt="購物狗">
-                </div>
+                
             </div>
             <RouterLink to="/" class="logo">
                 <img src="@/assets/images/global/logo/logo.png" alt="Logo">
@@ -69,6 +61,15 @@
 
         <section class="content">
             <div class="center-background"></div>
+            <div class="dog-pic dog-1">
+                    <img src="@/assets/images/dog-1.png" alt="地圖狗">
+                </div>
+                <div class="dog-pic dog-2">
+                    <img src="@/assets/images/dog-2.png" alt="行李狗">
+                </div>
+                <div class="dog-pic dog-3">
+                    <img src="@/assets/images/dog-3.png" alt="購物狗">
+                </div>
             <div class="content-item content-item-1">
                 <div class="pic"></div>
                 <div class="icon icon-item-1">
@@ -447,7 +448,8 @@ nav.closed {
 //地圖狗
 .dog-1 {
     position: relative;
-    left: 70vw; // 將此值調整為所需的水平偏移量
+    left: -20vw; // 將此值調整為所需的水平偏移量
+    top:-50vh;
     animation: move1 1.5s infinite linear;
 }
 
@@ -472,7 +474,8 @@ nav.closed {
 //行李狗
 .dog-2 {
     position: relative;
-    top: 5vh;
+    top: 40vh;
+    left: -15vw;
     animation: move2 1s infinite linear;
 }
 
@@ -497,8 +500,8 @@ nav.closed {
 //購物狗
 .dog-3 {
     position: relative;
-    left: 80vw; // 將此值調整為所需的水平偏移量
-    top: 20vh;
+    left: 15vw; // 將此值調整為所需的水平偏移量
+    top: 10vh;
     animation: move3 2s infinite linear;
 }
 
