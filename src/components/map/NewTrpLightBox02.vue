@@ -191,7 +191,7 @@
   }
   .light-box {
     position: absolute;
-    top: 1%;
+    top: 8vh;
     left: 47.5vw;
     transform: translateX(-47.5%);
     z-index: 401;

@@ -48,7 +48,7 @@
           <div v-if="daysCount" class="day-settings">
             <div class="departure-time">
               出發時間：
-              <span class="edit-time" @click="handleEditTimeClick(day)">{{ departureTimes[calculateDate(day)] || '07:00' }}</span>
+              <span class="edit-time" @click="handleEditTimeClick(day)">{{ departureTimes[day] || '07:00' }}</span>
             </div>
             <div class="day-info">
               {{ calculateDate(day) }} ({{ getWeekday(day) }})
@@ -129,11 +129,16 @@ import IconStarRating from '@/components/icons/IconStarRating.vue';
 import NotePopup from '@/components/map/NotePopup.vue';// 新增：導入 NotePopup 組件
 import FunctionList from '@/components/map/FunctionList.vue';
 
+
 export default {
   props: {
     tripData: {
       type: Object,
       required: true,
+    },
+    tripDays: {
+      type: Array,
+      required: true
     },
     onEditTimeClick: {
       type: Function,
@@ -177,7 +182,8 @@ export default {
       isNotePopupOpen: false, // 筆記相關的數據
       noteTitle: '',
       noteContent: '',
-      coverImageUrl: sessionStorage.getItem('coverImage') || 'src/assets/images/default-userBg.png',
+      // coverImageUrl: sessionStorage.getItem('coverImage') || 'src/assets/images/default-userBg.png',
+      coverImageUrl: '',
       showFunctionList: false, // 預設隱藏 FunctionList
       receivedStayTime: '2小時0分',
     };
@@ -186,6 +192,14 @@ export default {
     IconStarRating, //評星小功能
     NotePopup, // 新增：註冊 NotePopup 組件
     FunctionList,
+  },
+  created() {
+    // 加載頁面時根據 tripData.tripImg 初始化 coverImageUrl
+    if (this.tripData.tripImg) {
+      this.coverImageUrl = `http://localhost/phpG6/images/${this.tripData.tripImg}`;
+    } else {
+      this.coverImageUrl = sessionStorage.getItem('coverImage') || 'src/assets/images/default-userBg.png';
+    }
   },
   computed: {
     filteredSearchResults() {
@@ -215,7 +229,8 @@ export default {
       immediate: true,
     },
     departureTimes: {
-      handler() {
+      handler(newValue) {
+        console.log('departureTimes changed:', newValue);
         // 出發時間改變時重新計算景點時間
         this.recalculateSpotTimes();
       },
@@ -227,6 +242,16 @@ export default {
         this.recalculateSpotTimes();
       },
       deep: true
+    },
+    'tripData.tripImg': {
+      handler(newImg, oldImg) {
+        if (newImg) {
+          this.coverImageUrl = `http://localhost/phpG6/images/${newImg}`;
+        } else {
+          this.coverImageUrl = sessionStorage.getItem('coverImage') || 'src/assets/images/default-userBg.png';
+        }
+      },
+      immediate: true // 立即执行一次 handler
     },
   },
   methods: {
@@ -510,7 +535,10 @@ export default {
     calculateDate(day) {
       const date = new Date(this.startDateObj);
       date.setDate(date.getDate() + (day - 1));
-      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+      const formattedDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+      console.log('Calculated date for day:', day, 'is', formattedDate);
+      return formattedDate;
+      // return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
     },
     // 根據開始日期計算第 day 天是星期幾
     getWeekday(day) {
@@ -732,7 +760,7 @@ export default {
         trp_name: this.tripData.tripName,
         trp_sdate: this.tripData.startDate,
         trp_edate: this.tripData.endDate,
-        trp_area: this.areaMapping[this.tripData.selectedArea],
+        trp_area: this.tripData.selectedArea, // 使用原始的區域代碼
         trp_rate: 0,
         trp_rate_sum: 0,
         trp_is_public: false,
