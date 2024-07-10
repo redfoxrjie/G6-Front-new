@@ -49,9 +49,9 @@
                 <div class="amoeba"></div>
                 <div class="slogan">土狗陪您 TOGO 展開新的旅程</div>
                 <div class="togo-large-text">TOGO</div>
-                <div class="dog-pic dog-0">
+                <!-- <div class="dog-pic dog-0">
                     <img src="@/assets/images/airplane-dog.png" alt="飛機狗">
-                </div>
+                </div> -->
                 
             </div>
             <RouterLink to="/" class="logo">
@@ -552,6 +552,14 @@ nav.closed {
     border-radius: 10px;
     z-index: 1; // 確保 slogan 的 z-index 小於 dog-pic
 }
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (max-width: 768px) {
+    .slogan{
+        font-size: 1rem;
+        letter-spacing: 8px;
+    }
+}
+
 
 .togo-large-text {
     position: absolute;
@@ -565,6 +573,15 @@ nav.closed {
     letter-spacing: 50px;
     z-index: 1; // 確保 togo-large-text 的 z-index 小於 dog-pic
     text-align: center;
+}
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (max-width: 768px) {
+    .togo-large-text{
+        font-size: 5rem;
+        bottom: 20%;
+        right: 15%;
+        font-weight: 900;
+    }
 }
 
 @keyframes morph {
@@ -660,6 +677,14 @@ nav.closed {
     z-index: -1;
     border-radius: 50%;
 }
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (max-width: 768px) {
+    .center-background{
+        width: 30%;
+        height: 50%;
+        border-radius: 10%;
+    }
+}
 
 .content-item {
     position: absolute;
@@ -707,6 +732,22 @@ nav.closed {
         top: 35%;
         left: -80%;
         z-index: 2;
+    }
+}
+@media screen and (max-width: 768px) {
+    .content-item-1{
+        .pic{
+            width: 200px;
+            height: 200px;
+        }
+        .text{
+            font-size: 1rem;
+            letter-spacing: 4px;
+            line-height:1.5;
+            top: 0%;
+            left: 0%;
+            z-index: 2;
+        }
     }
 }
 
