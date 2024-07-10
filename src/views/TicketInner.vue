@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
+import { useUserStore } from '@/stores/userStore';
 
 export default {
     name:'TicketInner',
@@ -122,16 +124,30 @@ export default {
             }
         },
         goToOrderPage(tickets){
-            this.$router.push({ //導航至新頁面
-                name: 'TicketOrder', //目標頁面
-                query: {
-                    id: tickets.t_id,
-                    name: tickets.t_name,
-                    image: tickets.t_image,
-                    totalPrice: this.totalPrice,
-                    count: this.ticketNum.count
-                }
-            });
+            const userStore = useUserStore();
+            if(!userStore.isLoggedIn){
+                // userStore.toggleLoginModal(); // 顯示登錄彈窗
+                this.showErrorAlert();
+            }else{
+                this.$router.push({ //導航至新頁面
+                    name: 'TicketOrder', //目標頁面
+                    query: {
+                        id: tickets.t_id,
+                        name: tickets.t_name,
+                        image: tickets.t_image,
+                        totalPrice: this.totalPrice,
+                        count: this.ticketNum.count
+                    }
+                });
+            }
+        },
+        showErrorAlert(){
+            Swal.fire({
+                title: '請先登入會員',
+                text: '未完成登入無法購票',
+                icon: 'warning',
+                confirmButtonText: '確定',
+            })
         },
         parseImg(imgURL) {
         // 將相對路徑解析成正確的 URL
