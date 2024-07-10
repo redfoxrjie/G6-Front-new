@@ -3,6 +3,7 @@
     <MapGuide />
     <Mapcomponent
       :trip-data="tripData"
+      :trip-days="tripDays"
       :departure-times="departureTimes"
       @edit-time-click="handleEditTimeClick"
       @edit-plan-setting="showTripSetting"
@@ -46,19 +47,27 @@ import EditStayTime from '@/components/map/EditStayTime.vue';
 // 使用 ref 定義 reactive 變量來控制顯示狀態
 const showNewTrpLightBox02 = ref(false);
 const showBlackLayout = ref(false);
+// 以tripData接收來自php回傳的trip資料以及子組件傳來的值
 const tripData = ref({
+  trp_id: null,
+  u_id: null,
   tripName: '',
   startDate: '',
   endDate: '',
-  selectedArea: ''
+  selectedArea: '',
+  tripRate: 0,
+  tripRateSum: 0,
+  tripIsPublic: 0,
+  tripImg: '',
 });
+const tripDays = ref([]); // 定義 tripDays 用於接收 trip_day 資料
+
 const showEditDepartureTime = ref(false);
 const selectedDate = ref('');
 const selectedWeekday = ref('');
 const departureTimes = ref({}); // 維護每一天的出發時間
 const displayTripSetting = ref(false); // 控制 TripSetting 顯示狀態
 const isEditStayTimeVisible = ref(false); //「編輯停留時間」欄位預設不顯示
-// let selectedLocation = ref(null);
 const selectedLocation = ref(null); // 你的選定地點
 
 // 處理行程提交
@@ -105,8 +114,13 @@ const handleEditTimeClick = ({ date, weekday }) => {
 const handleTimeSaved = (time) => {
   // 確認有順利接收到來自EditDepartureTime.vue的資料
   console.log('接收到的時間：', time);
+
+  const startDate = new Date(tripData.value.startDate);
+  const selectedDateObj = new Date(selectedDate.value);
+  const day = Math.ceil((selectedDateObj - startDate) / (1000 * 60 * 60 * 24)) + 1;
+  
   // 更新對應日期的出發時間
-  departureTimes.value[selectedDate.value] = time; 
+  departureTimes.value[day] = time;
   showEditDepartureTime.value = false;
   showBlackLayout.value = false;
 };
@@ -144,7 +158,7 @@ const saveStayTimeHandler = (formattedTime) => {
 
   closeEditStayTime(); // 儲存完畢後關閉 EditStayTime 組件
 };
-//處理儲存行程事件與接收資料
+/*---------處理儲存行程事件與接收資料-----------*/
 const handleSaveTripPlan = async (tripPlanData) => {
   console.log('接收到的行程資料：', tripPlanData); // 確認 tripPlanData 的內容
   try {
@@ -169,11 +183,60 @@ const handleSaveTripPlan = async (tripPlanData) => {
     alert('catch:行程保存失敗，請重試。');
   }
 };
+// 加入撈取行程資料的邏輯
+const loadTripData = async (trpId) => {
+  try {
+    const response = await fetch(`http://localhost/phpG6/api/loadTripData.php?trp_id=${trpId}`);
+    const data = await response.json();
+
+      // 將從 PHP 返回的資料映射到 Vue 組件中的 tripData
+      const trip = data.trip;
+      tripData.value.trp_id = trip.trp_id;
+      tripData.value.u_id = trip.u_id;
+      tripData.value.tripName = trip.trp_name;
+      tripData.value.startDate = new Date(trip.trp_sdate).toISOString().split('T')[0]; // 確保為 YYYY-MM-DD 格式
+      tripData.value.endDate = new Date(trip.trp_edate).toISOString().split('T')[0]; // 確保為 YYYY-MM-DD 格式
+      tripData.value.selectedArea = trip.trp_area;
+      tripData.value.tripRate = trip.trp_rate;
+      tripData.value.tripRateSum = trip.trp_rate_sum;
+      tripData.value.tripIsPublic = trip.trp_is_public;
+      tripData.value.tripImg = trip.trp_img;
+
+      // 將從 PHP 返回的資料映射到 Vue 組件中的 tripDays
+      tripDays.value = data.trip_day.map(day => ({
+        day_id: day.day_id,
+        day_num: day.day_num,
+        departureTimes: day.day_deptime
+      }));
+
+      // 初始化 departureTimes
+      data.trip_day.forEach(day => {
+        const time = day.day_deptime.split(':');
+        departureTimes.value[day.day_num] = `${time[0]}:${time[1]}`;
+      });
+
+      console.log('接收php的trip資料：', data.trip);
+      console.log('接收php的trip_day資料：', data.trip_day);
+      console.log('轉換後的departureTimes:', JSON.stringify(departureTimes.value));
+  } catch (error) {
+    console.error('撈取行程資料時出錯:', error);
+  }
+};
+// 從 URL 中取得 trp_id 並載入行程資料
+const getTrpIdFromUrl = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('trp_id');
+};
 
 // 在組件載入後顯示 MapGuide、NewTrpLightBox01 及 BlackLayout
 onMounted(() => {
   showNewTrpLightBox02.value = true;
   showBlackLayout.value = true;
+
+  const trpId = getTrpIdFromUrl();
+  if (trpId) {
+    loadTripData(trpId);
+  }
 });
 
 </script>

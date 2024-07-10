@@ -10,7 +10,10 @@
       <div class="button-group">
         <button @click="prevStep" :disabled="isFirstStep">上一步</button>
         <button @click="nextStep">{{ isLastStep ? '完成' : '下一步' }}</button>
-        <button @click="closeGuide">關閉導引</button>
+        <button @click="closeGuide">
+          跳過說明
+          <font-awesome-icon icon="forward-step" />
+        </button>
       </div>
     </div>
   </div>
