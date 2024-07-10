@@ -92,8 +92,6 @@
 import Swal from 'sweetalert2';
 import { useUserStore } from '@/stores/userStore';
 
-import { mapStores } from 'pinia';
-
 export default {
   name: "TicketOrder",
   data() {
