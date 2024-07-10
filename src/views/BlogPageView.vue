@@ -218,7 +218,7 @@ export default {
                 });
             } else {
                 try {
-                    let path = `${import.meta.env.VITE_API_URL}/api`;
+                    let path = `${import.meta.env.VITE_API_URL}`;
                     let url = path + `/responseWrite.php`;
                     console.log('url:' + url)
 
