@@ -247,8 +247,8 @@ export default {
       deep: true,
     },
     daysCount: {
-    handler(newVal) {
-      console.log('new daysCount', newVal);
+    handler(newVal, oldVal) {
+      console.log('daysCount changed:', oldVal, '->', newVal);
       if (newVal > 0) {
         this.initItinerary();
       }
@@ -291,8 +291,12 @@ export default {
   },
   methods: {
     initItinerary() {
-    this.itinerary = Array.from({ length: this.daysCount }, () => []);
-    console.log('Initialized itinerary:', this.itinerary);
+      if (this.daysCount <= 0 || isNaN(this.daysCount)) {
+        console.warn('Invalid daysCount:', this.daysCount);
+        return;
+      }
+      this.itinerary = Array.from({ length: this.daysCount }, () => []);
+      console.log('Initialized itinerary:', this.itinerary);
     },
     addToPlanFromTripSpots() {
       this.tripSpots.forEach(spot => {
@@ -319,31 +323,31 @@ export default {
         console.log(`Day ${day}:`, spots);
       }
     },
-    // getSpotsForDay(day) {
-    //   // 返回根據 day 找到的 spot 列表
-    //   return this.tripSpots.filter(spot => spot.day_num === day);
-    // },
     // 初始化地圖
     initializeMap() {
-      this.map = L.map('map-container').setView([35.6821936, 139.762221], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(this.map);
+      try{
+          this.map = L.map('map-container').setView([35.6821936, 139.762221], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(this.map);
 
-      // 自定義 marker 圖片路徑
-      const markerIcon = new L.Icon({
-        iconUrl: 'https://tibamef2e.com/cid101/g6/front/images/togo-marker-icon-2x.png',
-        iconSize: [44, 72], // 圖片大小
-        iconAnchor: [12, 41], // 圖片錨點
-        popupAnchor: [1, -34],
-        shadowUrl: 'https://tibamef2e.com/cid101/g6/front/images/togo-marker-shadow.png', // 如果有陰影圖片
-        shadowSize: [46, 46] // 陰影圖片大小
-      });
+        // 自定義 marker 圖片路徑
+        const markerIcon = new L.Icon({
+          iconUrl: 'https://tibamef2e.com/cid101/g6/front/images/togo-marker-icon-2x.png',
+          iconSize: [44, 72], // 圖片大小
+          iconAnchor: [12, 41], // 圖片錨點
+          popupAnchor: [1, -34],
+          shadowUrl: 'https://tibamef2e.com/cid101/g6/front/images/togo-marker-shadow.png', // 如果有陰影圖片
+          shadowSize: [46, 46] // 陰影圖片大小
+        });
 
-      this.defaultMarkerIcon = markerIcon; // 保存到 this.defaultMarkerIcon 中
+        this.defaultMarkerIcon = markerIcon; // 保存到 this.defaultMarkerIcon 中
 
-      this.updateGeocoder(this.tripData.selectedArea);
-      this.setCenterByCountryCode(this.tripData.selectedArea);
+        this.updateGeocoder(this.tripData.selectedArea);
+        this.setCenterByCountryCode(this.tripData.selectedArea);
+      } catch (error) {
+        console.error('Map intialization error', error);
+      }
     },
     //更新對應的國家或地區的圖資
     updateGeocoder(countryCode) {
@@ -901,10 +905,16 @@ export default {
     },
   },
   mounted() {
-    this.initializeMap(); // 初始化地圖
+    this.initializeMap();
+    // setTimeout(() => {
+      
+    // }, 100);
     this.loadJsonData();
     this.calcDaysDiff();
     this.initItinerary();
+    // this.$nextTick(() => {
+      
+    // });
     this.addToPlanFromTripSpots();
 
     // 監聽 beforeunload 事件，以在掛載時先清除儲存於session storage的行程封面
