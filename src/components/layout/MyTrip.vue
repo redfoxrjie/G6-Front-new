@@ -62,7 +62,7 @@ export default {
         parseServerImg(imgURL) {
             // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
             if (imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
-            return 'public/default-bgImg.png'
+            return `${import.meta.env.VITE_IMG_URL}/default-userBg.png`
         }
     }
 }

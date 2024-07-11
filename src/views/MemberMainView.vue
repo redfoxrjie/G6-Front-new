@@ -67,12 +67,12 @@ const route = useRoute();
 function parseBgImg(imgURL) {
     // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
     if (imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
-    return '/default-userBg.png'
+    return `${import.meta.env.VITE_IMG_URL}/default-userBg.png`
 }
 function parseUserImg(imgURL) {
     // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
     if (imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
-    return '/default-userImg.png'
+    return `${import.meta.env.VITE_IMG_URL}/default-userImg.png`
 }
 
 // 修改banner

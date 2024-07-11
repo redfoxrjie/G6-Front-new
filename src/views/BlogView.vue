@@ -164,7 +164,7 @@ const parseServerImg = (imgURL) => {
 };
 const parseBlogImg = (imgURL) => {
   if(imgURL)return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
-  return '/public/default-userBg.png'
+  return `${import.meta.env.VITE_IMG_URL}/default-userBg.png`
 };
 
 // 導航至BlogPage頁面
