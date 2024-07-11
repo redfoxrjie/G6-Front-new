@@ -54,7 +54,7 @@ export default {
         parseServerImg(imgURL) {
             // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
             if (imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
-            return 'public/default-userBg.png'
+            return `${import.meta.env.VITE_IMG_URL}/default-userBg.png`;
         },
         navigateToBlogPage(b_id){
             // this.$router.push({ name: 'blogPage', params: { b_id } });
@@ -103,6 +103,10 @@ export default {
                 background-color: #fff;
                 box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
                 cursor: pointer;
+                transition: .1s ease;
+                &:hover{
+                    transform: scale(1.02);
+                }
 
                 .option-btn {
                     width: 28px;
@@ -115,16 +119,16 @@ export default {
                 }
 
                 .journey-img {
-                    width: 100%;
+                    // width: 100%;
                     aspect-ratio: 1/1.18;
                     overflow: hidden;
                     background-color: #d3c7c7;
 
                     img {
+                        height: 100%;
                         width: 100%;
-                        height: auto;
                         object-fit: cover;
-
+                        // object-position: center;
                         // transform: translate(-20%, 0);
                     }
                 }

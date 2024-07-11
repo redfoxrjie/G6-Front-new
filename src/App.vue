@@ -15,7 +15,14 @@
             <RouterLink to="/blog">旅行筆記</RouterLink>
             <RouterLink to="/news">最新消息</RouterLink>
             <RouterLink to="/tickets">票券訂購</RouterLink>
-            <RouterLink v-if="isLoggedIn" to="/member" style="display: flex; align-items: center; gap:5px;">
+            <!-- 原本的memwrap  -->
+            <!-- <RouterLink v-if="isLoggedIn" to="/member" style="display: flex; align-items: center; gap:5px;" >
+              <img :src="parseUserImg(userInfo.u_avatar)"
+                style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid" />
+              <span class="nickname">{{ userInfo.u_nickname }}</span>
+            </RouterLink> -->
+            <!-- 修改的memwrap  -->
+            <RouterLink v-if="isLoggedIn" to="/member" class="memwrap">
               <img :src="parseUserImg(userInfo.u_avatar)"
                 style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid" />
               <span class="nickname">{{ userInfo.u_nickname }}</span>
@@ -36,7 +43,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, watch } from 'vue'
+import { defineComponent, ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter, RouterLink, RouterView } from 'vue-router'
 import PageFooter from './components/footer/PageFooter.vue'
 import { useUserStore } from '@/stores/userStore'
@@ -74,6 +81,10 @@ export default defineComponent({
     const toggleMobileMenu = () => {
       isMobileMenuClosed.value = !isMobileMenuClosed.value //設置toggleMobileMenu每次都會轉換closed/!closed狀態
     }
+    const handleResize = () => {
+      isMobileMenuClosed.value = true;
+    }
+
 
     watch(route, (newRoute) => {
       isHomePage.value = newRoute.path === '/'
@@ -119,7 +130,12 @@ export default defineComponent({
 
     onMounted(() => {
       userStore.initializeStore()
+      window.addEventListener('resize', handleResize);
     })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', handleResize);
+    });
 
     return {
       isHomePage,
@@ -267,6 +283,12 @@ header {
           }
         }
 
+        .memwrap {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+
         .nickname {
           position: relative;
           color: $primaryColor;
@@ -294,6 +316,7 @@ header {
         }
 
         span.btn-start-plan {
+          display: unset;
           background-color: $accentColor-1;
           color: $black;
           padding: 10px 14px;
@@ -327,12 +350,19 @@ header {
         a {
           display: none;
         }
+
+        span.btn-start-plan {
+          display: none;
+        }
+
       }
     }
   }
 }
 
 @media screen and (min-width: 768px) {
+
+
   header {
     position: relative;
 
@@ -385,7 +415,16 @@ header {
             letter-spacing: $base-fontSize * 0.1;
           }
 
-          a.btn-start-plan {
+
+          .memwrap {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+          }
+
+          span.btn-start-plan {
+            // display: unset;
+
             background-color: $accentColor-1;
             color: $black;
             padding: 10px 14px;
@@ -412,6 +451,10 @@ header {
         .router-wrapper {
           a {
             display: inline;
+          }
+
+          .memwrap {
+            display: flex;
           }
         }
       }
