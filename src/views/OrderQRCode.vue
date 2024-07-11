@@ -12,10 +12,10 @@
             <h5>票券是否有效：{{ ticketStatus }}</h5>
             <button class="btn-1" :disabled="!isPaymentCompleted">驗票</button>
         </div>
-        <div class="btn_1">
+        <!-- <div class="btn_1">
             <img :src="order.tq_url" alt="tq_url" ref="ticketImage" />
             <button @click="download">點我下載</button>
-        </div>
+        </div> -->
     </div>
 </template>
 
