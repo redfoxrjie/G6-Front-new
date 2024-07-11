@@ -38,7 +38,7 @@ const hotTripsData = [
     { title: '京阪神絕景賞楓五天四夜', memberName: '浪漫百香狗', imgUrl: new URL('@/assets/images/japan_kyoto-street.jpg', import.meta.url).href, memPicUrl: 'https://picsum.photos/300/200/?random=3' },
     { title: '墾丁四天三夜畢業旅行', memberName: '耍廢奇異狗', imgUrl: new URL('@/assets/images/taiwan_kenting.jpg', import.meta.url).href, memPicUrl: 'https://picsum.photos/300/200/?random=4' },
     { title: '韓國釜山放鬆之旅', memberName: 'CuteHotDog', imgUrl: new URL('@/assets/images/korea_busan.jpg', import.meta.url).href, memPicUrl: 'https://picsum.photos/300/200/?random=5' },
-    { title: '東京下町散策之旅', memberName: '短腿狗愛旅行', imgUrl: new URL('@/assets/images/japan_asakusa-street.jpg', import.meta.url).href, memPicUrl: 'https://picsum.photos/300/200/?random=6' },
+    { title: '東京下町散策之旅', memberName: '短腿狗愛旅行', imgUrl: new URL('@/assets/images/japan_asakusa_street.jpg', import.meta.url).href, memPicUrl: 'https://picsum.photos/300/200/?random=6' }
 ];
 const props = defineProps({
     hotTrips: {
