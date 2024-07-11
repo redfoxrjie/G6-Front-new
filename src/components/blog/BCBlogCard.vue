@@ -6,6 +6,7 @@
                 <img class="bc-i-img" :src="bcImg">
                 <div class="bc-i-likes">
                     <div class="bc-i-likes-icon">
+                        <!-- <svg src="@/assets/images/global/icons/bones-xs-svg.svg" alt="" class="likes-iconImg"></svg> -->
                         <img src="@/assets/images/global/icons/bones-xs-svg.svg" alt="" class="likes-iconImg">
                     </div>
                     <p class="bc-i-likes-count">{{ bcLikesCount }}個讚</p>
@@ -120,7 +121,10 @@ const goToPage = (toLink) => {
                     img {
                         width: 100%;
                         aspect-ratio: 1;
+                        filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.76));
+
                     }
+
                 }
                 .bc-i-likes-count {
                     color: $primaryColor;

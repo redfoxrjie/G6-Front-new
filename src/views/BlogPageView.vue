@@ -7,21 +7,16 @@
                 </div>
                 <span>返回</span>
             </div>
-            <!-- debug-check -->
-            <!-- <p style="color: orange;">資料傳回確認(done)</p>
-            {{ blogpost }}
-            <hr>
-            <p style="color: orange;">留言資料傳回確認(done)</p>
-            {{ blogrp }}
-            <hr> -->
+
             <div class="journey-banner" :style="{ backgroundImage: 'url(' + parseServerImg(blogpost.trp_img) + ')' }">
                 <div class="journey-data">
                     <div class="publish-date font-time">{{ blogpost.b_date }} </div>
                     <div class="journey-title">{{ blogpost.b_title }}</div>
                 </div>
-                <div class="like-count" @click="toggleLikes">
+                <div class="like-count" @click="likeHandle">
+                    <font-awesome-icon :icon="['fas', 'bone']" :class="[isLiked ? 'active' : '']" class="like_icon" />
+                    <span>{{ blogpost.b_likes }} 個讚</span>
 
-                    <font-awesome-icon :icon="['fas', 'bone']" class="like_icon" /> {{ blogpost.b_likes }} 個讚
                 </div>
 
             </div>
@@ -29,13 +24,13 @@
                 <div class="journey-content col-12 col-md-9">
                     <div class="journey-info">
                         <div class="member">
-                            <div class="mem-data">
+                            <div class="mem-data col-9">
                                 <div class="mem-headshot">
-                                    <img src="https://picsum.photos/300/200/?random=10">
+                                    <img :src=parseUserImg(blogpost.u_avatar)>
                                 </div>
                                 <div class="title-wrapper">
-                                    <div class="mem-name">Nabi</div>
-                                    <div class="mem-slogan">一台相機，一只皮箱，一趟說走就走的旅行</div>
+                                    <div class="mem-name">{{ blogpost.u_nickname }}</div>
+                                    <div class="mem-slogan">@{{ blogpost.u_account }}</div>
                                 </div>
 
                             </div>
@@ -155,6 +150,13 @@ export default {
                 u_id: this.userInfo.u_id
             }
         },
+        isLiked() {
+            // let likedBlogs = JSON.parse(localStorage.getItem('likedBlogs')) || [];
+            // return likedBlogs.includes(this.blogpost.b_id);        
+            return this.liked
+        }
+    },
+    watch: {
     },
     methods: {
 
@@ -173,12 +175,14 @@ export default {
                 // 存取資料到陣列中
                 this.blogpost = data.blogpost;
                 this.blogrp = data.blog_rp;
+                this.initLike();
                 // blogsCount.value = data.blogs.length; //計算blog總數
             } catch (error) {
                 console.log('erro link at', `${import.meta.env.VITE_API_URL}/front/blog...View.php`)
                 console.error('Error fetching data:', error);
             }
-        },
+        }
+        ,
         toggleLikes() {
             if (this.item.liked) {
                 this.item.b_likes -= 1;
@@ -187,17 +191,58 @@ export default {
             }
             this.item.liked = !this.item.liked;
         },
+        async likeHandle() {
+            const blogId = this.blogpost.b_id;
+            let likes = JSON.parse(localStorage.getItem('likedBlogs')) || [];
+
+
+            if (likes.includes(blogId)) {
+                // 已点赞，移除点赞
+                this.liked = false;
+
+                likes = likes.filter(id => id !== blogId);
+                localStorage.setItem('likedBlogs', JSON.stringify(likes));
+                console.log(localStorage.getItem('likedBlogs'))
+                // updateLikeStatus(blogId, 'remove');  // 发送请求到后端
+            } else {
+                // 未点赞，添加点赞
+                this.liked = true;
+
+                likes.push(blogId);
+                localStorage.setItem('likedBlogs', JSON.stringify(likes));
+
+                console.log(localStorage.getItem('likedBlogs'))
+
+                // updateLikeStatus(blogId, 'add');  // 发送请求到后端
+            }
+
+        },
+        async likeShowHandle() {
+            const blogId = this.blogpost.b_id;
+
+            let path = `${import.meta.env.VITE_API_URL}`;
+            let url = path + `/blogLikeShow.php`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log(data)
+            } catch (error) {
+                console.error('Error:', error)
+            }
+        }
+        ,
         parseImg(imgURL) {
             // 將相對路徑解析成正確的 URL
             return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
         },
         parseServerImg(imgURL) {
             // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
-            return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+            return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
         },
         parseUserImg(imgURL) {
             // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
-            if (imgURL) return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+            if (imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
             return '/default-userBg.png'
         },
         goBack() {
@@ -231,14 +276,14 @@ export default {
                     });
                     const data = await response.json();
                     console.log(data)
-                    if(data.code===1){
+                    if (data.code === 1) {
                         Swal.fire({
                             icon: 'success',
                             title: '留言送出',
-            
-                        });  
-                        this.msg='';
-                        this.fetchData();                      
+
+                        });
+                        this.msg = '';
+                        this.fetchData();
                     }
 
                 } catch (error) {
@@ -247,6 +292,16 @@ export default {
 
             }
         },
+        initLike() {
+
+            let likedBlogs = JSON.parse(localStorage.getItem('likedBlogs')) || [];
+            this.liked = likedBlogs.includes(this.blogpost.b_id);
+            console.log('init');
+        }
+
+    },
+    created() {
+        this.initLike();
 
     },
     mounted() {
@@ -259,12 +314,38 @@ export default {
 @import '../assets/styles/base/color';
 @import '../assets/styles/base/font';
 
+@keyframes btndefault {
+    40% {
+        transform: rotate(10deg);
+    }
+
+    60% {
+        transform: rotate(-20deg);
+    }
+
+    80% {
+        transform: rotate(20deg);
+    }
+
+}
+
+@keyframes btnhover {
+
+    50% {
+        transform: rotate(100deg);
+    }
+
+    80% {
+        transform: rotate(-100deg);
+    }
+}
+
 .whitespace {
     text-indent: 10px;
 }
 
 article {
-    margin-top: 120px;
+    margin-top: 60px;
 
     .container {
         width: 100%;
@@ -302,13 +383,16 @@ article {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
+            flex-wrap: wrap;
             box-sizing: border-box;
             padding: 18px 20px;
 
             .journey-data {
                 .publish-date {
                     letter-spacing: $base-fontSize * 0.75 * 0.1;
-                    text-shadow: .5px 0px .6px $black;
+                    // text-shadow: .5px 0px .6px $black;
+                    text-shadow: 1px 1.5px .2px rgba(49, 49, 49, 0.781);
+
 
                 }
 
@@ -316,58 +400,116 @@ article {
                     font-size: $base-fontSize * 1.8;
                     line-height: 140%;
                     letter-spacing: $base-fontSize * 1.375 * 0.1;
-                    text-shadow: 2p 2px .6px $black;
-                    background-color: $accentColor-1;
-                    color: $black;
+                    text-shadow: 2px 2px .2px rgba(49, 49, 49, 0.781);
+                    // background-color: $accentColor-1;
+                    color: $primaryColor;
                     margin-top: 6px;
                 }
             }
 
             .like-count {
-                font-size: $base-fontSize * 0.75;
+                cursor: pointer;
+                background-color: $primaryColor;
+                border-radius: 40px;
+                border: solid 2px rgb(186, 198, 93);
+                padding: 4px 10px;
+                color: $black;
+                font-size: $base-fontSize * 1;
+                line-height: $base-fontSize * 1;
+                transition: .08s;
+                box-shadow: inset 2px 2px 0px #43434325;
 
-                // &::before{
-                //     content: '';
-                //     width: 28px;
-                //     height: 24px;
-                //     background: no-repeat center/contain url(@/assets/images/bone-stroke.png);
-                //     display: inline-block;
-                //     margin-right: 8px;
-                //     vertical-align: middle;
-                //     cursor: pointer;
-                // }
+                // text-shadow: 1px 1px #eeeeee9a;
+                span {
+                    // text-shadow: 1px 1px #121212bc;
+                    padding-left: 8px;
+                }
+
+                svg {
+                    color: $primaryColor;
+                    filter: drop-shadow(0px 0px 1.5px rgba(0, 0, 0, 0.774));
+                    animation: btndefault 2s infinite;
+
+
+                }
+
+                &:hover {
+                    // color: $accent-bgDrop;
+                    transform: scale(1.02);
+                    box-shadow: inset 2px 1px 3px #434343ac;
+
+                    svg {
+                        animation: btndefault .5s infinite;
+                    }
+
+                    // .like_icon{
+
+                    // }
+                }
+
+                &:active {
+                    transform: scale(0.98);
+
+                    svg {
+                        animation: btndefault .2s infinite;
+                    }
+                }
+
                 .like_icon {
                     font-size: 22px;
                     // color: #ffffff;
                     cursor: pointer;
+                    transition: .2s ease-out;
+                }
 
-
-                    &:hover {
-                        color: $accent-bgDrop;
-
-                    }
+                .like_icon.active {
+                    color: $accentColor-2;
                 }
             }
         }
 
         .journey-main {
-            margin-bottom: 20px;
-            background-color: $subtle-bgDrop;
+            // margin-bottom: 20px;
+            // background-color: $subtle-bgDrop;
 
             .journey-content {
                 box-sizing: border-box;
-                padding: 0 24px;
+                padding: 10px 24px;
+                padding-top: 0;
 
                 .journey-info {
                     .member {
+                        cursor: pointer;
+                        margin-top: 25px;
                         display: flex;
                         justify-content: space-between;
+                        box-shadow: inset 0px 0px 8px 5px rgba(146, 146, 146, 0.158);
+                        background-color: $secondColor-2;
+
+                        &:hover {
+                            background-color: #2d76e4d0;
+
+                            .mem-data {
+                                transform: scale(1.03);
+
+                            }
+                        }
+
+                        // padding: 10px 0;
 
                         .mem-data {
                             display: flex;
                             align-items: center;
+                            box-sizing: border-box;
+                            // background-color: rgba(240, 255, 255, 0.363);
+                            // box-shadow: inset -4px 0px 18px rgba(206, 206, 206, 0.418);
+
+                            padding: 8px 0;
+                            transition: all .2s;
+                            color: $primaryColor;
 
                             .mem-headshot {
+                                margin: 0 25px;
                                 width: 58px;
                                 aspect-ratio: 1/1;
                                 overflow: hidden;
@@ -381,6 +523,7 @@ article {
                                     display: inline-block;
 
                                 }
+
                             }
 
                             .title-wrapper {
@@ -391,7 +534,7 @@ article {
 
                                 .mem-slogan {
                                     font-size: $base-fontSize * 0.75;
-                                    color: $gray;
+                                    // color: $gray;
                                 }
                             }
                         }
@@ -530,10 +673,13 @@ article {
                 border-left: 1px solid $black;
                 box-sizing: border-box;
                 padding: 0 48px;
-                margin: 48px 0;
+                padding-bottom: 20px;
+                margin-bottom: 15PX;
+                background-color: $subtle-bgDrop;
 
                 .journey-block {
-                    margin: 48px 0 86px;
+                    // margin: 48px 0 86px;
+                    padding: 48px 10px;
 
                     .block-title {
                         margin: 24px 0;
@@ -612,6 +758,13 @@ article {
 
         .container {
             width: 75vw;
+
+            .journey-banner {
+                justify-content: space-between;
+                align-items: flex-end;
+                box-sizing: border-box;
+                padding: 18px 20px;
+            }
 
             .journey-main {
                 margin-bottom: 20px;
