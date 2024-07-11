@@ -32,6 +32,8 @@
   </section>
 
   <!-- 旅行筆記區塊 -->
+
+
   <div class="section-blogList">
     <div class="container">
       <div class="blogList-row row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4">
@@ -158,10 +160,10 @@ const currentCardBlogs = computed(() => {
 
 // 解析伺服器上的圖片路徑
 const parseServerImg = (imgURL) => {
-  return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+  return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
 };
 const parseBlogImg = (imgURL) => {
-  if(imgURL)return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+  if(imgURL)return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
   return '/public/default-userBg.png'
 };
 
