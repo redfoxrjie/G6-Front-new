@@ -16,8 +16,8 @@ const props = defineProps({
 })
 const parseUserImg = (imgURL) => {
     // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
-    if(imgURL) return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
-    return 'public/default-userBg.png'
+    if(imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
+    return 'public/default-userImg.png'
 }
 
 </script>
