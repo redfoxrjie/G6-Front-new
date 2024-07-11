@@ -6,7 +6,8 @@ const props = defineProps({
     },
     uImg: {
         type: String,
-        default: 'public/default-userBg.png'
+        default:`${import.meta.env.VITE_IMG_URL}/default-userImg.png`
+
     },
     uSize: {
         type: Number,
@@ -17,7 +18,7 @@ const props = defineProps({
 const parseUserImg = (imgURL) => {
     // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
     if(imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
-    return 'public/default-userImg.png'
+    return `${import.meta.env.VITE_IMG_URL}/default-userImg.png`
 }
 
 </script>

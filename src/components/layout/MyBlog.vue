@@ -54,7 +54,7 @@ export default {
         parseServerImg(imgURL) {
             // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
             if (imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
-            return 'public/default-bgImg.png'
+            return 'public/default-userBg.png'
         },
         navigateToBlogPage(b_id){
             // this.$router.push({ name: 'blogPage', params: { b_id } });

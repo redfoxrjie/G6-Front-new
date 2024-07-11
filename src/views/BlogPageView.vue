@@ -243,7 +243,7 @@ export default {
         parseUserImg(imgURL) {
             // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
             if (imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
-            return '/default-userBg.png'
+            return `${import.meta.env.VITE_IMG_URL}/default-userImg.png`
         },
         goBack() {
             window.history.back(); // 返回前一頁
