@@ -237,11 +237,15 @@ export default {
     showSuccessAlert(url) {
       Swal.fire({
         title: '已完成訂單',
-        html: `<p>請掃此QRCode取得訂單資訊及下載：</p><img src='${url}'alt="tq_url" />`,
+        // html: `<p>請掃此QRCode取得訂單資訊及下載：</p><img src='${url}'alt="tq_url" />`,
         icon: 'success',
         iconColor: '#4F82D4',
         confirmButtonText: '確定',
         confirmButtonColor: '#4F82D4'
+      }).then(() => {
+        this.$router.push({ //導航至新頁面
+          name: 'OrderQRCode', //目標頁面
+        });
       });
     },
     showErrorAlert(){ //失敗彈窗
