@@ -17,7 +17,7 @@
             <RouterLink to="/tickets">票券訂購</RouterLink>
             <RouterLink v-if="isLoggedIn" to="/member" style="display: flex; align-items: center; gap:5px;">
               <img :src="parseUserImg(userInfo.u_avatar)"
-                style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid" />
+                class="user-avatar"/>
               <span class="nickname">{{ userInfo.u_nickname }}</span>
             </RouterLink>
             <!-- <button v-if="isLoggedIn" @click="logout" class="logout">登出</button> -->
@@ -105,8 +105,11 @@ export default defineComponent({
     }
     const parseUserImg = (imgURL) => {
       // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
-      if (imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`
-      return '/default-userImg.png'
+      if (imgURL) {
+        return `${import.meta.env.VITE_IMG_URL}/${imgURL}`
+      } else {
+        return `${import.meta.env.VITE_IMG_URL}/default-userImg.png`
+      }
     }
     const handlePlanningClick = () => {
       if (isLoggedIn.value) {
@@ -116,6 +119,13 @@ export default defineComponent({
         redirectToTripsAfterLogin.value = true // 設置變數
       }
     }
+
+    // 監聽 userInfo.u_avatar 的變化並執行 parseUserImg
+    watch(() => userInfo.value && userInfo.value.u_avatar, (newVal, oldVal) => {
+      if (newVal !== oldVal) {
+        parseUserImg(newVal)
+      }
+    })
 
     onMounted(() => {
       userStore.initializeStore()
@@ -259,18 +269,25 @@ header {
         align-items: center;
         transition: height 0.3s ease;
 
+        img {
+          //橫式banner頭像
+          width: 50px;
+          height: 50px;
+          border-radius: 50%; 
+          border: 1px solid unset;
+          object-fit: cover;
+        }
+
         .login {
           cursor: pointer;
-
-          &:hover {
-            color: $accentColor-1;
-          }
+          &:hover { color: $accentColor-1; }
         }
 
         .nickname {
           position: relative;
           color: $primaryColor;
-
+          font-size: 0.9rem;
+          letter-spacing: .2;
 
           &::after {
             content: ' ';
