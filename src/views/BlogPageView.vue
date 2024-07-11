@@ -7,7 +7,7 @@
                 </div>
                 <span>返回</span>
             </div>
-{{ blogpost }}
+<!-- {{ blogpost }} -->
             <div class="journey-banner" :style="{ backgroundImage: 'url(' + parseServerImg(blogpost.trp_img) + ')' }">
                 <div class="journey-data">
                     <div class="publish-date font-time">{{ blogpost.b_date }} </div>
