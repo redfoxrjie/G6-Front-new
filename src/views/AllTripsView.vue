@@ -36,11 +36,11 @@
             <div class="tr-item-cardTag col-2 col-md-1">
               <h3>#{{ index + 1 }}</h3>
             </div>
-            <div class="tr-item shadow-v1 bdradius-sm col-10 col-md-11">
+            <div class="tr-item shadow-v1 bdradius-sm col-10 col-md-11" @click=goToTripMap(trips[selectedCase][index].trp_id) >
               <div class="tr-item-img col-12 col-md-3 col-xl-2">
                 <img :src="parseServerImg(trips[selectedCase][index].trp_img)" alt="">
               </div>
-              <div class="tr-item-content col-12 col-md-9 col-xl-10">
+              <div class="tr-item-content col-12 col-md-9 col-xl-10" >
                 <div class="content-title">
                   <h4>
                     {{ trips[selectedCase][index].trp_name }}
@@ -69,7 +69,7 @@
   <p>目前在第displatStatus{{ displayStatus }}頁，此地區資料共有displayLimit:{{ displayLimit }}頁面</p> -->
   <!-- <p>顯示陣列{{ displayTrips }}</p> -->
   <!-- <p v-for="n in displayTrips">{{n}}</p> -->
-
+      <!-- 資料在{{ areaTripsCreatorSets }} -->
   <div class="row-btns row">
         <button id="prevBtn" class="col-2 col-md-1" @click="btnSwitch('prev')">
           <font-awesome-icon :icon="['fas', 'chevron-left']" />
@@ -81,7 +81,7 @@
       <div class="tripList-row row row-cols-1 row-cols-md-2 row-cols-lg-3">
         <trip-card v-for="(trip, i) in displayTrips" :tcImg="parseServerImg(trip.trp_img)"
           :tc-title="trip.trp_name" :tcMemName="trip.u_nickname" :tcMemImg='trip.u_avatar'
-          :key="trip.trp_id" />
+          :key="trip.trp_id" @click=goToTripMap(trip.trp_id) />
       </div>
     </div>
   </div>
@@ -126,6 +126,12 @@ export default {
       const newList =this.trips[this.selectedCase].slice(index,index+this.displayMax)
       // return `slice list [${index},${index+this.displayMax}],` //debug 
       return newList
+    },
+    uniqueCreatorsCount() {
+      const trips = this.trips[selectedCase] || [];
+      // trips[selectedCase]
+      // const uniqueNicknames = new Set(trips.map(trip => trip.u_nickname));
+      return trips;
     }
   },
   methods: {
@@ -145,30 +151,43 @@ export default {
           th: [],
           hkmo: []
         }
+                // 存放各地區總共地圖數量
+
         const areaTripsLength = {
           jp: 0,
           kr: 0,
           th: 0,
           hkmo: 0
         }
+        // 存放各地區總共創作者數量
+      //   const areaTripsCreatorSets = {
+      //     jp: new Set(),
+      //     kr: new Set(),
+      //     th: new Set(),
+      //     hkmo: new Set()
+      // };
         data.trips.forEach(trip => {
           switch (trip.trp_area) {
             case '日本':
               classifiedTrips.jp.push(trip);
               areaTripsLength.jp++
+              // areaTripsCreatorSets.jp.add(trip.u_nickname);
               break;
             case '韓國':
               classifiedTrips.kr.push(trip);
               areaTripsLength.kr++
+              // areaTripsCreatorSets.kr.add(trip.u_nickname);
               break;
             case '泰國':
               classifiedTrips.th.push(trip);
               areaTripsLength.th++
+              // areaTripsCreatorSets.th.add(trip.u_nickname);
 
               break;
             case '港澳':
               classifiedTrips.hkmo.push(trip);
               areaTripsLength.hkmo++
+              // areaTripsCreatorSets.hkmo.add(trip.u_nickname);
               break;
 
           }
@@ -203,11 +222,14 @@ export default {
     }
     ,
     parseServerImg(imgURL) {
-      return `${import.meta.env.VITE_FILE_URL}/${imgURL}`;
+      return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
     },
     goToPage(toLink) {
       this.$router.push(toLink)
-    }
+    },
+    goToTripMap(trp_id) {
+            this.$router.push(`/trips?trp_id=${trp_id}`);
+        }
 
 
 
@@ -296,6 +318,7 @@ export default {
         // border: 1px solid #000;
         h4 {
           padding: 5px 0;
+          font-size: 20px;
         }
       }
 
@@ -375,7 +398,7 @@ input {
   }
 }
 
-$searchBarHeight: 30px;
+$searchBarHeight: 40px;
 
 .comp-searchBar {
 
@@ -391,6 +414,7 @@ $searchBarHeight: 30px;
     width: 80%;
     box-sizing: border-box;
     padding: 0 6px;
+    font-size: 16px;
   }
 
   .icon-wrap {
@@ -413,7 +437,9 @@ $searchBarHeight: 30px;
 }
 
 
-
+h3{
+  font-size: 24px;
+}
 
 .icon-wrap:hover {
   background-color: $secondColor-2;
@@ -425,10 +451,13 @@ $searchBarHeight: 30px;
 
   h3 {
     color: $secondColor-2;
+    font-size: 24px;
     margin-bottom: 20px;
   }
 
   p {
+    font-size: 20px;
+
     color: $black;
   }
 

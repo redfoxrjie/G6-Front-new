@@ -63,7 +63,7 @@ const router = createRouter({
       component: () => import('../views/AllTripsView.vue')
     },
     {
-      path: '/memberMain',
+      path: '/memberMain/:id',
       name: 'memberMain',
       component: () => import('../views/MemberMainView.vue')
     },
