@@ -201,6 +201,7 @@ const userNickname = computed(() => {
 @media screen and (max-width: 768px) {
 
     .panel-row {
+        padding-top: 100px;
         .panel-sidenav>.p-s-mem {
             display: none;
             background: none;
