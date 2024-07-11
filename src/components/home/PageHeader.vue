@@ -427,6 +427,12 @@ nav.closed {
         width: 100%;
     }
 }
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (max-width: 768px) {
+    .logo {
+        display: none;
+    }
+}
 
 #amoeba-container {
     position: relative;
@@ -525,6 +531,22 @@ nav.closed {
 
     100% {
         transform: translate3d(0, 0%, 0);
+    }
+}
+
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (max-width: 768px) {
+    .dog-1 {
+        left: 30vw; // 將此值調整為所需的水平偏移量
+        top: -50vh;
+    }
+    .dog-2 {
+        left: 0.5vw; 
+        top: 3vh;
+    }
+    .dog-3 {
+        left: -1vw; 
+        top: 55vh;
     }
 }
 
@@ -996,13 +1018,6 @@ nav.closed {
     top: -12%;
     left: -50%;
 }
-/* 響應式設計，針對寬度小於768px的設備 */
-@media screen and (max-width: 768px) {
-    .icon-item-1 {
-        top: -10%;
-        left: 130%;
-    }
-}
 //icon-ticket
 .icon-item-2{
     top: 10%;
@@ -1020,6 +1035,25 @@ nav.closed {
 .icon-item-4{
     top: 10%;
     right: -35%;
+}
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (max-width: 768px) {
+    .icon-item-1 {
+        top: 20%;
+        left: 140%;
+    }
+    .icon-item-2 {
+        top: 40%;
+        right: 170%;
+    }
+    .icon-item-3 {
+        top: 50%;
+        left: 190%;
+    }
+    .icon-item-4 {
+        top: 40%;
+        right: 180%;
+    }
 }
 
 
