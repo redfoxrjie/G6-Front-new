@@ -290,39 +290,6 @@ export default {
     }
   },
   methods: {
-    initItinerary() {
-      if (this.daysCount <= 0 || isNaN(this.daysCount)) {
-        console.warn('Invalid daysCount:', this.daysCount);
-        return;
-      }
-      this.itinerary = Array.from({ length: this.daysCount }, () => []);
-      console.log('Initialized itinerary:', this.itinerary);
-    },
-    addToPlanFromTripSpots() {
-      this.tripSpots.forEach(spot => {
-        const day = spot.day_num;
-        const location = {
-          osm_id: spot.osm_id,
-          name: spot.location.name,
-          spotTime: spot.sp_time,
-          receivedStayTime: spot.receivedStayTime,
-          // 可以根據需要添加其他相關的資料
-        };
-        console.log(`Adding location to day ${day}:`, location);
-        
-        if (!this.itinerary[day - 1]) {
-          this.itinerary, day - 1, [];
-        }
-        this.itinerary[day - 1].push(location);
-      });
-      console.log('itinerary:', this.itinerary);
-    },
-    verifyDayAndSpots() {
-      for (let day = 1; day <= this.daysCount; day++) {
-        const spots = this.tripSpots.filter(spot => spot.day_num === day);
-        console.log(`Day ${day}:`, spots);
-      }
-    },
     // 初始化地圖
     initializeMap() {
       try{
@@ -466,6 +433,39 @@ export default {
           marker.setLatLng(marker.getLatLng()).update(); // 強制更新標記位置
         });
       });
+    },
+    initItinerary() {
+      if (this.daysCount <= 0 || isNaN(this.daysCount)) {
+        console.warn('Invalid daysCount:', this.daysCount);
+        return;
+      }
+      this.itinerary = Array.from({ length: this.daysCount }, () => []);
+      console.log('Initialized itinerary:', this.itinerary);
+    },
+    addToPlanFromTripSpots() {
+      this.tripSpots.forEach(spot => {
+        const day = spot.day_num;
+        const location = {
+          osm_id: spot.osm_id,
+          name: spot.location.name,
+          spotTime: spot.sp_time,
+          receivedStayTime: spot.receivedStayTime,
+          // 可以根據需要添加其他相關的資料
+        };
+        console.log(`Adding location to day ${day}:`, location);
+        
+        if (!this.itinerary[day - 1]) {
+          this.itinerary, day - 1, [];
+        }
+        this.itinerary[day - 1].push(location);
+      });
+      console.log('itinerary:', this.itinerary);
+    },
+    verifyDayAndSpots() {
+      for (let day = 1; day <= this.daysCount; day++) {
+        const spots = this.tripSpots.filter(spot => spot.day_num === day);
+        console.log(`Day ${day}:`, spots);
+      }
     },
 
     // 創建popup彈出框內容
@@ -910,8 +910,8 @@ export default {
       
     // }, 100);
     this.loadJsonData();
-    this.calcDaysDiff();
-    this.initItinerary();
+    // this.calcDaysDiff();
+    // this.initItinerary();
     // this.$nextTick(() => {
       
     // });
