@@ -57,18 +57,10 @@
                 <div class="amoeba"></div>
                 <div class="slogan">土狗陪您 TOGO 展開新的旅程</div>
                 <div class="togo-large-text">TOGO</div>
-                <div class="dog-pic dog-0">
+                <!-- <div class="dog-pic dog-0">
                     <img src="@/assets/images/airplane-dog.png" alt="飛機狗">
-                </div>
-                <div class="dog-pic dog-1">
-                    <img src="@/assets/images/dog-1.png" alt="地圖狗">
-                </div>
-                <div class="dog-pic dog-2">
-                    <img src="@/assets/images/dog-2.png" alt="行李狗">
-                </div>
-                <div class="dog-pic dog-3">
-                    <img src="@/assets/images/dog-3.png" alt="購物狗">
-                </div>
+                </div> -->
+                
             </div>
             <RouterLink to="/" class="logo">
                 <img src="@/assets/images/global/logo/logo.png" alt="Logo">
@@ -77,8 +69,18 @@
 
         <section class="content">
             <div class="center-background"></div>
+            <div class="dog-pic dog-1">
+                <img src="@/assets/images/dog-1.png" alt="地圖狗">
+            </div>
+            <div class="dog-pic dog-2">
+                <img src="@/assets/images/dog-2.png" alt="行李狗">
+            </div>
+            <div class="dog-pic dog-3">
+                <img src="@/assets/images/dog-3.png" alt="購物狗">
+            </div>
             <div class="content-item content-item-1">
                 <div class="pic"></div>
+                <div class="center-rwd-background circle-1"><img src="@/assets/images/blue-circle.svg" alt=""></div>
                 <div class="icon icon-item-1">
                     <img src="@/assets/images/icon-map.png" alt="icon-map">
                 </div>
@@ -86,6 +88,7 @@
             </div>
             <div class="content-item content-item-2">
                 <div class="pic"></div>
+                <div class="center-rwd-background circle-2"><img src="@/assets/images/blue-circle.svg" alt=""></div>
                 <div class="icon icon-item-2">
                     <img src="@/assets/images/icon-ticket.png" alt="icon-ticket">
                 </div>
@@ -93,6 +96,7 @@
             </div>
             <div class="content-item content-item-3">
                 <div class="pic"></div>
+                <div class="center-rwd-background circle-3"><img src="@/assets/images/blue-circle.svg" alt=""></div>
                 <div class="icon icon-item-3">
                     <img src="@/assets/images/icon-pin.png" alt="icon-pin">
                 </div>
@@ -100,6 +104,7 @@
             </div>
             <div class="content-item content-item-4">
                 <div class="pic"></div>
+                <div class="center-rwd-background circle-4"><img src="@/assets/images/blue-circle.svg" alt=""></div>
                 <div class="icon icon-item-4">
                     <img src="@/assets/images/icon-airplane.png" alt="icon-airplane">
                 </div>
@@ -484,6 +489,7 @@ nav.closed {
     overflow: hidden;
 }
 
+
 .dog-pic {
     position: absolute;
     top: 0;
@@ -499,7 +505,8 @@ nav.closed {
 //地圖狗
 .dog-1 {
     position: relative;
-    left: 70vw; // 將此值調整為所需的水平偏移量
+    left: -20vw; // 將此值調整為所需的水平偏移量
+    top:-50vh;
     animation: move1 1.5s infinite linear;
 }
 
@@ -524,7 +531,8 @@ nav.closed {
 //行李狗
 .dog-2 {
     position: relative;
-    top: 5vh;
+    top: 40vh;
+    left: -15vw;
     animation: move2 1s infinite linear;
 }
 
@@ -549,8 +557,8 @@ nav.closed {
 //購物狗
 .dog-3 {
     position: relative;
-    left: 80vw; // 將此值調整為所需的水平偏移量
-    top: 20vh;
+    left: 15vw; // 將此值調整為所需的水平偏移量
+    top: 10vh;
     animation: move3 2s infinite linear;
 }
 
@@ -601,6 +609,14 @@ nav.closed {
     border-radius: 10px;
     z-index: 1; // 確保 slogan 的 z-index 小於 dog-pic
 }
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (max-width: 768px) {
+    .slogan{
+        font-size: 1rem;
+        letter-spacing: 8px;
+    }
+}
+
 
 .togo-large-text {
     position: absolute;
@@ -608,10 +624,21 @@ nav.closed {
     right: 20%;
     transform: translate(10%, -10%);
     font-size: 10rem;
+    font-family: "Noto Sans TC", sans-serif;
+    font-weight: 700;
     color: $primaryColor;
     letter-spacing: 50px;
     z-index: 1; // 確保 togo-large-text 的 z-index 小於 dog-pic
     text-align: center;
+}
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (max-width: 768px) {
+    .togo-large-text{
+        font-size: 5rem;
+        bottom: 20%;
+        right: 15%;
+        font-weight: 900;
+    }
 }
 
 @keyframes morph {
@@ -698,6 +725,12 @@ nav.closed {
     overflow: hidden;
     /* 防止溢出 */
 }
+@media screen and (max-width: 768px) {
+    .content {
+        margin-top: -200px;
+        height: 1500px;
+    }
+}
 
 .center-background {
     position: absolute;
@@ -706,6 +739,12 @@ nav.closed {
     background: url('../../assets/images/amoeba/blueback.svg') center/cover no-repeat;
     z-index: -1;
     border-radius: 50%;
+}
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (max-width: 768px) {
+    .center-background{
+    display: none;
+    }
 }
 
 .content-item {
@@ -754,6 +793,66 @@ nav.closed {
         top: 35%;
         left: -80%;
         z-index: 2;
+    }
+}
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (max-width: 768px) {
+    .content-item-1 {
+        .text{
+            top: 60%;
+            left: 100%;
+            white-space:nowrap;
+        }
+    }
+    .content-item-2 {
+        .text{
+            top:60%;
+            left: -230%;
+            white-space:nowrap;
+        }
+    }
+    .content-item-3 {
+        .text{
+            top: 60%;
+            white-space:nowrap;
+        }
+    }
+    .content-item-4 {
+        .text{
+            top: 55%;
+            left: -85%;
+            white-space:nowrap;
+        }
+    }
+}
+
+.center-rwd-background {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+}
+.circle-1{
+    right:-10%;
+    top: 50%;
+}
+.circle-2{
+    right:100%;
+    top: 45%;
+}
+.circle-3{
+    right:-25%;
+    top: 40%;
+}
+.circle-4{
+    right:100%;
+    top: 40%;
+}
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (min-width: 769px) {
+    .center-rwd-background{
+        display: none;
     }
 }
 
@@ -989,7 +1088,13 @@ nav.closed {
     top: -12%;
     left: -50%;
 }
-
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (max-width: 768px) {
+    .icon-item-1 {
+        top: -10%;
+        left: 130%;
+    }
+}
 //icon-ticket
 .icon-item-2 {
     top: 10%;
@@ -1031,12 +1136,18 @@ nav.closed {
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%) translateY(135px);
-        /* 向下移動10px */
-        text-align: center;
-        /* 文字置中 */
-        white-space: nowrap;
-        /* 防止文字換行 */
+        transform: translate(-50%, -50%) translateY(135px); /* 向下移動10px */
+        text-align: center; /* 文字置中 */
+        white-space: nowrap; /* 防止文字換行 */
+        }
+}
+
+@media (max-width: 768px) {
+    .ocean-img {
+        .text{
+            font-size: 10vw;
+            top: 30%;
+        }
     }
 }
 
@@ -1100,23 +1211,25 @@ nav.closed {
     }
 
     .content-item-1 {
-        top: 15%;
+        top: 12%;
         left: 10%;
+
     }
 
     .content-item-2 {
-        top: 15%;
+        top: 33%;
         right: 10%;
     }
 
     .content-item-3 {
-        bottom: 10%;
+        bottom: 25%;
         left: 10%;
     }
 
     .content-item-4 {
-        bottom: 10%;
+        bottom: 2%;
         right: 10%;
+        z-index: 20;
     }
 
     .center-background {
@@ -1162,3 +1275,4 @@ nav.closed {
     }
 }
 </style>
+
