@@ -140,6 +140,11 @@ export default {
       type: Array,
       required: true
     },
+    tripSpots: {
+      type: Array,
+      required: true,
+      default: () => []
+    },
     onEditTimeClick: {
       type: Function,
       required: true,
@@ -150,6 +155,10 @@ export default {
     },
     location: {
       type: Object,
+      required: true
+    },
+    locations: {
+      type: Array,
       required: true
     },
   },
@@ -196,7 +205,7 @@ export default {
   created() {
     // 加載頁面時根據 tripData.tripImg 初始化 coverImageUrl
     if (this.tripData.tripImg) {
-      this.coverImageUrl = `http://localhost/phpG6/images/${this.tripData.tripImg}`;
+      this.coverImageUrl = `${import.meta.env.VITE_IMG_URL}/${this.tripData.tripImg}`;
     } else {
       this.coverImageUrl = sessionStorage.getItem('coverImage') || 'src/assets/images/default-userBg.png';
     }
@@ -228,6 +237,24 @@ export default {
       deep: true,
       immediate: true,
     },
+    tripSpots: {
+      handler(newValue) {
+        console.log('tripSpots updated:', JSON.stringify(newValue));
+        if (newValue.length > 0) {
+          this.addToPlanFromTripSpots();
+          this.verifyDayAndSpots();
+        }
+      },
+      deep: true,
+    },
+    daysCount: {
+    handler(newVal) {
+      console.log('new daysCount', newVal);
+      if (newVal > 0) {
+        this.initItinerary();
+      }
+    }
+  },
     departureTimes: {
       handler(newValue) {
         console.log('departureTimes changed:', newValue);
@@ -246,15 +273,57 @@ export default {
     'tripData.tripImg': {
       handler(newImg, oldImg) {
         if (newImg) {
-          this.coverImageUrl = `http://localhost/phpG6/images/${newImg}`;
+          this.coverImageUrl = `${import.meta.env.VITE_IMG_URL}/${newImg}`;
         } else {
           this.coverImageUrl = sessionStorage.getItem('coverImage') || 'src/assets/images/default-userBg.png';
         }
       },
       immediate: true // 立即执行一次 handler
     },
+    'tripData.selectedArea': {
+      immediate: true, // 立即執行一次
+      handler(newValue, oldValue) {
+        // 確保 newValue 是有值的情況下才執行 setCenterByCountryCode
+        if (newValue) {
+          this.setCenterByCountryCode(newValue);
+        }
+      }
+    }
   },
   methods: {
+    initItinerary() {
+    this.itinerary = Array.from({ length: this.daysCount }, () => []);
+    console.log('Initialized itinerary:', this.itinerary);
+    },
+    addToPlanFromTripSpots() {
+      this.tripSpots.forEach(spot => {
+        const day = spot.day_num;
+        const location = {
+          osm_id: spot.osm_id,
+          name: spot.location.name,
+          spotTime: spot.sp_time,
+          receivedStayTime: spot.receivedStayTime,
+          // 可以根據需要添加其他相關的資料
+        };
+        console.log(`Adding location to day ${day}:`, location);
+        
+        if (!this.itinerary[day - 1]) {
+          this.itinerary, day - 1, [];
+        }
+        this.itinerary[day - 1].push(location);
+      });
+      console.log('itinerary:', this.itinerary);
+    },
+    verifyDayAndSpots() {
+      for (let day = 1; day <= this.daysCount; day++) {
+        const spots = this.tripSpots.filter(spot => spot.day_num === day);
+        console.log(`Day ${day}:`, spots);
+      }
+    },
+    // getSpotsForDay(day) {
+    //   // 返回根據 day 找到的 spot 列表
+    //   return this.tripSpots.filter(spot => spot.day_num === day);
+    // },
     // 初始化地圖
     initializeMap() {
       this.map = L.map('map-container').setView([35.6821936, 139.762221], 13);
@@ -417,8 +486,20 @@ export default {
       }
     },
     // --------------- 返回對應天數的行程 ------------------------------------
+    getTrpIdFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('trp_id');
+    },
     getItineraryForDay(day) {
-      return this.itinerary.filter(item => item.day === day);
+      const trpId = this.getTrpIdFromUrl();
+
+      if (trpId) {
+        // 如果存在 trp_id，使用索引方式取得行程數據
+        return this.itinerary[day - 1] || [];
+      } else {
+        // 如果不存在 trp_id，使用過濾方式取得行程數據
+        return this.itinerary.filter(item => item.day === day);
+      }
     },
     // -----------------删除行程中的地點-----------------------------------
     removeLocation(location) {
@@ -536,7 +617,7 @@ export default {
       const date = new Date(this.startDateObj);
       date.setDate(date.getDate() + (day - 1));
       const formattedDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-      console.log('Calculated date for day:', day, 'is', formattedDate);
+      // console.log('Calculated date for day:', day, 'is', formattedDate);
       return formattedDate;
       // return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
     },
@@ -690,7 +771,7 @@ export default {
         if (!coverImage) return null;
 
         try {
-            const response = await fetch('http://localhost/phpG6/api/uploadTripImage.php', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/uploadTripImage.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -822,9 +903,10 @@ export default {
   },
   mounted() {
     this.initializeMap(); // 初始化地圖
-
     this.loadJsonData();
     this.calcDaysDiff();
+    this.initItinerary();
+    this.addToPlanFromTripSpots();
 
     // 監聽 beforeunload 事件，以在掛載時先清除儲存於session storage的行程封面
     window.addEventListener('beforeunload', this.clearCoverImage);
