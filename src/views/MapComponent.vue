@@ -191,7 +191,6 @@ export default {
       isNotePopupOpen: false, // 筆記相關的數據
       noteTitle: '',
       noteContent: '',
-      // coverImageUrl: sessionStorage.getItem('coverImage') || 'src/assets/images/default-userBg.png',
       coverImageUrl: '',
       showFunctionList: false, // 預設隱藏 FunctionList
       receivedStayTime: '2小時0分',
@@ -207,7 +206,7 @@ export default {
     if (this.tripData.tripImg) {
       this.coverImageUrl = `${import.meta.env.VITE_IMG_URL}/${this.tripData.tripImg}`;
     } else {
-      this.coverImageUrl = sessionStorage.getItem('coverImage') || 'src/assets/images/default-userBg.png';
+      this.coverImageUrl = sessionStorage.getItem('coverImage') || `${import.meta.env.VITE_IMG_URL}/default-userBg.png`;
     }
   },
   computed: {
@@ -275,7 +274,7 @@ export default {
         if (newImg) {
           this.coverImageUrl = `${import.meta.env.VITE_IMG_URL}/${newImg}`;
         } else {
-          this.coverImageUrl = sessionStorage.getItem('coverImage') || 'src/assets/images/default-userBg.png';
+          this.coverImageUrl = sessionStorage.getItem('coverImage') || `${import.meta.env.VITE_IMG_URL}default-userBg.png`;
         }
       },
       immediate: true // 立即执行一次 handler
