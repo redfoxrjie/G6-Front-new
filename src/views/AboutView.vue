@@ -22,7 +22,7 @@ margin col-1 -->
     <div class="container">
       <div class="row row-cols-1 row-cols-md-2">
         <div class="s-a-imgWrap col-10 col-md-5">
-          <img src="@/assets/images/aboutpage/felix-rostig-UmV2wr-Vbq8-unsplash.jpg">
+          <img :src="toImgLink('felix-rostig-UmV2wr-Vbq8-unsplash.jpg')">
         </div>
         <div class="s-a-content col-10 col-md-5">
           <div class="section-title">
