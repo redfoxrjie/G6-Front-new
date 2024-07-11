@@ -171,7 +171,6 @@ const parseBlogImg = (imgURL) => {
 const navigateToBlogPage = (b_id) => {
   // router.push({ name: 'blogPage', params: { b_id } });
   router.push(`blog/${b_id}`);
-
 };
 </script>
 

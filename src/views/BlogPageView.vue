@@ -7,7 +7,7 @@
                 </div>
                 <span>返回</span>
             </div>
-
+{{ blogpost }}
             <div class="journey-banner" :style="{ backgroundImage: 'url(' + parseServerImg(blogpost.trp_img) + ')' }">
                 <div class="journey-data">
                     <div class="publish-date font-time">{{ blogpost.b_date }} </div>
@@ -24,7 +24,7 @@
                 <div class="journey-content col-12 col-md-9">
                     <div class="journey-info">
                         <div class="member">
-                            <div class="mem-data col-9">
+                            <div class="mem-data col-9" @click=goToMemPage(blogpost.u_id)>
                                 <div class="mem-headshot">
                                     <img :src=parseUserImg(blogpost.u_avatar)>
                                 </div>
@@ -53,11 +53,11 @@
                         <div class="comment-list">
                             <div class="comment-item" v-for="rp in blogrp">
                                 <div class="comment-head">
-                                    <div class="comment-mem">
+                                    <div class="comment-mem cmm" @click=goToMemPage(rp.u_id)>
                                         <div class="mem-headshot">
                                             <img :src=parseUserImg(rp.u_avatar)>
                                         </div>
-                                        <div class="mem-name">{{ rp.u_nickname }}</div>
+                                        <div class="mem-name"><p>{{ rp.u_nickname }}</p></div>
                                     </div>
                                     <div class="timediff">{{ rp.rp_date }}</div>
                                 </div>
@@ -73,7 +73,7 @@
                                             <img src="/default-userImg.png">
                                         </div>
                                         <div v-if="isLoggedIn" class="mem-name">{{ userInfo.u_nickname }}</div>
-                                        <div v-else class="mem-name">訪客</div>
+                                        <div v-else class="mem-name"><p>訪客</p></div>
                                     </div>
                                 </div>
                                 <form class="comment-text" @submit.prevent="rpsubmit">
@@ -106,7 +106,7 @@
                                 <li class="spot">皿蒼山展望台</li>
                             </ul>
                         </div>
-                        <button class="show-plan-btn">查看行程</button>
+                        <button class="show-plan-btn" @click="goToTripPage(blogpost.trp_id)">查看行程</button>
                     </div>
 
                 </div>
@@ -248,6 +248,16 @@ export default {
         goBack() {
             window.history.back(); // 返回前一頁
         },
+        goToMemPage(u_id){
+            // this.$router.push({ name: 'blogPage', params: { b_id } });
+            this.$router.push(`../memberMain/${u_id}`);
+        }     
+        ,
+        goToTripPage(trp_id){
+            // this.$router.push({ name: 'blogPage', params: { b_id } });
+            this.$router.push(`../trips?trp_id=${trp_id}`);
+        }
+        ,
         formattedContent(raw) {
             if (raw) {
                 return raw.replace(/\\n/g, '<br>');
@@ -291,7 +301,8 @@ export default {
                 }
 
             }
-        },
+        }
+        ,
         initLike() {
 
             let likedBlogs = JSON.parse(localStorage.getItem('likedBlogs')) || [];
@@ -528,12 +539,14 @@ article {
 
                             .title-wrapper {
                                 .mem-name {
-                                    font-size: $base-fontSize * 1.375;
+
+                                    font-size: 20px;
+
                                     margin: 6px 0;
                                 }
 
                                 .mem-slogan {
-                                    font-size: $base-fontSize * 0.75;
+                                    font-size: $base-fontSize * 1;
                                     // color: $gray;
                                 }
                             }
@@ -621,6 +634,20 @@ article {
                                 .comment-mem {
                                     display: flex;
                                     align-items: center;
+                                    transition: .2s ease;
+                                    box-sizing: border-box;
+                                    cursor: pointer;
+                                    p{
+                                        font-size: 18px;
+                                    }
+                                    &.cmm{
+                                        &:hover{
+                                        transform: scale(1.02);
+                                        // box-shadow: inset 1px 0px 18px 2px rgba(109, 158, 255, 0.516);
+                                        // box-shadow: 1px 0px 4px 2px rgba(50, 50, 50, 0.224);
+                                        // padding: 0 10px
+                                    }
+                                    }
 
                                     .mem-headshot {
                                         width: 56px;
