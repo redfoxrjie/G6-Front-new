@@ -191,7 +191,7 @@ const handleSaveTripPlan = async (tripPlanData) => {
 // 加入撈取行程資料的邏輯
 const loadTripData = async (trpId) => {
   try {
-    const response = await fetch(`http://localhost/phpG6/api/loadTripData.php?trp_id=${trpId}`);
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/loadTripData.php?trp_id=${trpId}`);
     const data = await response.json();
 
       // 將從 PHP 返回的資料映射到 Vue 組件中的 tripData
