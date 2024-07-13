@@ -15,7 +15,7 @@
                                 <td><input type="text" id="name" v-model="formData.name" placeholder="請輸入姓名" required></td>
                             </tr>
                             <tr class="form_group form_phone">
-                                <td><input type="tel" id="tel" v-model="formData.tel" placeholder="請輸入電話" required></td>
+                                <td><input type="tel" id="tel" v-model="formData.tel" placeholder="請輸入電話"></td>
                             </tr>
                             <tr class="form_group form_email">
                                 <td><input type="email" id="email" v-model="formData.email" placeholder="請輸入e-mail" required></td>
@@ -133,11 +133,7 @@ export default {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    // 如果有需要傳遞的資料，可以透過 body 屬性傳遞
                     body: JSON.stringify({
-                        // 可以放你要傳遞的資料的物件
-                        // u_id: userStore.userInfo.u_id,
-                        // cu_id: this.formData.id,
                         cu_name: this.formData.name,
                         cu_phone: this.formData.tel,
                         cu_email: this.formData.email,
