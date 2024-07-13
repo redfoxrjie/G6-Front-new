@@ -23,7 +23,7 @@
                     <div class="tab" :class="{ 'selected': selectedTab === '團隊行程' }" @click="selectTab('團隊行程')">團隊行程
                     </div>
                 </div>
-                <MyBlog v-if="selectedTab === '旅行筆記'" :memPageBlogData=blogData  />
+                <MyBlog v-if="selectedTab === '旅行筆記'" :memPageBlogData=blogData />
                 <MyTrip v-if="selectedTab === '我的行程'" :memPageTripData=tripData />
             </div>
         </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted,computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
 import MyBlog from '@/components/layout/MyBlog.vue';
@@ -77,8 +77,8 @@ function parseUserImg(imgURL) {
 
 // 修改banner
 const memBannerImg = computed(() => ({
-        background: `no-repeat center/cover url(${parseBgImg()})`
-    }));
+    background: `no-repeat center/cover url(${parseBgImg()})`
+}));
 
 
 const fetchData = async () => {
