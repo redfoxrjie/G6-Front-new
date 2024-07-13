@@ -10,21 +10,13 @@
             <img src="@/assets/images/global/logo/logo-h.png" alt="horzontal logo" />
           </RouterLink>
           <div class="router-wrapper">
-            <RouterLink to="/about">關於我們</RouterLink>
-            <RouterLink to="/allTrips">行程一覽</RouterLink>
-            <RouterLink to="/blog">旅行筆記</RouterLink>
-            <RouterLink to="/news">最新消息</RouterLink>
-            <RouterLink to="/tickets">票券訂購</RouterLink>
-            <!-- 原本的memwrap  -->
-            <!-- <RouterLink v-if="isLoggedIn" to="/member" style="display: flex; align-items: center; gap:5px;" >
-              <img :src="parseUserImg(userInfo.u_avatar)"
-                style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid" />
-              <span class="nickname">{{ userInfo.u_nickname }}</span>
-            </RouterLink> -->
-            <!-- 修改的memwrap  -->
+            <RouterLink to="/about" active-class="active-link">關於我們</RouterLink>
+            <RouterLink to="/allTrips" active-class="active-link">行程一覽</RouterLink>
+            <RouterLink to="/blog" active-class="active-link">旅行筆記</RouterLink>
+            <RouterLink to="/news" active-class="active-link">最新消息</RouterLink>
+            <RouterLink to="/tickets" active-class="active-link">票券訂購</RouterLink>
             <RouterLink v-if="isLoggedIn" to="/member" class="memwrap">
-              <img :src="parseUserImg(userInfo.u_avatar)"
-                class="user-avatar"/>
+              <img :src="parseUserImg(userInfo.u_avatar)" class="user-avatar" />
               <span class="nickname">{{ userInfo.u_nickname }}</span>
             </RouterLink>
             <!-- <button v-if="isLoggedIn" @click="logout" class="logout">登出</button> -->
@@ -177,6 +169,12 @@ export default defineComponent({
   /* 文字顏色 */
 }
 
+.active-link {
+  border-radius: 10px;
+  padding: 7px;
+  background-color: $accentColor-1;
+}
+
 header {
   // opacity: .3;
   position: relative;
@@ -289,14 +287,17 @@ header {
           //橫式banner頭像
           width: 50px;
           height: 50px;
-          border-radius: 50%; 
+          border-radius: 50%;
           border: 1px solid unset;
           object-fit: cover;
         }
 
         .login {
           cursor: pointer;
-          &:hover { color: $accentColor-1; }
+
+          &:hover {
+            color: $accentColor-1;
+          }
         }
 
         .memwrap {
@@ -310,21 +311,6 @@ header {
           color: $primaryColor;
           font-size: 0.9rem;
           letter-spacing: .2;
-
-          &::after {
-            content: ' ';
-            position: absolute;
-            right: 50%;
-            left: 50%;
-            bottom: -4px;
-            border-bottom: 4px solid $accentColor-1;
-            transition: 0.3s;
-          }
-
-          &:hover::after {
-            right: 0%;
-            left: 0%;
-          }
         }
 
         a:hover,
@@ -358,6 +344,29 @@ header {
       }
     }
 
+    .router-wrapper a {
+      position: relative;
+      display: inline-block;
+      text-decoration: none;
+      color: inherit;
+
+      &::after {
+        content: ' ';
+        position: absolute;
+        right: 50%;
+        left: 50%;
+        bottom: -4px;
+        border-bottom: 4px solid $accentColor-1;
+        transition: 0.3s;
+      }
+
+      &:hover::after {
+        right: 0%;
+        left: 0%;
+      }
+    }
+
+
     nav.closed {
       flex-direction: row;
 
@@ -369,9 +378,9 @@ header {
           display: none;
         }
 
-        span.btn-start-plan {
-          display: none;
-        }
+        // span.btn-start-plan {
+        // display: none;
+        // }
 
       }
     }
@@ -422,10 +431,9 @@ header {
           align-items: center;
           gap: 1.8vw;
 
-          a:hover,
-          a.click {
-            color: $accentColor-1;
-          }
+          // a:hover {
+          //   color: $accentColor-1;
+          // }
 
           button {
             color: $primaryColor;

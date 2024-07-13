@@ -1,3 +1,4 @@
+EditMemberMainView
 <template>
     <main>
         <div class="section-full-width">
@@ -167,12 +168,12 @@ onMounted(() => {
     .fa-camera {
         background-color: $primaryColor ;
         border-radius: 50%;
-        top: 25px;
+        top: 13%;
         cursor: pointer;
-        height: 28px;
+        height: auto;
         padding: 4px;
         position: absolute;
-        right: 578px;
+        right: 46%;
         width: 25px;
         color: $secondColor-2;
     }
@@ -277,7 +278,6 @@ onMounted(() => {
                 background-color: $secondColor-2;
                 color: $primaryColor;
             }
-        }
-    }
+        }   }
 }
 </style>
