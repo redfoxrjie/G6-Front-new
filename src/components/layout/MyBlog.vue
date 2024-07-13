@@ -17,8 +17,8 @@
                 </div>
             </div> -->
             <BCBlogCard v-for="(blog, index) in memPageBlogData" :key="blog.b_id" :bcImg="parseServerImg(blog.b_img)"
-                    :bcTitle="blog.b_title" :bcLikesCount="blog.b_likes" :bcViewsCount="blog.b_viewers"
-                    :bcDate="blog.b_date" @click="goToBlogPage(blog.b_id)" />
+                :bcTitle="blog.b_title" :bcLikesCount="blog.b_likes" :bcViewsCount="blog.b_viewers"
+                :bcDate="blog.b_date" :bc-liked="isLiked(blog.b_id)" @click="goToBlogPage(blog.b_id)" />
         </div>
     </div>
 </template>
@@ -50,6 +50,13 @@ export default {
         navigateToBlogPage(b_id) {
             // this.$router.push({ name: 'blogPage', params: { b_id } });
             this.$router.push(`../blog/${b_id}`);
+        },
+        goToBlogPage(b_id) {
+            this.$router.push(`../blog/${b_id}`);
+        },
+        isLiked(blogId) {
+            let likedBlogs = JSON.parse(localStorage.getItem('likedBlogs')) || [];
+            return likedBlogs.includes(blogId);
         }
     }
     ,

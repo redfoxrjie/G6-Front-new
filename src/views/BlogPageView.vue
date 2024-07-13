@@ -643,7 +643,7 @@ article {
                                 box-shadow: inset 2px -15px 13px rgba(80, 65, 94, 0.212);
                                 &.myRp{
                                     background-color: rgb(48, 74, 146);
-                                    box-shadow: inset 2px -15px 13px rgba(136, 122, 148, 0.489);
+                                    box-shadow: inset 2px -15px 13px rgba(187, 181, 192, 0.333);
                                 }
                                 .comment-mem {
                                     display: flex;
