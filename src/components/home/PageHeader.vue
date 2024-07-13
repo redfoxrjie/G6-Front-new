@@ -378,6 +378,28 @@ nav {
         }
     }
 
+    .logout {
+        position: relative;
+        margin-top: 20px;
+        color: $primaryColor;
+
+        &::after {
+            content: " ";
+            position: absolute;
+            right: 50%;
+            left: 50%;
+            bottom: -4px;
+            border-bottom: 4px solid $accentColor-1;
+            transition: .3s;
+        }
+
+        &:hover::after {
+            right: 0%;
+            left: 0%;
+        }
+
+    }
+
     .nickname {
         position: relative;
         color: $primaryColor;
@@ -603,7 +625,7 @@ nav.closed {
 
 .amoeba {
     position: absolute;
-    top: -100px;
+    top: -10vw;
     // right: -4vw;
     width: 96vw;
     height: 100%;
@@ -619,46 +641,32 @@ nav.closed {
 }
 
 .slogan {
-    font-size: 1.9rem;
-    letter-spacing: 16px;
+    width: 100%;
+    font-size: m#{i}n(m#{a}x(4vw, 1rem), 2rem); //同時設定最大值與最小值
+    letter-spacing: 1vw;
     position: absolute;
-    top: 40%;
-    left: 20%;
+    top: 25vw;
+    right: 50%;
+    transform: translateX(50%);
+    text-align: center;
     color: $black;
     background: rgba(246, 245, 241, 0.6);
-    padding: 14px 20px;
     border-radius: 10px;
     z-index: 1; // 確保 slogan 的 z-index 小於 dog-pic
 }
 
-/* 響應式設計，針對寬度小於768px的設備 */
-@media screen and (max-width: 768px) {
-    .slogan{
-        font-size: 1rem;
-        letter-spacing: 8px;
-    }
-}
-
 .togo-large-text {
+    width: 100%;
+    font-size: 15vw;
+    text-align: center;
     position: absolute;
     bottom: 10%;
-    right: 20%;
-    transform: translate(10%, -10%);
-    font-size: 10rem;
+    right: 50%;
+    transform: translate(50%, -10%);
     color: $primaryColor;
-    letter-spacing: 50px;
+    letter-spacing: 5vw;
     z-index: 1; // 確保 togo-large-text 的 z-index 小於 dog-pic
     text-align: center;
-}
-
-/* 響應式設計，針對寬度小於768px的設備 */
-@media screen and (max-width: 768px) {
-    .togo-large-text{
-        font-size: 5rem;
-        bottom: 20%;
-        right: 15%;
-        font-weight: 900;
-    }
 }
 
 @keyframes morph {
@@ -747,12 +755,12 @@ nav.closed {
     /* 防止溢出 */
 }
 
-@media screen and (max-width: 768px) {
-    .content {
-        margin-top: -200px;
-        height: 1500px;
-    }
-}
+// @media screen and (max-width: 768px) {
+//     .content {
+//         // margin-top: -200px;
+//         height: 1500px;
+//     }
+// }
 
 .center-background {
     position: absolute;
@@ -780,8 +788,6 @@ nav.closed {
     flex-direction: column;
     box-sizing: border-box;
 }
-
-
 .text {
     color: $black;
     font-size: 1rem;
@@ -990,19 +996,15 @@ nav.closed {
     100% {
         border-radius: 65% 35% 46% 54% / 56% 68% 32% 44%;
     }
-
     20% {
         border-radius: 37% 63% 51% 49% / 37% 65% 35% 63%;
     }
-
     40% {
         border-radius: 36% 64% 64% 36% / 64% 48% 52% 36%;
     }
-
     60% {
         border-radius: 37% 63% 51% 49% / 30% 30% 70% 70%;
     }
-
     80% {
         border-radius: 40% 60% 42% 58% / 41% 51% 49% 59%;
     }
@@ -1087,25 +1089,11 @@ nav.closed {
 }
 
 @keyframes icon-swing {
-    8% {
-        transform: rotate3d(0, 0, 1, 20deg);
-    }
-
-    16% {
-        transform: rotate3d(0, 0, 1, -15deg);
-    }
-
-    24% {
-        transform: rotate3d(0, 0, 1, 10deg);
-    }
-
-    32% {
-        transform: rotate3d(0, 0, 1, -5deg);
-    }
-
-    40% {
-        transform: rotate3d(0, 0, 1, 0deg);
-    }
+    8% { transform: rotate3d(0, 0, 1, 20deg); }
+    16% { transform: rotate3d(0, 0, 1, -15deg); }
+    24% { transform: rotate3d(0, 0, 1, 10deg); }
+    32% { transform: rotate3d(0, 0, 1, -5deg); }
+    40% { transform: rotate3d(0, 0, 1, 0deg); }
 }
 
 //icon-map
@@ -1187,7 +1175,8 @@ nav.closed {
     .ocean-img {
         .text{
             font-size: 10vw;
-            top: 30%;
+            bottom: 0%;
+            left: 50%;
         }
     }
 }
@@ -1225,13 +1214,8 @@ nav.closed {
 }
 
 @keyframes oceanwave-animation {
-    0% {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(-50%);
-    }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
 
 .footer {
@@ -1244,17 +1228,21 @@ nav.closed {
 
 @media (max-width: 768px) {
     .content-item {
-        width: 40%;
-    }
-
-    .text {
-        font-size: 0.8rem;
+        width: 40vw;
+        min-width: 170px;
+        aspect-ratio: 1/1;
+        .pic {
+            width: 100%;
+            height: 100%;
+        }
+        .text {
+            font-size: m#{i}n(m#{a}x(1.5vw, 1.25rem), 0.875rem);
+        }
     }
 
     .content-item-1 {
-        top: 12%;
-        left: 10%;
-
+        top: 5%;
+        left: 10vw;
     }
 
     .content-item-2 {
@@ -1263,12 +1251,12 @@ nav.closed {
     }
 
     .content-item-3 {
-        bottom: 25%;
+        bottom: 28%;
         left: 10%;
     }
 
     .content-item-4 {
-        bottom: 2%;
+        bottom: 5%;
         right: 10%;
         z-index: 20;
     }
@@ -1280,40 +1268,23 @@ nav.closed {
     }
 }
 
-
 @media (max-width: 480px) {
-    .content-item {
-        width: 60%;
-    }
-
-    .text {
-        font-size: 0.6rem;
-    }
-
     .content-item-1 {
-        top: 20%;
+        top: 3%;
         left: 5%;
     }
-
     .content-item-2 {
-        top: 20%;
+        top: 25%;
         right: 5%;
     }
-
     .content-item-3 {
-        bottom: 5%;
+        top: 47%;
         left: 5%;
     }
 
     .content-item-4 {
-        bottom: 5%;
+        top: 69%;
         right: 5%;
-    }
-
-    .center-background {
-        width: 110%;
-        height: 110%;
-        top: 25%;
     }
 }
 </style>
