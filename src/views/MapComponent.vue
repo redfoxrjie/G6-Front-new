@@ -61,7 +61,8 @@
             @dragover="dragOver"
             @drop="drop">
             <div class="spot-img">
-              <img src="https://picsum.photos/300/200/?random=1">
+              <!-- <img src="https://picsum.photos/300/200/?random=1"> -->
+              <img :src="location.imgUrl || 'https://picsum.photos/300/200/?random=1'" alt="景點圖片">
             </div>
             <div class="spot-info">
               <div class="spot-time font-time">{{ formatSpotTime(location.spotTime) }}</div>
@@ -355,13 +356,13 @@ export default {
         lng = 121.5654177;
         lat = 25.033968;
       }
-      this.map.setView([lat, lng], 13);
+      this.map.setView([lat, lng], 12);
     },
     // 設置當前的地理位置
     setCurrentLocation(position) {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
-      this.map.setView([lat, lng], 13);
+      this.map.setView([lat, lng], 12);
     },
     // 顯示定位失敗的錯誤訊息 (此功能必要性再檢討)
     showError() {
@@ -404,6 +405,28 @@ export default {
         .catch(error => console.error('Error fetching geocoding data:', error));
     }, 300), // 300毫秒的去抖動
 
+    // 獲取景點圖片
+    async getOSMImageUrl(osm_id) {
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/details.php?osmtype=N&osmid=${osm_id}&format=json`);
+        const data = await response.json();
+        if (data && data.centroid) {
+          const lat = data.centroid.coordinates[1];
+          const lon = data.centroid.coordinates[0];
+          const zoom = 12;
+          const tileUrl = `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${lon},${lat},${zoom}/600x600?access_token=YOUR_MAPBOX_ACCESS_TOKEN`;
+          return tileUrl;
+        } else {
+          console.error('No centroid data found for the given OSM ID.', 'osm_id: ', osm_id);
+          
+          return '';
+        }
+      } catch (error) {
+        console.error('Error fetching data from OSM:', error);
+        return '';
+      }
+    },
+    
     // 添加marker
     addMarker(result) {
       const latlng = { lat: result.lat, lng: result.lon };
@@ -422,10 +445,8 @@ export default {
       // 清空 filteredSearchResults
       this.filteredSearchResults = [];
 
-      // 只在第一次添加標記時設置地圖視角
-      if (this.markers.length === 1) {
-        this.map.setView([latlng.lat, latlng.lng], 13);
-      }
+      // 以新標註在地圖上的Marker為中心更新地圖視圖
+      this.map.setView([latlng.lat, latlng.lng], 12);
 
       // 監聽地圖縮放事件，並調整標記位置
       this.map.on('zoomend', () => {
@@ -445,11 +466,18 @@ export default {
     addToPlanFromTripSpots() {
       this.tripSpots.forEach(spot => {
         const day = spot.day_num;
+
+        // 提取和轉換 receivedStayTime
+        const timeParts = spot.receivedStayTime.split(':');
+        const hours = timeParts[0];
+        const minutes = timeParts[1];
+        const formattedStayTime = `${hours}小時${minutes}分`;
+
         const location = {
           osm_id: spot.osm_id,
           name: spot.location.name,
           spotTime: spot.sp_time,
-          receivedStayTime: spot.receivedStayTime,
+          receivedStayTime: formattedStayTime,
           // 可以根據需要添加其他相關的資料
         };
         console.log(`Adding location to day ${day}:`, location);
@@ -482,9 +510,11 @@ export default {
       container.appendChild(button);
       return container;
     },
-    addToPlan(location) {
+    async addToPlan(location) {
       if (!this.itinerary.some(item => item.place_id === location.place_id)) {
         location.day = this.selectedDay; // 將行程分配到選中的天數
+        const imageUrl = await this.getOSMImageUrl(location.osm_id);
+        location.imgUrl = imageUrl || 'https://picsum.photos/300/200/?random=1';
         this.itinerary.push(location);
       }
     },
@@ -1179,7 +1209,7 @@ li.dragging{
 /* 地圖樣式 */
 #map {
   position: absolute;
-  top: 8vh;
+  top: 0;
   left: 0;
   height: fit-content;
   background-color: white;

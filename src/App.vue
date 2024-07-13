@@ -336,7 +336,8 @@ header {
           display: unset;
           background-color: $accentColor-1;
           color: $black;
-          padding: 10px 14px;
+          padding: 8px 10px;
+          font-size: 0.875rem;
           cursor: pointer;
           border-radius: ($base-fontSize + 24) * 0.5;
 

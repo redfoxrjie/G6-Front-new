@@ -57,12 +57,12 @@ export default {
             this.$router.push({ name: 'TicketInner', params: { id } });
         },
         parseImg(imgURL) {
-      // 將相對路徑解析成正確的 URL
+        // 將相對路徑解析成正確的 URL
         return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
         },
         parseServerImg(imgURL) {
             // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
-                    return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
+                    return `${import.meta.env.VITE_IMG_URL}/${imgURL}`
         }
     }
 };

@@ -730,6 +730,7 @@ nav.closed {
 
     .logo {
         top: 80px;
+        z-index: 2;
         /* 調整 logo 位置，避免被導航欄遮擋 */
     }
 }
@@ -1171,9 +1172,9 @@ nav.closed {
         letter-spacing: 1vw;
         /* 調整字母間距 */
         position: absolute;
-        top: 50%;
+        bottom: 0%;
         left: 50%;
-        transform: translate(-50%, -50%) translateY(135px);
+        transform: translate(-50%, -50%) translateY(30%);
         /* 向下移動10px */
         text-align: center;
         /* 文字置中 */
