@@ -499,7 +499,8 @@ nav.closed {
 //地圖狗
 .dog-1 {
     position: relative;
-    left: 70vw; // 將此值調整為所需的水平偏移量
+    left: -20vw; // 將此值調整為所需的水平偏移量
+    top:-50vh;
     animation: move1 1.5s infinite linear;
 }
 
@@ -524,7 +525,8 @@ nav.closed {
 //行李狗
 .dog-2 {
     position: relative;
-    top: 5vh;
+    top: 40vh;
+    left: -15vw;
     animation: move2 1s infinite linear;
 }
 
@@ -549,8 +551,8 @@ nav.closed {
 //購物狗
 .dog-3 {
     position: relative;
-    left: 80vw; // 將此值調整為所需的水平偏移量
-    top: 20vh;
+    left: 15vw; // 將此值調整為所需的水平偏移量
+    top: 10vh;
     animation: move3 2s infinite linear;
 }
 
@@ -569,6 +571,22 @@ nav.closed {
 
     100% {
         transform: translate3d(0, 0%, 0);
+    }
+}
+
+/* 響應式設計，針對寬度小於768px的設備 */
+@media screen and (max-width: 768px) {
+    .dog-1 {
+        left: 30vw; // 將此值調整為所需的水平偏移量
+        top: -50vh;
+    }
+    .dog-2 {
+        left: 0.5vw; 
+        top: 3vh;
+    }
+    .dog-3 {
+        left: -1vw; 
+        top: 55vh;
     }
 }
 
@@ -683,6 +701,7 @@ nav.closed {
 
     .logo {
         top: 80px;
+        z-index: 2;
         /* 調整 logo 位置，避免被導航欄遮擋 */
     }
 }
@@ -1029,9 +1048,9 @@ nav.closed {
         letter-spacing: 1vw;
         /* 調整字母間距 */
         position: absolute;
-        top: 50%;
+        bottom: 0%;
         left: 50%;
-        transform: translate(-50%, -50%) translateY(135px);
+        transform: translate(-50%, -50%) translateY(30%);
         /* 向下移動10px */
         text-align: center;
         /* 文字置中 */

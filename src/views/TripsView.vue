@@ -12,7 +12,7 @@
       @save-stay-time="saveStayTimeHandler"
       @save-trip-plan="handleSaveTripPlan"
     />
-    <NewTrpLightBox02 :class="{ hidden: !showNewTrpLightBox02 }" @submit-trip="handleTripSubmit" />
+    <NewTrpLightBox02 :class="{ hidden: !showNewTrpLightBox02 }" @submit-trip="handleTripSubmit"/>
     <BlackLayout :class="{ hidden: !showBlackLayout }" />
     <EditDepartureTime
       v-if="showEditDepartureTime"

@@ -88,7 +88,7 @@
                 <div class="dim">
                     <div class="text">
                         <p>本網站為緯育TibaMe_前端設計工程師班第90期學員專題成果作品,本平台僅供學習、展示之用。</p>
-                        <p>若有抵觸有關著作權,或有第三人主張侵害智慧財產權等情事,均由學員負法律上責任,緯育公司概不負責。若有侵權疑慮,您可以私訊[ 緯育TibaMe ],後續會由專人協助處理。</p>
+                        <p>若有抵觸有關著作權,或有第三人主張侵害智慧財產權等情事,均由學員負法律上責任,緯育公司概不負責。若有侵權疑慮,您可以私訊<a href="https://www.facebook.com/TibaMe" class="tibame-link">[ 緯育TibaMe ]</a>,後續會由專人協助處理。</p>
                     </div>
                 </div>
             </div>
@@ -164,28 +164,31 @@ body {
         }
         /*Footer文字*/
         footer .footer-text {
-            height: 55vh;
+            width: 100%;
+            height: fit-content;
             background-color: #0F125C;
+            padding: 24px 5vw 24px;
+            box-sizing: border-box;
         }
         @media (max-width: 768px) {
             footer .footer-text {
-                height: 110vh;
+                height: fit-content;
             }
         }
         footer .footer-text .container{
+            width: 100%;
             display: flex;
             flex-direction: row;
-            margin: 5vh 10vw ;
+            margin-bottom: 48px;
         }
         @media (max-width: 768px) {
             footer .footer-text .container {
                 display: flex;
                 flex-direction: column;
-                margin: 5vh 10vw ;
             }
         }
         footer .footer-text .container .item{
-            margin-right: 10vw;
+            flex-grow: 1;
         }
         @media (max-width: 768px) {
             footer .footer-text .container .item {
@@ -231,14 +234,22 @@ body {
             margin-right: 0.5vw;
         }
         footer .dim{
-            font-size: 12px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
-        footer .dim p{
+        footer .dim p {
+            font-size: 0.75rem;
             text-align: center;
+            line-height: 140%;
+            .tibame-link {
+                text-decoration: underline;
+                color: $secondColor-1;
+                &:hover {
+                    color: $accentColor-1;
+                }
+            }
         }
         /* footer RWD */
         @media (max-width: 768px) {

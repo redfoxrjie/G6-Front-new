@@ -34,7 +34,7 @@
             <label for="edate">
               <h5>結束日期</h5>
             </label>
-            <input type="date" id="edate" name="trp_edate" v-model="endDate" :min="endDateMin">
+            <input type="date" id="edate" name="trp_edate" v-model="endDate" :min="endDateMin" :max="endDateMax">
           </div>
         </div>
         <div class="setting">
@@ -66,6 +66,7 @@
         startDate: '', // 開始日期
         endDate: '', // 結束日期
         endDateMin: '', // 結束日期的最小值
+        endDateMax: '', // 結束日期的最大值
         isPublic: false, // 是否公開
         areas: ['jp', 'kr', 'th', 'cn'],
         showAreaDropdown: false,
@@ -81,13 +82,21 @@
     methods: {
       updateEndDateMin() {
         // 更新結束日期的最小值為開始日期的下一天
-        var startDate = new Date(this.startDate);
+        let startDate = new Date(this.startDate);
         startDate.setDate(startDate.getDate() + 1);
         this.endDateMin = startDate.toISOString().split('T')[0];
+
+        // 更新結束日期的最大值為開始日期加4天
+        let endDateMax = new Date(this.startDate);
+        endDateMax.setDate(endDateMax.getDate() + 4);
+        this.endDateMax = endDateMax.toISOString().split('T')[0];
         
         // 同時更新結束日期的值，確保其不小於最小日期
         if (this.endDate < this.endDateMin) {
           this.endDate = this.endDateMin;
+        }
+        if (this.endDate > this.endDateMax) {
+          this.endDate = this.endDateMax;
         }
       },
       handlePublicClick() {
@@ -158,13 +167,13 @@
     },
     mounted() {
       // 取得當前日期
-      var today = new Date().toISOString().split('T')[0];
+      let today = new Date().toISOString().split('T')[0];
   
       // 設定開始日期和結束日期的初始值
       this.startDate = today;
   
       // 設定結束日期的初始值為開始日期加一天
-      var startDate = new Date(today);
+      let startDate = new Date(today);
       startDate.setDate(startDate.getDate() + 1);
       this.endDate = startDate.toISOString().split('T')[0];
   
@@ -173,6 +182,11 @@
   
       // 設定結束日期輸入框的最小日期為startDate加一天
       this.endDateMin = startDate.toISOString().split('T')[0];
+
+      // 設定結束日期輸入框的最大日期為開始日期加四天
+      let endDateMax = new Date(today);
+      endDateMax.setDate(endDateMax.getDate() + 4);
+      this.endDateMax = endDateMax.toISOString().split('T')[0];
 
       window.addEventListener('click', this.closeAllDropdowns);
     },
@@ -235,6 +249,7 @@
             width: 100%;
             margin: 12px 0;
             input {
+              width: 60%;
               margin: 6px 0;
               padding: 6px 18px;
               box-sizing: border-box;
