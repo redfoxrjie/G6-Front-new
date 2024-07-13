@@ -55,7 +55,11 @@ const isNextStepDisabled = computed(() => currentStep.value === 1 && props.showN
 function showGuide() {
   isVisible.value = true;
   nextTick(() => {
-    highlightElement(steps[currentStep.value].element);
+    if (currentStep.value === 0 || isLastStep.value) {
+      showCenteredContent();
+    } else {
+      highlightElement(steps[currentStep.value].element);
+    }
   });
 }
 
@@ -76,8 +80,8 @@ function nextStep() {
     } else {
       currentStep.value++;
       nextTick(() => {
-        if (isLastStep.value) {
-          showCongratulations();
+        if (isLastStep.value || currentStep.value === 0) {
+          showCenteredContent();
         } else {
           highlightElement(steps[currentStep.value].element);
         }
@@ -95,7 +99,11 @@ function prevStep() {
       emit('update:showNewTrpLightBox02', true);
     }
     nextTick(() => {
-      highlightElement(steps[currentStep.value].element);
+      if (currentStep.value === 0) {
+        showCenteredContent();
+      } else {
+        highlightElement(steps[currentStep.value].element);
+      }
     });
   }
 }
@@ -107,20 +115,24 @@ function handleOverlayClick(event) {
 function highlightElement(selector) {
   const element = document.querySelector(selector);
   if (element && overlay.value) {
-    const rect = element.getBoundingClientRect();
-    overlay.value.style.clipPath = `polygon(
-      0% 0%,
-      0% 100%,
-      100% 100%,
-      100% 0%,
-      ${rect.left}px 0%,
-      ${rect.left}px ${rect.top}px,
-      ${rect.right}px ${rect.top}px,
-      ${rect.right}px ${rect.bottom}px,
-      ${rect.left}px ${rect.bottom}px,
-      ${rect.left}px 0%
-    )`;
-    adjustGuideContentPosition(rect);
+    if (selector === 'body') {
+      showCenteredContent();
+    } else {
+      const rect = element.getBoundingClientRect();
+      overlay.value.style.clipPath = `polygon(
+        0% 0%,
+        0% 100%,
+        100% 100%,
+        100% 0%,
+        ${rect.left}px 0%,
+        ${rect.left}px ${rect.top}px,
+        ${rect.right}px ${rect.top}px,
+        ${rect.right}px ${rect.bottom}px,
+        ${rect.left}px ${rect.bottom}px,
+        ${rect.left}px 0%
+      )`;
+      adjustGuideContentPosition(rect);
+    }
   }
 }
 
@@ -137,7 +149,7 @@ function adjustGuideContentPosition(targetRect) {
   };
 }
 
-function showCongratulations() {
+function showCenteredContent() {
   guideContentStyle.value = {
     top: '50%',
     left: '50%',
