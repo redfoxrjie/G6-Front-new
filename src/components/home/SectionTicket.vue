@@ -75,7 +75,7 @@ export default {
     .ticket_Card{
         margin: 5% 0px;
         .ticket-img img{
-            width: 80%;
+            width: 90%;
             display: block;
             margin: auto;
             border-radius: 80px;

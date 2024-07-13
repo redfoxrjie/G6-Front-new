@@ -130,7 +130,10 @@ export default {
       }
     },
     goToDetail(id) {
-      this.$router.push({ name: 'TicketInner', params: { id } }); //跳頁設置
+      this.$router.push({
+        name: 'TicketInner', 
+        params: { id } 
+      });
     },
     parseImg(imgURL) {
       // 將相對路徑解析成正確的 URL

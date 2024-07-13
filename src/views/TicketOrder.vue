@@ -178,10 +178,12 @@ export default {
           
         });
         const data = await response.json();
+        console.log("取到訂單編號:" +  data.o_id)        
         if (data.tq_url) {
-          this.ticketInfo = { tq_url: data.tq_url }; //將data.tq_url值放入this.ticketInfo
+          this.ticketInfo = { tq_url: data.tq_url, oid: data.o_id };  //將data.tq_url值放入this.ticketInfo
           const url = this.ticketInfo.tq_url;
-          this.showSuccessAlert(url); //tq_url存在且ticketInfo被正確設置\才調用showSuccessAlert
+          const oid = this.ticketInfo.oid;
+          this.showSuccessAlert(url,oid); //tq_url存在且ticketInfo被正確設置才調用showSuccessAlert
           console.log(url);
         } else {
           console.error('Error:', data.error);
@@ -234,17 +236,19 @@ export default {
           console.error('Error finishing order:', error);
       }
     },
-    showSuccessAlert(url) {
+    showSuccessAlert(url,oid) {
       Swal.fire({
         title: '已完成訂單',
-        // html: `<p>請掃此QRCode取得訂單資訊及下載：</p><img src='${url}'alt="tq_url" />`,
+        html: `<p>請掃此QRCode取得訂單資訊及下載：</p><img src='${url}'alt="tq_url" />`,
         icon: 'success',
         iconColor: '#4F82D4',
         confirmButtonText: '確定',
         confirmButtonColor: '#4F82D4'
       }).then(() => {
+        console.error('test:'+ oid);
         this.$router.push({ //導航至新頁面
           name: 'OrderQRCode', //目標頁面
+          params: { id: oid }
         });
       });
     },
