@@ -52,7 +52,7 @@
                         <div class="comment-count">留言({{ blogrp.length }})</div>
                         <div class="comment-list">
                             <div class="comment-item" v-for="rp in blogrp">
-                                <div class="comment-head">
+                                <div class="comment-head" :class="{ 'myRp': isLoggedIn && rp.u_id === userInfo.u_id }">
                                     <div class="comment-mem cmm" @click=goToMemPage(rp.u_id)>
                                         <div class="mem-headshot">
                                             <img :src=parseUserImg(rp.u_avatar)>
@@ -61,7 +61,7 @@
                                             <p>{{ rp.u_nickname }}</p>
                                         </div>
                                     </div>
-                                    <div class="timediff">{{ rp.rp_date }}</div>
+                                    <div class="timediff">{{ formattedDate(rp.rp_date) }}</div>
                                 </div>
                                 <div class="comment-text">{{ rp.rp_content }}
                                 </div>
@@ -74,7 +74,8 @@
                                         <div class="mem-headshot">
                                             <img src="/default-userImg.png">
                                         </div>
-                                        <div v-if="isLoggedIn" class="mem-name">{{ userInfo.u_nickname }}</div>
+                                        <div v-if="isLoggedIn" class="mem-name">
+                                            <p>{{ userInfo.u_nickname }}</p></div>
                                         <div v-else class="mem-name">
                                             <p>訪客</p>
                                         </div>
@@ -120,10 +121,10 @@
 </template>
 
 <script>
-import GCompUserAcoount from '@/components/global/GCompUserAcoount.vue';
 import { useUserStore } from '@/stores/userStore';
-import { storeToRefs } from 'pinia';
+
 import Swal from 'sweetalert2';
+import { format, differenceInMinutes, differenceInHours, differenceInDays } from 'date-fns';
 
 export default {
     data() {
@@ -133,8 +134,6 @@ export default {
 
             blogpost: {},
             blogrp: {},
-            //b_id 目前文章編號,rp_content 文章內容,u_id 留言會員帳號
-
             msg: ''
         }
     },
@@ -155,8 +154,6 @@ export default {
             }
         },
         isLiked() {
-            // let likedBlogs = JSON.parse(localStorage.getItem('likedBlogs')) || [];
-            // return likedBlogs.includes(this.blogpost.b_id);        
             return this.liked
         }
     },
@@ -185,15 +182,6 @@ export default {
                 console.log('erro link at', `${import.meta.env.VITE_API_URL}/front/blog...View.php`)
                 console.error('Error fetching data:', error);
             }
-        }
-        ,
-        toggleLikes() {
-            if (this.item.liked) {
-                this.item.b_likes -= 1;
-            } else {
-                this.item.b_likes += 1;
-            }
-            this.item.liked = !this.item.liked;
         },
         async likeHandle() {
             const blogId = this.blogpost.b_id;
@@ -216,7 +204,7 @@ export default {
                 console.log(localStorage.getItem('likedBlogs'))
 
                 this.updateLikeStatus(blogId, 'add');  // 发送请求到后端
-                
+
             }
 
         },
@@ -247,6 +235,25 @@ export default {
                 return raw.replace(/\\n/g, '<br>');
             } else { return '' }
 
+        },
+        formattedDate(dateStr) {
+            const now = new Date();
+            const date = new Date(dateStr);
+            const diffMinutes = differenceInMinutes(now, date);
+            const diffHours = differenceInHours(now, date);
+            const diffDays = differenceInDays(now, date);
+
+            if (diffMinutes < 1) {
+                return '剛才';
+            } else if (diffMinutes < 60) {
+                return `${Math.floor(diffMinutes)}分鐘前`;
+            } else if (diffHours < 24) {
+                return `${Math.floor(diffHours)}小時前`;
+            } else if (diffDays < 7) {
+                return `${Math.floor(diffDays)}天前`;
+            } else {
+                return format(date, 'yyyy/MM/dd');
+            }
         },
         async rpsubmit() {
             if (!this.isLoggedIn) {
@@ -297,7 +304,7 @@ export default {
                     },
                     body: new URLSearchParams({
                         b_id: b_id,
-                        action: task 
+                        action: task
                     }),
                 });
                 const data = await response.json();
@@ -323,6 +330,7 @@ export default {
     },
     mounted() {
         this.fetchData();
+        console.log(this.userInfo);
     }
 };
 </script>
@@ -545,7 +553,6 @@ article {
                                 .mem-name {
 
                                     font-size: 20px;
-
                                     margin: 6px 0;
                                 }
 
@@ -634,7 +641,10 @@ article {
                                 justify-content: space-between;
                                 align-items: center;
                                 box-shadow: inset 2px -15px 13px rgba(80, 65, 94, 0.212);
-
+                                &.myRp{
+                                    background-color: rgb(48, 74, 146);
+                                    box-shadow: inset 2px -15px 13px rgba(136, 122, 148, 0.489);
+                                }
                                 .comment-mem {
                                     display: flex;
                                     align-items: center;
