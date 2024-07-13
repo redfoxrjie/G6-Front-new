@@ -169,22 +169,26 @@ export default {
         data.trips.forEach(trip => {
           switch (trip.trp_area) {
             case '日本':
+            case 'jp':
               classifiedTrips.jp.push(trip);
               areaTripsLength.jp++
               // areaTripsCreatorSets.jp.add(trip.u_nickname);
               break;
             case '韓國':
+            case 'kr':
               classifiedTrips.kr.push(trip);
               areaTripsLength.kr++
               // areaTripsCreatorSets.kr.add(trip.u_nickname);
               break;
             case '泰國':
+            case 'th':
               classifiedTrips.th.push(trip);
               areaTripsLength.th++
               // areaTripsCreatorSets.th.add(trip.u_nickname);
 
               break;
             case '港澳':
+            case 'cn':
               classifiedTrips.hkmo.push(trip);
               areaTripsLength.hkmo++
               // areaTripsCreatorSets.hkmo.add(trip.u_nickname);
