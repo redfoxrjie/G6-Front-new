@@ -137,8 +137,8 @@ export default {
                 // userStore.toggleLoginModal(); // 顯示登錄彈窗
                 this.showErrorAlert();
             }else{
-                this.$router.push({ //導航至新頁面
-                    name: 'TicketOrder', //目標頁面
+                this.$router.push({
+                    name: 'TicketOrder',
                     query: {
                         id: tickets.t_id,
                         name: tickets.t_name,
