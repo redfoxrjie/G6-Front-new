@@ -6,8 +6,7 @@
                 <img class="bc-i-img" :src="bcImg">
                 <div class="bc-i-likes">
                     <div class="bc-i-likes-icon">
-                        <!-- <svg src="@/assets/images/global/icons/bones-xs-svg.svg" alt="" class="likes-iconImg"></svg> -->
-                        <img src="@/assets/images/global/icons/bones-xs-svg.svg" alt="" class="likes-iconImg">
+                        <font-awesome-icon :icon="['fas', 'bone']" size="xl" :class="[bcLiked ? 'active' : '']" class="likes-iconImg" />
                     </div>
                     <p class="bc-i-likes-count">{{ bcLikesCount }}個讚</p>
                 </div>
@@ -16,14 +15,6 @@
                 <h4 class="bc-c-title">{{ bcTitle }}</h4>
                 <div class="bc-c-data">
                     <p class="bc-c-date">{{ bcDate }}</p>
-                    <!-- <div class="bc-c-viewsWrap">
-                        <div class="bc-c-v-icon">
-                            <img src="@/assets/images/global/icons/views-xs-svg.svg" alt="">
-                        </div>
-                        <p class="bc-c-v-count">
-                            {{ bcViewsCount }} 次觀看
-                        </p>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -52,6 +43,10 @@ const props = defineProps({
     bcDate: {
         type: String,
         default: "2022/10/21"
+    },
+    bcLiked: {
+        type: Boolean,
+        default: false
     }
 
 })
@@ -98,6 +93,13 @@ const goToPage = (toLink) => {
         flex-direction: column;
         flex-grow: 1;
         cursor: pointer;
+        transition: .4s ease;
+        &:hover{
+            .bc-imgWrap .bc-i-img{
+                transform: scale(1.05) rotate(1deg);
+
+            }
+        }
         .bc-imgWrap {
             position: relative;
             aspect-ratio: 3/4;
@@ -107,6 +109,8 @@ const goToPage = (toLink) => {
                 height: 100%;
                 object-fit: cover;
                 object-position: center bottom;
+                transition: .3s ease;
+
             }
             .bc-i-likes {
                 position: absolute;
@@ -114,22 +118,25 @@ const goToPage = (toLink) => {
                 right: 0;
                 padding: 5px;
                 .bc-i-likes-icon {
-                    margin-left: 25%;
-                    margin-right: 25%;
+                    padding: 6px 0;
                     width: 50%;
-                    aspect-ratio: 1;
-                    img {
-                        width: 100%;
-                        aspect-ratio: 1;
-                        filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.76));
+                    margin: 0 25%;
 
+                    // aspect-ratio: 1;
+                    svg {
+                        width: 100%;
+                        color: $primaryColor;
+                        filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.76));
+                        &.active{
+                            color: $accentColor-2;
+                        }
                     }
 
                 }
                 .bc-i-likes-count {
                     color: $primaryColor;
                     font-size: 14px;
-                    text-shadow: .5px .1px $black;
+                    text-shadow: 1px -.2px 1px $black;
                 }
             }
         }
@@ -153,29 +160,6 @@ const goToPage = (toLink) => {
                     margin-top: auto;
                     // display: inline-block;
                     letter-spacing: unset;
-                }
-                .bc-c-viewsWrap{
-                    display: flex;
-                    display: block;
-                    margin-top: auto;
-                    .bc-c-v-icon {
-                        width: $base-fontSize;
-                        aspect-ratio: 1;
-                        display: inline-block;
-                        margin-right: 4px;
-                        img{
-                            display: inline-block;
-                            width: 1rem;
-                            vertical-align: middle;
-                            aspect-ratio: 1;
-                        }
-                    }
-                    .bc-c-v-count {
-                        letter-spacing: unset;
-                        display: inline-block;
-                        text-align: right;
-                        color: $secondColor-2;
-                    }
                 }
             }
         }

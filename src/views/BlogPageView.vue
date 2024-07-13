@@ -7,7 +7,7 @@
                 </div>
                 <span>返回</span>
             </div>
-<!-- {{ blogpost }} -->
+            <!-- {{ blogpost }} -->
             <div class="journey-banner" :style="{ backgroundImage: 'url(' + parseServerImg(blogpost.trp_img) + ')' }">
                 <div class="journey-data">
                     <div class="publish-date font-time">{{ blogpost.b_date }} </div>
@@ -57,7 +57,9 @@
                                         <div class="mem-headshot">
                                             <img :src=parseUserImg(rp.u_avatar)>
                                         </div>
-                                        <div class="mem-name"><p>{{ rp.u_nickname }}</p></div>
+                                        <div class="mem-name">
+                                            <p>{{ rp.u_nickname }}</p>
+                                        </div>
                                     </div>
                                     <div class="timediff">{{ rp.rp_date }}</div>
                                 </div>
@@ -73,7 +75,9 @@
                                             <img src="/default-userImg.png">
                                         </div>
                                         <div v-if="isLoggedIn" class="mem-name">{{ userInfo.u_nickname }}</div>
-                                        <div v-else class="mem-name"><p>訪客</p></div>
+                                        <div v-else class="mem-name">
+                                            <p>訪客</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <form class="comment-text" @submit.prevent="rpsubmit">
@@ -194,18 +198,16 @@ export default {
         async likeHandle() {
             const blogId = this.blogpost.b_id;
             let likes = JSON.parse(localStorage.getItem('likedBlogs')) || [];
-
-
             if (likes.includes(blogId)) {
-                // 已点赞，移除点赞
+                // 已按讚
                 this.liked = false;
 
                 likes = likes.filter(id => id !== blogId);
                 localStorage.setItem('likedBlogs', JSON.stringify(likes));
                 console.log(localStorage.getItem('likedBlogs'))
-                // updateLikeStatus(blogId, 'remove');  // 发送请求到后端
+                this.updateLikeStatus(blogId, 'remove');  // 发送请求到后端
             } else {
-                // 未点赞，添加点赞
+                // 未按讚
                 this.liked = true;
 
                 likes.push(blogId);
@@ -213,48 +215,30 @@ export default {
 
                 console.log(localStorage.getItem('likedBlogs'))
 
-                // updateLikeStatus(blogId, 'add');  // 发送请求到后端
+                this.updateLikeStatus(blogId, 'add');  // 发送请求到后端
+                
             }
 
         },
-        async likeShowHandle() {
-            const blogId = this.blogpost.b_id;
-
-            let path = `${import.meta.env.VITE_API_URL}`;
-            let url = path + `/blogLikeShow.php`;
-
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                console.log(data)
-            } catch (error) {
-                console.error('Error:', error)
-            }
-        }
-        ,
         parseImg(imgURL) {
             // 將相對路徑解析成正確的 URL
             return new URL(`./assets/images/${imgURL}`, import.meta.url).href;
         },
         parseServerImg(imgURL) {
-            // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
             return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
         },
         parseUserImg(imgURL) {
-            // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
             if (imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
             return `${import.meta.env.VITE_IMG_URL}/default-userImg.png`
         },
         goBack() {
             window.history.back(); // 返回前一頁
         },
-        goToMemPage(u_id){
-            // this.$router.push({ name: 'blogPage', params: { b_id } });
+        goToMemPage(u_id) {
             this.$router.push(`../memberMain/${u_id}`);
-        }     
+        }
         ,
-        goToTripPage(trp_id){
-            // this.$router.push({ name: 'blogPage', params: { b_id } });
+        goToTripPage(trp_id) {
             this.$router.push(`../trips?trp_id=${trp_id}`);
         }
         ,
@@ -275,7 +259,6 @@ export default {
                 try {
                     let path = `${import.meta.env.VITE_API_URL}`;
                     let url = path + `/responseWrite.php`;
-                    console.log('url:' + url)
 
                     const response = await fetch(url, {
                         method: 'POST',
@@ -301,8 +284,31 @@ export default {
                 }
 
             }
-        }
-        ,
+        },
+        async updateLikeStatus(b_id, task) {
+            let path = `${import.meta.env.VITE_API_URL}`;
+            let url = path + `/blogLike.php`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        b_id: b_id,
+                        action: task 
+                    }),
+                });
+                const data = await response.json();
+                console.log(data)
+                this.fetchData();
+
+            } catch (error) {
+                console.log('fetch error:', error);
+            }
+        },
+        // 每次載入頁面讀取localstorage按讚狀態
         initLike() {
 
             let likedBlogs = JSON.parse(localStorage.getItem('likedBlogs')) || [];
@@ -440,8 +446,6 @@ article {
                     color: $primaryColor;
                     filter: drop-shadow(0px 0px 1.5px rgba(0, 0, 0, 0.774));
                     animation: btndefault 2s infinite;
-
-
                 }
 
                 &:hover {
@@ -637,16 +641,18 @@ article {
                                     transition: .2s ease;
                                     box-sizing: border-box;
                                     cursor: pointer;
-                                    p{
+
+                                    p {
                                         font-size: 18px;
                                     }
-                                    &.cmm{
-                                        &:hover{
-                                        transform: scale(1.02);
-                                        // box-shadow: inset 1px 0px 18px 2px rgba(109, 158, 255, 0.516);
-                                        // box-shadow: 1px 0px 4px 2px rgba(50, 50, 50, 0.224);
-                                        // padding: 0 10px
-                                    }
+
+                                    &.cmm {
+                                        &:hover {
+                                            transform: scale(1.02);
+                                            // box-shadow: inset 1px 0px 18px 2px rgba(109, 158, 255, 0.516);
+                                            // box-shadow: 1px 0px 4px 2px rgba(50, 50, 50, 0.224);
+                                            // padding: 0 10px
+                                        }
                                     }
 
                                     .mem-headshot {

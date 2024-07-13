@@ -10,13 +10,16 @@
     <div class="section-resultDisplay">
         <div class="container">
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-                <GCompTripCard v-for="(n, i) in tripsResultData" :tcImg="tripsResultData[i].trp_img"
-                    :tc-title="tripsResultData[i].trp_name" :tcMemName="tripsResultData[i].u_nickname"
-                    :key="tripsResultData[i].trp_id" />
+                <GCompTripCard v-for="(n, i) in tripsResultData" :tcImg=parseTripImg(n.trp_img)
+                    :tc-title="n.trp_name" :tcMemName="n.u_nickname"
+                    :tcMemImg="n.u_avatar"
+                    :key="n.trp_id" @click=goToTripMap(n.trp_id) />
 
             </div>
             <div class="button-wrap col-6 col-md-3 col-lg-2">
-                <button @click="goToPage('/alltrips')"><h4>返回</h4></button>
+                <button @click="goToPage('/alltrips')">
+                    <h4>返回</h4>
+                </button>
             </div>
 
         </div>
@@ -27,9 +30,9 @@
 <script>
 import GCompTripCard from '@/components/global/GCompTripCard.vue';
 
-export default{
-    data(){
-        return{
+export default {
+    data() {
+        return {
             tripsResultData: [],
             tripsResultLength: 0,
         }
@@ -61,7 +64,16 @@ export default{
 
         goToPage(toLink) {
             this.$router.push(toLink);
-        }
+        },
+        goToTripMap(trp_id) {
+            this.$router.push(`../trips?trp_id=${trp_id}`);
+        },
+        parseTripImg(imgURL) {
+            if (imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
+            return `${import.meta.env.VITE_IMG_URL}/default-userBg.png`
+        },
+
+
     },
     components: {
         'GCompTripCard': GCompTripCard
@@ -72,7 +84,7 @@ export default{
     computed() {
     }
 
-    
+
 }
 </script>
 <!-- <script setup>
@@ -117,39 +129,45 @@ fetchData();
 
 
 }
-.section-resultDisplay{
-    .container{
+
+.section-resultDisplay {
+    .container {
         border-top: 2px solid $secondColor-2;
         padding: 30px 0;
-    .button-wrap{
-        margin: auto;
-        margin-top: 40px;
-        button{
-        display: block;
-        cursor: pointer;
-        background-color: $secondColor-2 ;
-        color:$black ;
-        border-radius: 15px;
-        padding: 5px 0px ;
-        width: 90%;
-        margin: auto;
-        h4{
-            text-align: center;
-            color: $primaryColor;
+
+        .button-wrap {
+            margin: auto;
+            margin-top: 40px;
+
+            button {
+                display: block;
+                cursor: pointer;
+                background-color: $secondColor-2 ;
+                color: $black ;
+                border-radius: 15px;
+                padding: 5px 0px;
+                width: 90%;
+                margin: auto;
+
+                h4 {
+                    text-align: center;
+                    color: $primaryColor;
+                }
+            }
         }
+
+        .hs-section-btn-wrap {
+            padding: $base-fontSize 0;
+            margin: 0 auto;
         }
-    }
-    .hs-section-btn-wrap{
-        padding: $base-fontSize 0;
-        margin: 0 auto;
-    }
-    .hs-btn{
-        display: block;
-        background-color: $accentColor-2;
-        margin: auto;
-        border-radius: 10px;
-        padding: 2px 30px ;
-    }
+
+        .hs-btn {
+            display: block;
+            background-color: $accentColor-2;
+            margin: auto;
+            border-radius: 10px;
+            padding: 2px 30px;
+        }
     }
 }
 </style>

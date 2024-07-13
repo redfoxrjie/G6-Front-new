@@ -9,8 +9,8 @@
     <div class="section-resultDisplay">
         <div class="container">
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3  row-cols-xxl-4">
-                <BCBlogCard v-for="(n, i) in blogsResultData" :bcImg="n.b_img" :bcTitle="n.b_title"
-                    :bcLikesCount="n.b_likes" :bcViewsCount="n.b_viewers" :bcDate="n.b_date" />
+                <BCBlogCard v-for="(n, i) in blogsResultData" :bcImg=parseBlogImg(n.b_img) :bcTitle="n.b_title"
+                    :bcLikesCount="n.b_likes" :bcViewsCount="n.b_viewers" :bcDate="n.b_date" @click=goToBlogPage(n.b_id) />
 
             </div>
             <div class="button-wrap col-6 col-md-3 col-lg-2">
@@ -63,6 +63,13 @@ export default {
         ,
         goToPage(toLink) {
             this.$router.push(toLink);
+        },
+        goToBlogPage(b_id) {
+            this.$router.push(`../blog/${b_id}`);
+        },
+        parseBlogImg(imgURL) {
+            if (imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
+            return `${import.meta.env.VITE_IMG_URL}/default-userBg.png`
         }
     },
     components: {

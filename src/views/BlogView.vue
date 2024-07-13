@@ -39,7 +39,7 @@
       <div class="blogList-row row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4">
         <!-- 使用 BCBlogCard 元件來顯示每一篇筆記卡片 -->
         <BCBlogCard v-for="(blog, index) in currentCardBlogs" :key="blog.b_id" :bcImg="parseBlogImg(blog.b_img)"
-          :bcTitle="blog.b_title" :bcLikesCount="blog.b_likes" :bcViewsCount="blog.b_viewers" :bcDate="blog.b_date"
+          :bcTitle="blog.b_title" :bcLikesCount="blog.b_likes" :bcViewsCount="blog.b_viewers" :bcDate="blog.b_date" :bc-liked="isLiked(blog.b_id)"
           @click="navigateToBlogPage(blog.b_id)" />
       </div>
     </div>
@@ -116,6 +116,13 @@ const fetchData = async () => {
     console.error('Error fetching data:', error);
   }
 };  
+
+const isLiked = (blogId) => {
+      let likedBlogs = JSON.parse(localStorage.getItem('likedBlogs')) || [];
+      return likedBlogs.includes(blogId);
+    };
+
+
 onMounted(()=>{
   fetchData();
 });
