@@ -37,7 +37,7 @@ const props = defineProps({
 </script>
 <style lang="scss">
 @import '../../assets/styles/base/font';
-@import '../../assets/styles/base/color';
+@import '../../assets/styles/base/color'; 
 
 .trip-card-wrapper {
     box-sizing: border-box;
@@ -49,6 +49,15 @@ const props = defineProps({
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
+
+    &:hover{
+        .tc-content{
+            background-color: #e1f4fb;
+        }
+        .tc-img img{
+            transform: scale(1.05) rotate(1deg)
+        }
+    }
     .tc-img {
         width: 100%;
         aspect-ratio: 456/200;
@@ -58,11 +67,15 @@ const props = defineProps({
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: .4s ease;
         }
     }
 
     .tc-content{
         padding: 21px 20px 8px;
+        background-color: rgb(246, 246, 250);
+        transition: .4s ease;
+
 
     }
 }

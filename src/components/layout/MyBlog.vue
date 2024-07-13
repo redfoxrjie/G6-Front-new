@@ -2,9 +2,8 @@
     <div class="myblog-section">
         <h2>旅行筆記</h2>
         <div class="journey-card-wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
-            <div class="card-container col" v-for="card in memPageBlogData" :key="card.b_id">
+            <!-- <div class="card-container col" v-for="card in memPageBlogData" :key="card.b_id">
                 <div class="journey-card" @click=navigateToBlogPage(card.b_id)>
-                    <!-- <div class="option-btn"></div> -->
                     <div class="journey-img">
                         <img :src=parseServerImg(card.b_img) :alt="card.b_img">
                     </div>
@@ -16,21 +15,23 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
+            <BCBlogCard v-for="(blog, index) in memPageBlogData" :key="blog.b_id" :bcImg="parseServerImg(blog.b_img)"
+                    :bcTitle="blog.b_title" :bcLikesCount="blog.b_likes" :bcViewsCount="blog.b_viewers"
+                    :bcDate="blog.b_date" @click="goToBlogPage(blog.b_id)" />
         </div>
     </div>
 </template>
 
 <script>
+import BCBlogCard from '@/components/blog/BCBlogCard.vue';
 
 export default {
     data() {
         return {
-            cards: []
         };
     },
     mounted() {
-        // this.loadJsonData();
     },
     props: {
         memPageBlogData: {
@@ -41,25 +42,19 @@ export default {
     },
 
     methods: {
-        // loadJsonData() {
-        //     fetch(`${import.meta.env.BASE_URL}json/myblogs.json`)
-        //         .then((response) => response.json())
-        //         .then(data => {
-        //             this.cards = data;
-        //         })
-        //         .catch((error) => {
-        //             console.error('Error loading JSON data:', error);
-        //         });
-        // },
         parseServerImg(imgURL) {
             // return `https://tibamef2e.com/cid101/g6/images/${imgURL}`
             if (imgURL) return `${import.meta.env.VITE_IMG_URL}/${imgURL}`;
             return `${import.meta.env.VITE_IMG_URL}/default-userBg.png`;
         },
-        navigateToBlogPage(b_id){
+        navigateToBlogPage(b_id) {
             // this.$router.push({ name: 'blogPage', params: { b_id } });
             this.$router.push(`../blog/${b_id}`);
         }
+    }
+    ,
+    components: {
+        'BCBlogCard': BCBlogCard
     }
 }
 </script>
@@ -104,7 +99,8 @@ export default {
                 box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
                 cursor: pointer;
                 transition: .1s ease;
-                &:hover{
+
+                &:hover {
                     transform: scale(1.02);
                 }
 
