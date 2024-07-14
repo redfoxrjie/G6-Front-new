@@ -1,4 +1,3 @@
-EditMemberMainView
 <template>
     <main>
         <div class="section-full-width">
@@ -47,7 +46,7 @@ EditMemberMainView
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
-import MyBlog from '@/components/layout/MyBlog.vue';
+import MyBlog from '@/components/layout/EditMyBlog.vue';
 import EditMyTrip from '@/components/layout/EditMyTrip.vue';
 import defaultBannerImageUrl from '@/assets/images/default-userBg.png';
 import defaultHeadshotImageUrl from '@/assets/images/default-userImg.png';
@@ -133,8 +132,6 @@ onMounted(() => {
 });
 
 </script>
-
-
 
 
 <style lang="scss" scoped>
@@ -278,6 +275,7 @@ onMounted(() => {
                 background-color: $secondColor-2;
                 color: $primaryColor;
             }
-        }   }
+        }
+    }
 }
 </style>
