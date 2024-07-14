@@ -169,11 +169,7 @@ export default defineComponent({
   /* 文字顏色 */
 }
 
-.active-link {
-  border-radius: 10px;
-  padding: 7px;
-  background-color: $accentColor-1;
-}
+
 
 header {
   // opacity: .3;
@@ -316,6 +312,12 @@ header {
         a:hover,
         a.click {
           color: $accentColor-1;
+        }
+        .active-link {
+          border-radius: 10px;
+          padding: 7px;
+          background-color: $accentColor-2;
+          &:hover {color: #fff;}
         }
 
         span.btn-start-plan {
