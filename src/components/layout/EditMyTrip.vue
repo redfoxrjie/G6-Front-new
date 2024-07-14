@@ -4,7 +4,7 @@
         <h2>我的行程</h2>
         <div class="trip-card-wrapper row row-cols-1 row-cols-md-2 row-cols-lg-3">
             <div class="card-container col" v-for="card in cards" :key="card.trp_id" :ref="`card-${card.trp_id}`"
-                @click.stop="navigateToTripMap(card.trp_id)">
+                @click="goToTripMap(card.trp_id)">
                 <div class="trip-card">
                     <div class="option-btn" @click.stop="Dropdown(card)" style="cursor: pointer;">
                         <ul v-show="card.isDropdownOpen" class="dropdown-menu">
@@ -14,7 +14,7 @@
                         </ul>
                     </div>
                     <div class="trip-img">
-                        <img :src="card.trp_img" :alt="card.trp_name">
+                        <img :src="getImageUrl(card.trp_img)" :alt="card.trp_name" @error="handleImageError">
                     </div>
                     <div class="trip-info">
                         <div class="trip-title">{{ card.trp_name }}</div>
@@ -24,15 +24,17 @@
             </div>
         </div>
     </div>
-    <AddTrip :isVisible="isModalVisible" @update:isVisible="isModalVisible = $event" />
+    <AddTrip :isVisible="isModalVisible" @update:isVisible="handleModalVisibility" />
 </template>
 
 <script>
+import { useUserStore } from '@/stores/userStore';
 // import AddTrip from '@/components/layout/AddTrip.vue';
+
 export default {
-    name: 'MyComponent',
+    name: 'EditMyTrip',
     components: {
-        // AddTrip// 註冊組件
+        // AddTrip 
     },
     props: {
         options: {
@@ -44,20 +46,28 @@ export default {
             ],
         },
     },
-
     data() {
         return {
             cards: [],
             isDropdownOpen: false,
             selectedOption: null,
-            isModalVisible: false
+            isModalVisible: false,
+            baseUrl: import.meta.env.VITE_IMG_URL // 初始化 baseUrl
         };
     },
     mounted() {
-        this.loadJsonData();
+        this.loadTripsFromDatabase();
     },
     methods: {
-        //卡片下拉選單開合
+        goToTripMap(trp_id) {
+            this.$router.push(`/trips?trp_id=${trp_id}`);
+        },
+        getImageUrl(imagePath) {
+            return imagePath ? `${this.baseUrl}/${imagePath}` : 'https://tibamef2e.com/cid101/g6/images/default-userBg.png';
+        },
+        handleImageError(event) {
+            event.target.src = 'https://tibamef2e.com/cid101/g6/images/default-userBg.png';
+        },
         Dropdown(card) {
             this.closeAllDropdowns();
             card.isDropdownOpen = !card.isDropdownOpen;
@@ -67,36 +77,64 @@ export default {
                 card.isDropdownOpen = false;
             });
         },
-        loadJsonData() {
-            fetch(`${import.meta.env.BASE_URL}json/mytrips.json`)
-                .then((response) => response.json())
-                .then(data => {
-                    this.cards = data;
-                })
-                .catch((error) => {
-                    console.error('Error loading JSON data:', error);
-                });
+        async loadTripsFromDatabase() {
+            const userStore = useUserStore();
+            const userId = userStore.userId;
+            if (!userId) {
+                console.error('User is not logged in');
+                return;
+            }
+            try {
+                const apiUrl = `${import.meta.env.VITE_API_URL}/get_trips.php?user_id=${userId}`;
+                console.log('API URL:', apiUrl);
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                console.log('Loaded trips data:', data);
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                this.cards = data;
+            } catch (error) {
+                console.error('Error loading trips:', error);
+            }
         },
-        addTripModal() {
+        showAddTripModal() {
             this.isModalVisible = true;
         },
-        navigateToTripMap(trp_id) {
+        handleModalVisibility(newVisibility) {
+            this.isModalVisible = newVisibility;
+        },
+        navigateToTripMap(card) {
+            const userStore = useUserStore();
+            const userId = userStore.userId;
+            const userInfo = userStore.userInfo;
+
             this.$router.push({
                 name: 'mytrip',
-                params: { trp_id }
+                params: { trp_id: card.trp_id },
+                query: {
+                    userId: userId,
+                    userName: userInfo.u_nickname,
+                    userAvatar: userInfo.u_avatar,
+                    tripName: card.trp_name,
+                    tripStartDate: card.trp_sdate,
+                    tripEndDate: card.trp_edate,
+                    tripImage: card.trp_img
+                }
             });
         },
-        //下拉選單點擊事件
         selectOption(option, card) {
-            if (option.label === '編輯行程') {
-                this.navigateToTripMap(card.trp_id);
+            if (option.label === '编辑行程') {
+                this.navigateToTripMap(card);
             } else if (option.label === '複製行程') {
                 this.copyTrip(card);
             } else {
                 console.log('Selected option:', option, 'for card:', card);
             }
         },
-        //複製行程
         copyTrip(card) {
             const newCard = { ...card, trp_id: this.generateId() };
             this.cards.push(newCard);
@@ -108,15 +146,15 @@ export default {
                     behavior: 'smooth'
                 });
             });
-            card.isDropdownOpen = false; // 確保複製後關閉下拉選單
+            card.isDropdownOpen = false;
         },
-        //生成ID
         generateId() {
             return 'trip-' + Date.now();
         }
     }
 }
 </script>
+
 
 <style lang="scss" scoped>
 @import '@/assets/styles/base/color';
