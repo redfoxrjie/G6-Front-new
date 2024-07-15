@@ -380,9 +380,9 @@ header {
           display: none;
         }
 
-        // span.btn-start-plan {
-        // display: none;
-        // }
+        span.btn-start-plan {
+        display: none;
+        }
 
       }
     }
@@ -479,6 +479,9 @@ header {
         .router-wrapper {
           a {
             display: inline;
+          }
+          span.btn-start-plan {
+            display: block;
           }
 
           .memwrap {
