@@ -19,7 +19,7 @@
 |  ----  | ----  |
 | 前端  | CSS、HTML、JS、AJAX、Vue.js、串接地圖API、google第三方登入、OpenStreetMap、動態生成QRCode、Email.js、sweetalert、pinia、GSAP、SASS |
 | 後端  | PHP、MySQL、Bootstrap |
-| 工具與服務 | Figma、 git 、 MySQL 、 Notion, SourceTree |
+| 工具與服務 | Figma、 git 、 MySQL 、 Notion 、 SourceTree |
 
 ## 網站架構圖
 
@@ -27,11 +27,12 @@
 
 ## 安裝與設置
 
-sh
+```sh
 git clone https://github.com/redfoxrjie/G6-Front-new.git
 cd G6-Front-new
 npm install
 npm run dev
+```
 
 
 
@@ -42,5 +43,4 @@ npm run dev
 | [libo](https://github.com/libo5566) | 熱門行程、共編行程、行程筆記、行程分享、管理我的行程、地圖串接、地圖功能使用導覽|
 | [uuuut0](https://github.com/uuuut0) | 行程一覽-頁面切版、行程一覽-前台功能(搜尋,分頁按鈕),PHP串接、旅行筆記一覽-頁面切版、旅行筆記一覽-前台功能(搜尋,分頁按鈕),PHP、旅行筆記內頁-前台功能(按讚紀錄,留言),PHP串接、會員資料管理-切版、關於我們-切版|
 | [aquamarune](https://github.com/aquamarune) | 最新消息、首頁視覺整合、查看單一消息、消息分類篩選、查看通知|
-| [NaBi0215](https://github.com/NaBi0215) | 首頁熱門票券、票券一覽資訊帶入、票券內容金額及計數帶入、票券付款條件判斷、QRCode導入
-(帶入動態生成購票資訊)、聯絡表單存入資料庫|
+| [NaBi0215](https://github.com/NaBi0215) | 首頁熱門票券、票券一覽資訊帶入、票券內容金額及計數帶入、票券付款條件判斷、QRCode導入、聯絡表單存入資料庫|
